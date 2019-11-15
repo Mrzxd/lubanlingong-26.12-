@@ -10,7 +10,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
 @interface EmployerCertificationFourCell : UITableViewCell
+
+@property(nonatomic, strong) UIButton *fullfacePhoto;
+@property(nonatomic, strong) PhotoBlock photoBlock;
+@property(nonatomic, strong) UIButton *loginButton;
 
 @end
 

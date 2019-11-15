@@ -17,6 +17,8 @@
     UITextField *_scPassWordTextField;
     UIButton *lastButton;
 }
+@property (nonatomic, strong) UITextField *invitationTextField;
+
 @end
 
 @implementation RegisterController
@@ -25,6 +27,23 @@
     [super viewDidLoad];
     self.view.backgroundColor = UIColor.whiteColor;
     [self addSubViews];
+}
+
+//获取验证码
+- (void)connectToInternet {
+    if (![self isMobileNumberOnly:NoneNull(phoneTextField.text)]) {
+        [WHToast showErrorWithMessage:@"请输入正确的手机号码"];
+        return;
+    }
+    WeakSelf;
+    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingString:@"/updateMemberNews/verificationCode"] params:@{@"phone":phoneTextField.text NonNull} success:^(id  _Nonnull response) {
+        if ([response[@"code"] intValue] == 0 && [response[@"data"] isKindOfClass:[NSDictionary class]] && [response[@"data"] count]) {
+            StrongSelf;
+            strongSelf->verificationCodeField.text = response[@"data"][@"verificationCode"];
+        }
+    } fail:^(NSError * _Nonnull error) {
+        
+    } showHUD:YES];
 }
 - (void)addSubViews {
     
@@ -86,6 +105,7 @@
     getVerificationCodeButton.layer.cornerRadius = 30.0/2*ScalePpth;
     getVerificationCodeButton.layer.masksToBounds = YES;
     getVerificationCodeButton.clipsToBounds = YES;
+    [getVerificationCodeButton addTarget:self action:@selector(getVerificationCodeButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:getVerificationCodeButton];
     
     UIView *lineTwo = [[UIView alloc] initWithFrame:CGRectMake(38*ScalePpth, 294*ScalePpth +statusHeight, 300*ScalePpth, 0.8*ScalePpth)];
@@ -112,6 +132,7 @@
     imgView4.image = [UIImage imageNamed:@"register_password"];
     [imgView4 sizeToFit];
     [view4 addSubview:imgView4];
+    
     _scPassWordTextField = [[UITextField alloc] initWithFrame:CGRectMake(53*ScalePpth, 382*ScalePpth +statusHeight, 300, 30)];
     _scPassWordTextField.leftView = view4;
     _scPassWordTextField.leftViewMode = UITextFieldViewModeAlways;
@@ -128,10 +149,31 @@
     UIView *linef = [[UIView alloc] initWithFrame:CGRectMake(38*ScalePpth, 415*ScalePpth +statusHeight, 300*ScalePpth, 0.8*ScalePpth)];
     linef.backgroundColor = RGBHex(0xeeeeee);
     [self.view addSubview:linef];
+    UIView *lines = [[UIView alloc] initWithFrame:CGRectMake(38*ScalePpth, 475*ScalePpth +statusHeight, 300*ScalePpth, 0.8*ScalePpth)];
+    lines.backgroundColor = RGBHex(0xeeeeee);
+    [self.view addSubview:lines];
     
-    UIButton *loginButton = [[UIButton alloc] initWithFrame:CGRectMake(38*ScalePpth, 464*ScalePpth +statusHeight, 300*ScalePpth, 45*ScalePpth)];
+    UIView *view5= [[UIView alloc] initWithFrame:AutoFrame(0, 0, 29, 17)];
+    UIImageView *imgView5 = [[UIImageView alloc] initWithFrame:AutoFrame(0, 0, 12, 17)];
+    imgView5.image = [UIImage imageNamed:@"register_verification"];
+    [imgView5 sizeToFit];
+    [view5 addSubview:imgView5];
+    
+    _invitationTextField = [[UITextField alloc] initWithFrame:CGRectMake(53*ScalePpth, 442*ScalePpth +statusHeight, 300, 30)];
+    _invitationTextField.leftView = view5;
+    _invitationTextField.keyboardType = UIKeyboardTypeNumberPad;
+    _invitationTextField.leftViewMode = UITextFieldViewModeAlways;
+    _invitationTextField.borderStyle = UITextBorderStyleNone;
+    _invitationTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    _invitationTextField.font = FontSize(15);
+    _invitationTextField.delegate = self;
+    _invitationTextField.placeholder = @"请输入邀请码(若无则不填)";
+    [self.view addSubview:_invitationTextField];
+    
+    UIButton *loginButton = [[UIButton alloc] initWithFrame:CGRectMake(38*ScalePpth, 524*ScalePpth +statusHeight, 300*ScalePpth, 45*ScalePpth)];
     [loginButton setTitle:@"注册" forState:UIControlStateNormal];
     [loginButton setTitleColor:UIColor.blackColor forState:UIControlStateNormal];
+    [loginButton addTarget:self action:@selector(loginAction:) forControlEvents:UIControlEventTouchUpInside];
     loginButton.titleLabel.font = FontSize(17);
     loginButton.backgroundColor = RGBHex(0xFFD301);
     loginButton.layer.cornerRadius = 45.0/2*ScalePpth;
@@ -141,20 +183,20 @@
     UIButton *toLoginButton = [[UIButton alloc] initWithFrame:CGRectMake(233*ScalePpth, 522*ScalePpth +statusHeight, 100*ScalePpth, 13*ScalePpth)];
     [self.view addSubview:toLoginButton];
     
-    UIButton *yesButton = [[UIButton alloc] initWithFrame:CGRectMake(52*ScalePpth, 431*ScalePpth +statusHeight, 11*ScalePpth, 11*ScalePpth)];
+    UIButton *yesButton = [[UIButton alloc] initWithFrame:CGRectMake(52*ScalePpth, 491*ScalePpth +statusHeight, 11*ScalePpth, 11*ScalePpth)];
     [yesButton setImage:[UIImage imageNamed:@"selected"] forState:UIControlStateNormal];
     lastButton = yesButton;
     yesButton.tag = 200;
     [yesButton addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:yesButton];
     
-    UIButton *noButton = [[UIButton alloc] initWithFrame:CGRectMake(52*ScalePpth, 447*ScalePpth +statusHeight, 11*ScalePpth, 11*ScalePpth)];
+    UIButton *noButton = [[UIButton alloc] initWithFrame:CGRectMake(52*ScalePpth, 507*ScalePpth +statusHeight, 11*ScalePpth, 11*ScalePpth)];
     [noButton setImage:[UIImage imageNamed:@"noselected"] forState:UIControlStateNormal];
     noButton.tag = 201;
     [noButton addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:noButton];
     
-    UILabel *explainLabel = [[UILabel alloc] initWithFrame:CGRectMake(66*ScalePpth, 432*ScalePpth +statusHeight, 250*ScalePpth, 10*ScalePpth)];
+    UILabel *explainLabel = [[UILabel alloc] initWithFrame:CGRectMake(66*ScalePpth, 492*ScalePpth +statusHeight, 250*ScalePpth, 10*ScalePpth)];
     explainLabel.font = FontSize(10);
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@"我已阅读并接受鲁班零工注册协议、用户隐私政策"];
     [attributedString addAttribute:NSForegroundColorAttributeName value:RGBHex(0x333333) range:NSMakeRange(0, 7)];
@@ -162,12 +204,18 @@
     explainLabel.attributedText = attributedString;
     [self.view addSubview:explainLabel];
     
-    UIButton *tologinButton = [[UIButton alloc] initWithFrame:CGRectMake(233*ScalePpth, 522*ScalePpth +statusHeight, 100*ScalePpth, 13*ScalePpth)];
+    UIButton *tologinButton = [[UIButton alloc] initWithFrame:CGRectMake(233*ScalePpth, 582*ScalePpth +statusHeight, 100*ScalePpth, 13*ScalePpth)];
     [tologinButton setTitle:@"已有账号去登录" forState:UIControlStateNormal];
     [tologinButton setTitleColor:RGBHex(0x999999) forState:UIControlStateNormal];
     [tologinButton addTarget:self action:@selector(tologin:) forControlEvents:UIControlEventTouchUpInside];
     tologinButton.titleLabel.font = FontSize(13);
     [self.view addSubview:tologinButton];
+}
+- (void)getVerificationCodeButtonAction:(UIButton *)button {
+    [self connectToInternet];
+}
+- (void)loginAction:(UIButton *)button {
+    [self toRegister];
 }
 - (void)buttonAction:(UIButton *)button {
     if (lastButton != button) {
@@ -175,6 +223,38 @@
         [button setImage:[UIImage imageNamed:@"selected"] forState:UIControlStateNormal];
         lastButton = button;
     }
+}
+- (void)toRegister {
+    if (_passWordTextField.text && _scPassWordTextField.text) {
+        if (![_passWordTextField.text isEqualToString:_scPassWordTextField.text]) {
+            [WHToast showErrorWithMessage:@"两次输入密码不一致!"];
+            return;
+        }
+    }
+    if (![self isMobileNumberOnly:phoneTextField.text NonNull]) {
+        [WHToast showErrorWithMessage:@"请输入正确的手机号码"];
+        return;
+    }
+    if (_scPassWordTextField.text.length < 6) {
+        [WHToast showErrorWithMessage:@"请输入6位数以上密码"];
+        return;
+    }
+    WeakSelf;
+    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingString:@"/updateMemberNews/registeredMembers"] params:@{
+                                                                                                     @"phone":phoneTextField.text NonNull,
+                                                                                                     @"password":_passWordTextField.text NonNull,
+                                                                                                     @"code":verificationCodeField.text NonNull,
+                                                                                                     @"verCode":NoneNull(_invitationTextField.text)
+                                                                                                     } success:^(id  _Nonnull response) {
+                                                                                                         if (response && [response[@"code"] intValue] == 0) {
+                                                                                                             [WHToast showSuccessWithMessage:@"注册成功"];
+                                                                                                              [weakSelf dismissViewControllerAnimated:YES completion:nil];
+                                                                                                         } else {
+                                                                                                             [WHToast showErrorWithMessage:@"注册失败"];
+                                                                                                         }
+    } fail:^(NSError * _Nonnull error) {
+         [WHToast showErrorWithMessage:@"网络错误"];
+    } showHUD:YES];
 }
 - (void)tologin:(UIButton *)button {
     [self dismissViewControllerAnimated:YES completion:nil];

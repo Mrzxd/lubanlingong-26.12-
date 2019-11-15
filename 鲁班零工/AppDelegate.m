@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "LBTabBarController.h"
 #import "LoginViewController.h"
 
 @interface AppDelegate ()
@@ -18,8 +19,15 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     GlobalSingleton.gS_ShareInstance.systemWindow = self.window;
-    LoginViewController *loginController = [LoginViewController new];
-    self.window.rootViewController = loginController;
+    NSString *login_state = [[NSUserDefaults standardUserDefaults] objectForKey:@"login_state"];
+    if (login_state && [login_state isEqualToString:@"yes"]) {
+        GlobalSingleton.gS_ShareInstance.state = 1;
+        self.window.rootViewController = [LBTabBarController new];
+    } else {
+        GlobalSingleton.gS_ShareInstance.state = 2;
+        LoginViewController *loginController = [LoginViewController new];
+        self.window.rootViewController = loginController;
+    }
     [self.window makeKeyAndVisible];
     return YES;
 }

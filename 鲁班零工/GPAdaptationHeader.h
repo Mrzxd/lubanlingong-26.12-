@@ -13,16 +13,16 @@
 
 
 //#import "UIScrollView+MJRefreshEX.h"
-//#import "ZXD_NetWorking.h"
-//#import <MJExtension/MJExtension.h>
-//#import <MBProgressHUD.h>
+#import "ZXD_NetWorking.h"
+#import <MJExtension/MJExtension.h>
+#import <MBProgressHUD.h>
 #import "WHToast.h"
-//#import <Masonry/Masonry.h>
+#import <Masonry/Masonry.h>
 #import "YTSegmentBar.h"
-#import "Masonry.h"
 #import "ZXDNavigationContoller.h"
 #import "NSObject+JudgmentClass.h"
-//#import <SDWebImage/UIImageView+WebCache.h>
+#import "UIViewController+ImagePicker.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 #import "THViewController.h"
 #import "GlobalSingleton.h"
 
@@ -36,6 +36,7 @@
 #   define DLog(...)
 #endif
 
+typedef void(^PhotoBlock)(NSInteger index);
 
 typedef NS_ENUM(NSInteger,OrderDetail_Type){
     OrderDetail_Type_Cancle = 0,
@@ -46,12 +47,15 @@ typedef NS_ENUM(NSInteger,OrderDetail_Type){
 };
 
 
-#define  rootUrl @"http://"
+#define  rootUrl @"http://192.168.1.172"
 
 #define NonNull ?:@""
  #define NonNullNum ?:@0
+#define NoneNull(x)  [NSString stringWithFormat:@"%@", [x isKindOfClass:[NSNumber class]]?(NSNumber *)(x?x:@0):(NSString *)([x isKindOfClass:[NSNull class]] ?(x = @""):(([x length] > 0)?x:@""))]
+
 #define WeakSelf  __weak __typeof(&*self)weakSelf = self;
 #define WS(weakSelf)  __weak __typeof(&*self)weakSelf = self;
+#define StrongSelf  __strong typeof(weakSelf) strongSelf = weakSelf;
 
 #define RGBHex(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 #define RGBHexAlpha(rgbValue,a) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:(a)]

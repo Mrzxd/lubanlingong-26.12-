@@ -15,6 +15,7 @@
 #import "OrderDetailsController.h"
 
 @interface MyOddJobController ()
+
 @property (nonatomic, strong) YTSegmentBarVC *segmentVC;
 
 @end

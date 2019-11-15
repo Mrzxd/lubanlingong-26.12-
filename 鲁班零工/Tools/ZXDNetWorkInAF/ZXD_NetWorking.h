@@ -81,6 +81,20 @@ typedef NSURLSessionTask ZXDURLSessionTask;
                            success:(ZXDResponseSuccess)success
                               fail:(ZXDResponseFail)fail
                            showHUD:(BOOL)showHUD;
+/**
+ *  put请求方法,block回调
+ *
+ *  @param url     请求连接，根路径
+ *  @param params  参数
+ *  @param success 请求成功返回数据
+ *  @param fail    请求失败
+ *  @param showHUD 是否显示HUD
+ */
++ (ZXDURLSessionTask *)putWithUrl:(NSString *)url
+                           params:(NSDictionary *)params
+                          success:(ZXDResponseSuccess)success
+                             fail:(ZXDResponseFail)fail
+                          showHUD:(BOOL)showHUD;
 
 /**
  *  上传图片方法

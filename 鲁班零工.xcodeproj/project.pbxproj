@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -39,18 +39,6 @@
 		6118C28E2362E6810062AE02 /* photoImage2.png in Resources */ = {isa = PBXBuildFile; fileRef = 6118C28D2362E6810062AE02 /* photoImage2.png */; };
 		6118C2912362F1160062AE02 /* ThePersonIHiredController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6118C2902362F1160062AE02 /* ThePersonIHiredController.m */; };
 		611AAA202356E18B00F178AB /* JobRequirementsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 611AAA1F2356E18B00F178AB /* JobRequirementsCell.m */; };
-		611AAA3F2356E40800F178AB /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 611AAA232356E40800F178AB /* LICENSE */; };
-		611AAA402356E40800F178AB /* NSLayoutConstraint+MASDebugAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 611AAA262356E40800F178AB /* NSLayoutConstraint+MASDebugAdditions.m */; };
-		611AAA412356E40800F178AB /* ViewController+MASAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 611AAA2F2356E40800F178AB /* ViewController+MASAdditions.m */; };
-		611AAA422356E40800F178AB /* MASCompositeConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = 611AAA332356E40800F178AB /* MASCompositeConstraint.m */; };
-		611AAA432356E40800F178AB /* MASConstraintMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 611AAA342356E40800F178AB /* MASConstraintMaker.m */; };
-		611AAA442356E40800F178AB /* MASLayoutConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = 611AAA352356E40800F178AB /* MASLayoutConstraint.m */; };
-		611AAA452356E40800F178AB /* NSArray+MASAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 611AAA362356E40800F178AB /* NSArray+MASAdditions.m */; };
-		611AAA462356E40800F178AB /* View+MASAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 611AAA372356E40800F178AB /* View+MASAdditions.m */; };
-		611AAA472356E40800F178AB /* MASConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = 611AAA3A2356E40800F178AB /* MASConstraint.m */; };
-		611AAA482356E40800F178AB /* MASViewConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = 611AAA3C2356E40800F178AB /* MASViewConstraint.m */; };
-		611AAA492356E40800F178AB /* MASViewAttribute.m in Sources */ = {isa = PBXBuildFile; fileRef = 611AAA3D2356E40800F178AB /* MASViewAttribute.m */; };
-		611AAA4A2356E40800F178AB /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 611AAA3E2356E40800F178AB /* README.md */; };
 		611AAA4D2356F20E00F178AB /* EmployerRecordController.m in Sources */ = {isa = PBXBuildFile; fileRef = 611AAA4C2356F20E00F178AB /* EmployerRecordController.m */; };
 		611AAA4F2356FA5D00F178AB /* userbtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 611AAA4E2356FA5D00F178AB /* userbtn.png */; };
 		611AAA52235707B100F178AB /* EmployerRecordCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 611AAA51235707B100F178AB /* EmployerRecordCell.m */; };
@@ -79,6 +67,7 @@
 		611D0F00234D8BBF00391470 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 611D0EFF234D8BBF00391470 /* main.m */; };
 		611D0F0A234D8BBF00391470 /* ____Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 611D0F09234D8BBF00391470 /* ____Tests.m */; };
 		611D0F15234D8BBF00391470 /* ____UITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 611D0F14234D8BBF00391470 /* ____UITests.m */; };
+		611D8AD12373DF3C005B0A09 /* ZXD_NetWorking.m in Sources */ = {isa = PBXBuildFile; fileRef = 611D8ACF2373DF3C005B0A09 /* ZXD_NetWorking.m */; };
 		611E748D23682D6400481E19 /* EmployeeCentreController.m in Sources */ = {isa = PBXBuildFile; fileRef = 611E748C23682D6400481E19 /* EmployeeCentreController.m */; };
 		611E7490236833E900481E19 /* RequestSuccessfulController.m in Sources */ = {isa = PBXBuildFile; fileRef = 611E748F236833E900481E19 /* RequestSuccessfulController.m */; };
 		611E7493236835EA00481E19 /* EmployeeRecordsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 611E7492236835EA00481E19 /* EmployeeRecordsController.m */; };
@@ -175,6 +164,8 @@
 		61D9981E2358636B00CDABFA /* imageButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61D9981D2358636A00CDABFA /* imageButton.png */; };
 		61D998212358644D00CDABFA /* PublishImageTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 61D9981F2358644D00CDABFA /* PublishImageTableCell.m */; };
 		61D998242358671D00CDABFA /* UIViewController+ImagePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 61D998222358671D00CDABFA /* UIViewController+ImagePicker.m */; };
+		A22382EAF830118DAC53E5D3 /* Pods_____Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C124C3AD5653FF6376EB1362 /* Pods_____Tests.framework */; };
+		C764851467A76CB084486C1B /* Pods_____UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 244E45DE1E4EE638DD83D626 /* Pods_____UITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -195,6 +186,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0913CAE815CD5585CE301569 /* Pods-鲁班零工UITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-鲁班零工UITests.debug.xcconfig"; path = "Target Support Files/Pods-鲁班零工UITests/Pods-鲁班零工UITests.debug.xcconfig"; sourceTree = "<group>"; };
+		1B6A11625AFAF133BB71AA7A /* Pods-鲁班零工Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-鲁班零工Tests.debug.xcconfig"; path = "Target Support Files/Pods-鲁班零工Tests/Pods-鲁班零工Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		244E45DE1E4EE638DD83D626 /* Pods_____UITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "Pods_____UITests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		34B4DB1E80E6A0CE368E5714 /* Pods-鲁班零工.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-鲁班零工.release.xcconfig"; path = "Target Support Files/Pods-鲁班零工/Pods-鲁班零工.release.xcconfig"; sourceTree = "<group>"; };
 		61153BD52351C9A100C8DCDF /* LBTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBTabBarController.h; sourceTree = "<group>"; };
 		61153BD62351C9A100C8DCDF /* LBNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBNavigationController.m; sourceTree = "<group>"; };
 		61153BD72351C9A100C8DCDF /* LBTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBTabBarController.m; sourceTree = "<group>"; };
@@ -255,33 +250,6 @@
 		6118C2902362F1160062AE02 /* ThePersonIHiredController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThePersonIHiredController.m; sourceTree = "<group>"; };
 		611AAA1E2356E18B00F178AB /* JobRequirementsCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JobRequirementsCell.h; sourceTree = "<group>"; };
 		611AAA1F2356E18B00F178AB /* JobRequirementsCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JobRequirementsCell.m; sourceTree = "<group>"; };
-		611AAA232356E40800F178AB /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		611AAA252356E40800F178AB /* MASCompositeConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MASCompositeConstraint.h; sourceTree = "<group>"; };
-		611AAA262356E40800F178AB /* NSLayoutConstraint+MASDebugAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSLayoutConstraint+MASDebugAdditions.m"; sourceTree = "<group>"; };
-		611AAA272356E40800F178AB /* MASConstraint+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MASConstraint+Private.h"; sourceTree = "<group>"; };
-		611AAA282356E40800F178AB /* MASLayoutConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MASLayoutConstraint.h; sourceTree = "<group>"; };
-		611AAA292356E40800F178AB /* NSArray+MASShorthandAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+MASShorthandAdditions.h"; sourceTree = "<group>"; };
-		611AAA2A2356E40800F178AB /* MASConstraintMaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MASConstraintMaker.h; sourceTree = "<group>"; };
-		611AAA2B2356E40800F178AB /* View+MASAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "View+MASAdditions.h"; sourceTree = "<group>"; };
-		611AAA2C2356E40800F178AB /* NSArray+MASAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+MASAdditions.h"; sourceTree = "<group>"; };
-		611AAA2D2356E40800F178AB /* MASUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MASUtilities.h; sourceTree = "<group>"; };
-		611AAA2E2356E40800F178AB /* MASViewAttribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MASViewAttribute.h; sourceTree = "<group>"; };
-		611AAA2F2356E40800F178AB /* ViewController+MASAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ViewController+MASAdditions.m"; sourceTree = "<group>"; };
-		611AAA302356E40800F178AB /* MASViewConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MASViewConstraint.h; sourceTree = "<group>"; };
-		611AAA312356E40800F178AB /* MASConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MASConstraint.h; sourceTree = "<group>"; };
-		611AAA322356E40800F178AB /* NSLayoutConstraint+MASDebugAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSLayoutConstraint+MASDebugAdditions.h"; sourceTree = "<group>"; };
-		611AAA332356E40800F178AB /* MASCompositeConstraint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MASCompositeConstraint.m; sourceTree = "<group>"; };
-		611AAA342356E40800F178AB /* MASConstraintMaker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MASConstraintMaker.m; sourceTree = "<group>"; };
-		611AAA352356E40800F178AB /* MASLayoutConstraint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MASLayoutConstraint.m; sourceTree = "<group>"; };
-		611AAA362356E40800F178AB /* NSArray+MASAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+MASAdditions.m"; sourceTree = "<group>"; };
-		611AAA372356E40800F178AB /* View+MASAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "View+MASAdditions.m"; sourceTree = "<group>"; };
-		611AAA382356E40800F178AB /* View+MASShorthandAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "View+MASShorthandAdditions.h"; sourceTree = "<group>"; };
-		611AAA392356E40800F178AB /* Masonry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Masonry.h; sourceTree = "<group>"; };
-		611AAA3A2356E40800F178AB /* MASConstraint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MASConstraint.m; sourceTree = "<group>"; };
-		611AAA3B2356E40800F178AB /* ViewController+MASAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ViewController+MASAdditions.h"; sourceTree = "<group>"; };
-		611AAA3C2356E40800F178AB /* MASViewConstraint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MASViewConstraint.m; sourceTree = "<group>"; };
-		611AAA3D2356E40800F178AB /* MASViewAttribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MASViewAttribute.m; sourceTree = "<group>"; };
-		611AAA3E2356E40800F178AB /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		611AAA4B2356F20E00F178AB /* EmployerRecordController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmployerRecordController.h; sourceTree = "<group>"; };
 		611AAA4C2356F20E00F178AB /* EmployerRecordController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmployerRecordController.m; sourceTree = "<group>"; };
 		611AAA4E2356FA5D00F178AB /* userbtn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = userbtn.png; sourceTree = "<group>"; };
@@ -334,6 +302,8 @@
 		611D0F10234D8BBF00391470 /* 鲁班零工UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "鲁班零工UITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		611D0F14234D8BBF00391470 /* ____UITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "____UITests.m"; sourceTree = "<group>"; };
 		611D0F16234D8BBF00391470 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		611D8ACF2373DF3C005B0A09 /* ZXD_NetWorking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZXD_NetWorking.m; sourceTree = "<group>"; };
+		611D8AD02373DF3C005B0A09 /* ZXD_NetWorking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZXD_NetWorking.h; sourceTree = "<group>"; };
 		611E748B23682D6400481E19 /* EmployeeCentreController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmployeeCentreController.h; sourceTree = "<group>"; };
 		611E748C23682D6400481E19 /* EmployeeCentreController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmployeeCentreController.m; sourceTree = "<group>"; };
 		611E748E236833E900481E19 /* RequestSuccessfulController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RequestSuccessfulController.h; sourceTree = "<group>"; };
@@ -505,6 +475,11 @@
 		61D998202358644D00CDABFA /* PublishImageTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublishImageTableCell.h; sourceTree = "<group>"; };
 		61D998222358671D00CDABFA /* UIViewController+ImagePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+ImagePicker.m"; sourceTree = "<group>"; };
 		61D998232358671D00CDABFA /* UIViewController+ImagePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+ImagePicker.h"; sourceTree = "<group>"; };
+		69D7BFF37CCB4950CDE24548 /* Pods-鲁班零工.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-鲁班零工.debug.xcconfig"; path = "Target Support Files/Pods-鲁班零工/Pods-鲁班零工.debug.xcconfig"; sourceTree = "<group>"; };
+		795BED648948206452B2A653 /* Pods_____.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "Pods_____.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C124C3AD5653FF6376EB1362 /* Pods_____Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "Pods_____Tests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D6806E0B5258ED3F720CF8D3 /* Pods-鲁班零工UITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-鲁班零工UITests.release.xcconfig"; path = "Target Support Files/Pods-鲁班零工UITests/Pods-鲁班零工UITests.release.xcconfig"; sourceTree = "<group>"; };
+		E853FFB73FABA03404FEF9FC /* Pods-鲁班零工Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-鲁班零工Tests.release.xcconfig"; path = "Target Support Files/Pods-鲁班零工Tests/Pods-鲁班零工Tests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -521,6 +496,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A22382EAF830118DAC53E5D3 /* Pods_____Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -528,6 +504,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C764851467A76CB084486C1B /* Pods_____UITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -837,51 +814,8 @@
 		611AAA212356E3D200F178AB /* Library */ = {
 			isa = PBXGroup;
 			children = (
-				611AAA222356E40800F178AB /* Masonry */,
 			);
 			path = Library;
-			sourceTree = "<group>";
-		};
-		611AAA222356E40800F178AB /* Masonry */ = {
-			isa = PBXGroup;
-			children = (
-				611AAA232356E40800F178AB /* LICENSE */,
-				611AAA242356E40800F178AB /* Masonry */,
-				611AAA3E2356E40800F178AB /* README.md */,
-			);
-			path = Masonry;
-			sourceTree = "<group>";
-		};
-		611AAA242356E40800F178AB /* Masonry */ = {
-			isa = PBXGroup;
-			children = (
-				611AAA252356E40800F178AB /* MASCompositeConstraint.h */,
-				611AAA262356E40800F178AB /* NSLayoutConstraint+MASDebugAdditions.m */,
-				611AAA272356E40800F178AB /* MASConstraint+Private.h */,
-				611AAA282356E40800F178AB /* MASLayoutConstraint.h */,
-				611AAA292356E40800F178AB /* NSArray+MASShorthandAdditions.h */,
-				611AAA2A2356E40800F178AB /* MASConstraintMaker.h */,
-				611AAA2B2356E40800F178AB /* View+MASAdditions.h */,
-				611AAA2C2356E40800F178AB /* NSArray+MASAdditions.h */,
-				611AAA2D2356E40800F178AB /* MASUtilities.h */,
-				611AAA2E2356E40800F178AB /* MASViewAttribute.h */,
-				611AAA2F2356E40800F178AB /* ViewController+MASAdditions.m */,
-				611AAA302356E40800F178AB /* MASViewConstraint.h */,
-				611AAA312356E40800F178AB /* MASConstraint.h */,
-				611AAA322356E40800F178AB /* NSLayoutConstraint+MASDebugAdditions.h */,
-				611AAA332356E40800F178AB /* MASCompositeConstraint.m */,
-				611AAA342356E40800F178AB /* MASConstraintMaker.m */,
-				611AAA352356E40800F178AB /* MASLayoutConstraint.m */,
-				611AAA362356E40800F178AB /* NSArray+MASAdditions.m */,
-				611AAA372356E40800F178AB /* View+MASAdditions.m */,
-				611AAA382356E40800F178AB /* View+MASShorthandAdditions.h */,
-				611AAA392356E40800F178AB /* Masonry.h */,
-				611AAA3A2356E40800F178AB /* MASConstraint.m */,
-				611AAA3B2356E40800F178AB /* ViewController+MASAdditions.h */,
-				611AAA3C2356E40800F178AB /* MASViewConstraint.m */,
-				611AAA3D2356E40800F178AB /* MASViewAttribute.m */,
-			);
-			path = Masonry;
 			sourceTree = "<group>";
 		};
 		611AAA5B2357219A00F178AB /* 评价详情 */ = {
@@ -938,6 +872,9 @@
 			children = (
 				611B071F2359A86700A2983F /* MapKit.framework */,
 				611B071D23599B2200A2983F /* CoreLocation.framework */,
+				795BED648948206452B2A653 /* Pods_____.framework */,
+				C124C3AD5653FF6376EB1362 /* Pods_____Tests.framework */,
+				244E45DE1E4EE638DD83D626 /* Pods_____UITests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -950,6 +887,7 @@
 				611D0F13234D8BBF00391470 /* 鲁班零工UITests */,
 				611D0EEE234D8BBE00391470 /* Products */,
 				611B071C23599B2200A2983F /* Frameworks */,
+				AD5F85E9B85B3760B7719DC5 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1017,6 +955,15 @@
 				611D0F16234D8BBF00391470 /* Info.plist */,
 			);
 			path = "鲁班零工UITests";
+			sourceTree = "<group>";
+		};
+		611D8ACE2373DF3C005B0A09 /* ZXDNetWorkInAF */ = {
+			isa = PBXGroup;
+			children = (
+				611D8ACF2373DF3C005B0A09 /* ZXD_NetWorking.m */,
+				611D8AD02373DF3C005B0A09 /* ZXD_NetWorking.h */,
+			);
+			path = ZXDNetWorkInAF;
 			sourceTree = "<group>";
 		};
 		611E748723682CEE00481E19 /* 雇员中心 */ = {
@@ -1223,6 +1170,7 @@
 		612B69A1234D8F8F00447686 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				611D8ACE2373DF3C005B0A09 /* ZXDNetWorkInAF */,
 				611AAA68235729F500F178AB /* HCRatingView */,
 				611AAA212356E3D200F178AB /* Library */,
 				612D4E1C2355A9A3002B7E9E /* ZLImageViewDisplay */,
@@ -1767,6 +1715,19 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		AD5F85E9B85B3760B7719DC5 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				69D7BFF37CCB4950CDE24548 /* Pods-鲁班零工.debug.xcconfig */,
+				34B4DB1E80E6A0CE368E5714 /* Pods-鲁班零工.release.xcconfig */,
+				1B6A11625AFAF133BB71AA7A /* Pods-鲁班零工Tests.debug.xcconfig */,
+				E853FFB73FABA03404FEF9FC /* Pods-鲁班零工Tests.release.xcconfig */,
+				0913CAE815CD5585CE301569 /* Pods-鲁班零工UITests.debug.xcconfig */,
+				D6806E0B5258ED3F720CF8D3 /* Pods-鲁班零工UITests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1774,9 +1735,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 611D0F19234D8BBF00391470 /* Build configuration list for PBXNativeTarget "鲁班零工" */;
 			buildPhases = (
+				5C40E6BB956E43A38713DDAB /* [CP] Check Pods Manifest.lock */,
 				611D0EE9234D8BBE00391470 /* Sources */,
 				611D0EEA234D8BBE00391470 /* Frameworks */,
 				611D0EEB234D8BBE00391470 /* Resources */,
+				9AF1293603D09260658E3122 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1791,6 +1754,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 611D0F1C234D8BBF00391470 /* Build configuration list for PBXNativeTarget "鲁班零工Tests" */;
 			buildPhases = (
+				6AEFDF21D6B524E57C7C84DD /* [CP] Check Pods Manifest.lock */,
 				611D0F01234D8BBF00391470 /* Sources */,
 				611D0F02234D8BBF00391470 /* Frameworks */,
 				611D0F03234D8BBF00391470 /* Resources */,
@@ -1809,6 +1773,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 611D0F1F234D8BBF00391470 /* Build configuration list for PBXNativeTarget "鲁班零工UITests" */;
 			buildPhases = (
+				91F6035F9DC33853EA0D1B30 /* [CP] Check Pods Manifest.lock */,
 				611D0F0C234D8BBF00391470 /* Sources */,
 				611D0F0D234D8BBF00391470 /* Frameworks */,
 				611D0F0E234D8BBF00391470 /* Resources */,
@@ -1881,7 +1846,6 @@
 				6120E88C235EA8C70072E4F5 /* intergrial.png in Resources */,
 				611AAA6D235729F500F178AB /* starBar.gif in Resources */,
 				618E3939236052DC00CB8AFA /* postms.png in Resources */,
-				611AAA4A2356E40800F178AB /* README.md in Resources */,
 				6118C264236295160062AE02 /* personHeader.png in Resources */,
 				61D9981023581FF900CDABFA /* BusinessLicense.png in Resources */,
 				611D0EFA234D8BBF00391470 /* Assets.xcassets in Resources */,
@@ -1893,7 +1857,6 @@
 				612D237E23614C0000D22A74 /* selectedButton.png in Resources */,
 				612CFEE5235D510E00BDECD2 /* wx.png in Resources */,
 				612D4E3E2355D3BD002B7E9E /* homeButton.png in Resources */,
-				611AAA3F2356E40800F178AB /* LICENSE in Resources */,
 				61D9980923581A4C00CDABFA /* fullfacePhoto.png in Resources */,
 				612D4E2F2355C1C4002B7E9E /* daishu.png in Resources */,
 				61D9981E2358636B00CDABFA /* imageButton.png in Resources */,
@@ -1922,6 +1885,92 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		5C40E6BB956E43A38713DDAB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-鲁班零工-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6AEFDF21D6B524E57C7C84DD /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-鲁班零工Tests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		91F6035F9DC33853EA0D1B30 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-鲁班零工UITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9AF1293603D09260658E3122 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-鲁班零工/Pods-鲁班零工-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-鲁班零工/Pods-鲁班零工-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-鲁班零工/Pods-鲁班零工-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		611D0EE9234D8BBE00391470 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -1932,7 +1981,6 @@
 				611B072C2359E43300A2983F /* MapTableCell.m in Sources */,
 				612CCEC52363E6E400936F17 /* OrderManagementThreeChildController.m in Sources */,
 				618E39262360390500CB8AFA /* ChatController.m in Sources */,
-				611AAA412356E40800F178AB /* ViewController+MASAdditions.m in Sources */,
 				6118C262236287DC0062AE02 /* EmployerCenterController.m in Sources */,
 				612CFEDE235D402900BDECD2 /* RechargeController.m in Sources */,
 				61153C182351E92F00C8DCDF /* UIView+YTSegmentBar.m in Sources */,
@@ -1955,27 +2003,22 @@
 				61153BFC2351CBFC00C8DCDF /* LookingForServicesController.m in Sources */,
 				6118C2842362DBF60062AE02 /* EmployerCenterOrderDetailCell.m in Sources */,
 				6118C2742362BBA50062AE02 /* OnShelvesViewController.m in Sources */,
-				611AAA472356E40800F178AB /* MASConstraint.m in Sources */,
-				611AAA442356E40800F178AB /* MASLayoutConstraint.m in Sources */,
 				6118C27A2362BC410062AE02 /* RejectedController.m in Sources */,
 				611B070C235953D100A2983F /* GrabdTableCell.m in Sources */,
 				611B07292359CC1400A2983F /* CallOutAnnotationView.m in Sources */,
 				611B0712235955E700A2983F /* PublishingServiceController.m in Sources */,
 				612B69D5234D8F8F00447686 /* WHToastView.m in Sources */,
 				612551772366C12700BEDD9C /* MyAdvantageCell.m in Sources */,
-				611AAA482356E40800F178AB /* MASViewConstraint.m in Sources */,
 				618E392923603C8500CB8AFA /* LeftUserCell.m in Sources */,
 				6118C2912362F1160062AE02 /* ThePersonIHiredController.m in Sources */,
 				61153C152351E91F00C8DCDF /* YTSegmentBarConfig.m in Sources */,
 				6120E8F1235EECCC0072E4F5 /* MyOddJobController.m in Sources */,
 				611D0F00234D8BBF00391470 /* main.m in Sources */,
 				61153C052351CC6D00C8DCDF /* HomeController.m in Sources */,
-				611AAA422356E40800F178AB /* MASCompositeConstraint.m in Sources */,
 				612467832352B1D40008B996 /* RemingView.m in Sources */,
 				61D9981623583EE600CDABFA /* PublishOddJobsController.m in Sources */,
 				611AAA672357286200F178AB /* StarTableCell.m in Sources */,
 				612B69D4234D8F8F00447686 /* WHToastConfig.m in Sources */,
-				611AAA462356E40800F178AB /* View+MASAdditions.m in Sources */,
 				618E38D6235FF59100CB8AFA /* OrderDetailsController.m in Sources */,
 				61D99804235817E800CDABFA /* EmployerCertificationTexyfieldCell.m in Sources */,
 				612CCEC22363E6CF00936F17 /* OrderManagementTwoChildController.m in Sources */,
@@ -2002,7 +2045,6 @@
 				617B0E142357FA4100E46C1E /* PublishContentController.m in Sources */,
 				612CFEF6235D606400BDECD2 /* VerificationCardController.m in Sources */,
 				612D4E262355B709002B7E9E /* ZXDBaseViewController.m in Sources */,
-				611AAA402356E40800F178AB /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
 				61492E6D235B3AC10020DDA3 /* TransactionDetailsCell.m in Sources */,
 				611AAA52235707B100F178AB /* EmployerRecordCell.m in Sources */,
 				61153BFF2351CC2600C8DCDF /* PublishController.m in Sources */,
@@ -2031,10 +2073,10 @@
 				612B69D8234D8F8F00447686 /* CCCycleScrollView.m in Sources */,
 				615CE8692352EF9400836431 /* MineTableCell.m in Sources */,
 				6125517D2366C54200BEDD9C /* AcknowledgementOrderController.m in Sources */,
-				611AAA492356E40800F178AB /* MASViewAttribute.m in Sources */,
 				612CCEBC2363DE1200936F17 /* OrderManagementController.m in Sources */,
 				612CCEB92363DDE700936F17 /* WaitPermissionController.m in Sources */,
 				615CE87D2353187300836431 /* RegisterController.m in Sources */,
+				611D8AD12373DF3C005B0A09 /* ZXD_NetWorking.m in Sources */,
 				612B69D9234D8F8F00447686 /* FJSlidingController.m in Sources */,
 				612D238523616DCE00D22A74 /* ToEvaluateController.m in Sources */,
 				611E7490236833E900481E19 /* RequestSuccessfulController.m in Sources */,
@@ -2046,7 +2088,6 @@
 				611D0EF2234D8BBE00391470 /* AppDelegate.m in Sources */,
 				611E748D23682D6400481E19 /* EmployeeCentreController.m in Sources */,
 				617B0E1D23580A8400E46C1E /* EmployerCertificationController.m in Sources */,
-				611AAA432356E40800F178AB /* MASConstraintMaker.m in Sources */,
 				612D238823618C4E00D22A74 /* ForgetPasswordController.m in Sources */,
 				61153C1B2351F05100C8DCDF /* HomeTableCell.m in Sources */,
 				6120E8FF235EF90A0072E4F5 /* OneViewController.m in Sources */,
@@ -2055,7 +2096,6 @@
 				611B071B235989AF00A2983F /* WorkPlaceMapController.m in Sources */,
 				61492E6A235B35210020DDA3 /* TransactionDetailsController.m in Sources */,
 				61492E63235B2AF20020DDA3 /* RealNameAuthenticationController.m in Sources */,
-				611AAA452356E40800F178AB /* NSArray+MASAdditions.m in Sources */,
 				61D998072358193800CDABFA /* EmployerCertificationThreeCell.m in Sources */,
 				615CE870235307F200836431 /* LoginViewController.m in Sources */,
 			);
@@ -2218,6 +2258,7 @@
 		};
 		611D0F1A234D8BBF00391470 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 69D7BFF37CCB4950CDE24548 /* Pods-鲁班零工.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -2234,7 +2275,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "huizuchenfeng.----";
+				PRODUCT_BUNDLE_IDENTIFIER = "lubanlinggong-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -2242,6 +2283,7 @@
 		};
 		611D0F1B234D8BBF00391470 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 34B4DB1E80E6A0CE368E5714 /* Pods-鲁班零工.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -2258,7 +2300,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "huizuchenfeng.----";
+				PRODUCT_BUNDLE_IDENTIFIER = "lubanlinggong-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -2266,6 +2308,7 @@
 		};
 		611D0F1D234D8BBF00391470 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1B6A11625AFAF133BB71AA7A /* Pods-鲁班零工Tests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -2285,6 +2328,7 @@
 		};
 		611D0F1E234D8BBF00391470 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E853FFB73FABA03404FEF9FC /* Pods-鲁班零工Tests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -2304,6 +2348,7 @@
 		};
 		611D0F20234D8BBF00391470 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0913CAE815CD5585CE301569 /* Pods-鲁班零工UITests.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2WTMSF4J24;
@@ -2322,6 +2367,7 @@
 		};
 		611D0F21234D8BBF00391470 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D6806E0B5258ED3F720CF8D3 /* Pods-鲁班零工UITests.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2WTMSF4J24;

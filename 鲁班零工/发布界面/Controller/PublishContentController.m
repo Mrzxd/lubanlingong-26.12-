@@ -122,25 +122,77 @@
 }
 
 - (void)topViewGesture:(UITapGestureRecognizer *)gesture {
-    PublishOddJobsController *publishOddJobsontroller = [PublishOddJobsController new];
-    publishOddJobsontroller.isPresent = YES;
-    LBNavigationController *navi = [[LBNavigationController alloc] initWithRootViewController:publishOddJobsontroller];
-    [self presentViewController:navi animated:YES completion:nil];
-//    EmployerCertificationController *employerCertificationController = [EmployerCertificationController new];
-//    employerCertificationController.isPresent = YES;
-//    LBNavigationController *navi = [[LBNavigationController alloc] initWithRootViewController:employerCertificationController];
-//    [self presentViewController:navi animated:YES completion:nil];
+    [self real_name_authentication_query:@"0"];
 }
 - (void)bottomViewGesture:(UITapGestureRecognizer *)gesture {
-//    ServiceAuthenticationController *serviceAuthenticationvc = [ServiceAuthenticationController new];
-//    serviceAuthenticationvc.isPresent = YES;
-//    LBNavigationController *navi = [[LBNavigationController alloc] initWithRootViewController:serviceAuthenticationvc];
-//    [self presentViewController:navi animated:YES completion:nil];
-    
-        PublishingServiceController *publishingServiceController = [PublishingServiceController new];
-        publishingServiceController.isPresent = YES;
-        LBNavigationController *navi = [[LBNavigationController alloc] initWithRootViewController:publishingServiceController];
-        [self presentViewController:navi animated:YES completion:nil];
+     [self real_name_authentication_query:@"1"];
+}
+- (void)real_name_authentication_query:(NSString *)type {
+    WeakSelf;
+    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingString:@"/ReleaseWork/CardId"] params:@{@"type":type NonNull} success:^(id  _Nonnull response) {
+        switch ([response[@"code"] intValue]) {
+            case 0: {
+                [WHToast showMessage:@"未上传身份证,请上传身份证照片" duration:1.5 finishHandler:^{
+                    if (type.intValue == 0) {
+                        [weakSelf toEmployerCertificationController];
+                    } else {
+                        [weakSelf toServiceAuthenticationController];
+                    }
+                }];
+            }
+                break;
+            case 1: {
+                if (type.intValue == 0) {
+                    PublishOddJobsController *publishOddJobsontroller = [PublishOddJobsController new];
+                    publishOddJobsontroller.isPresent = YES;
+                    LBNavigationController *navi = [[LBNavigationController alloc] initWithRootViewController:publishOddJobsontroller];
+                    [weakSelf presentViewController:navi animated:YES completion:nil];
+                } else {
+                    PublishingServiceController *publishingServiceController = [PublishingServiceController new];
+                    publishingServiceController.isPresent = YES;
+                    LBNavigationController *navi = [[LBNavigationController alloc] initWithRootViewController:publishingServiceController];
+                    [weakSelf presentViewController:navi animated:YES completion:nil];
+                }
+            }
+                break;
+            case 2: {
+                [WHToast showErrorWithMessage:@"审核失败,请重新上传身份证等资料" duration:1.5 finishHandler:^{
+                    if (type.intValue == 0) {
+                        [weakSelf toEmployerCertificationController];
+                    } else {
+                        [weakSelf toServiceAuthenticationController];
+                    }
+                }];
+            }
+                break;
+            case 3: {
+                [WHToast showErrorWithMessage:@"已上传身份证没审核,请等待审核通过" duration:1.5 finishHandler:^{
+                    if (type.intValue == 0) {
+                        [weakSelf toEmployerCertificationController];
+                    } else {
+                        [weakSelf toServiceAuthenticationController];
+                    }
+                }];
+            }
+                break;
+            default:
+                break;
+        }
+    } fail:^(NSError * _Nonnull error) {
+        
+    } showHUD:YES];
 }
 
+- (void)toEmployerCertificationController {
+        EmployerCertificationController *employerCertificationController = [EmployerCertificationController new];
+        employerCertificationController.isPresent = YES;
+        LBNavigationController *navi = [[LBNavigationController alloc] initWithRootViewController:employerCertificationController];
+        [self presentViewController:navi animated:YES completion:nil];
+}
+- (void)toServiceAuthenticationController {
+        ServiceAuthenticationController *serviceAuthenticationvc = [ServiceAuthenticationController new];
+        serviceAuthenticationvc.isPresent = YES;
+        LBNavigationController *navi = [[LBNavigationController alloc] initWithRootViewController:serviceAuthenticationvc];
+        [self presentViewController:navi animated:YES completion:nil];
+}
 @end

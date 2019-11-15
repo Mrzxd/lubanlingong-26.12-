@@ -10,6 +10,7 @@
 #import "AboutUsController.h"
 #import "RechargeController.h"
 #import "LBTabBarController.h"
+#import "LoginViewController.h"
 #import "EmployeeCentreController.h"
 #import "EmployerCenterController.h"
 #import "CashWithdrawalController.h"
@@ -292,8 +293,14 @@
     } else if (indexPath.row == 0) {
         [self.navigationController pushViewController:[EmployeeCentreController new] animated:YES];
     } else if (indexPath.row == 6) {
-        LBTabBarController *lbtabbarController = (LBTabBarController *)self.tabBarController;
-        [lbtabbarController dismissViewControllerAnimated:YES completion:nil];
+          [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"login_state"];
+        if (GlobalSingleton.gS_ShareInstance.state == 1) {
+            LoginViewController *loginController = [LoginViewController new];
+            GlobalSingleton.gS_ShareInstance.systemWindow.rootViewController = loginController;
+        } else {
+            LBTabBarController *lbtabbarController = (LBTabBarController *)self.tabBarController;
+            [lbtabbarController dismissViewControllerAnimated:YES completion:nil];
+        }
     } else if (indexPath.row == 1) {
         [self.navigationController pushViewController:[EmployerCenterController new] animated:YES];
     }

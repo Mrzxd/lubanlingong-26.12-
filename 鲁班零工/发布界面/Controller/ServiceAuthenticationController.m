@@ -23,7 +23,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"雇主认证";
+    self.title = @"实名认证";
     [self.view addSubview:self.tableView];
 }
 - (UIView *)headerView {

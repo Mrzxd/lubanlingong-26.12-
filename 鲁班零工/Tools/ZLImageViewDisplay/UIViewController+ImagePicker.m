@@ -167,7 +167,7 @@ static void const *isCut =  @"isCut"; //截取
     else{
         editedimage = info[@"UIImagePickerControllerOriginalImage"];
     }
-    NSData *imageData = UIImageJPEGRepresentation(editedimage, 0.0001);//首次进行压缩
+    NSData *imageData = UIImagePNGRepresentation(editedimage);//首次进行压缩
     UIImage *image = [UIImage imageWithData:imageData];
     //图片限制大小不超过 1M     CGFloat  kb =   data.lenth / 1000;  计算kb方法 os 按照千进制计算
 //    while (imageData.length/1000 > 1024) {

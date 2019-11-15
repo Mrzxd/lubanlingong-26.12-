@@ -10,8 +10,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
 @interface EmployerCertificationThreeCell : UITableViewCell
+
 @property (nonatomic, assign) BOOL isServiceAuthenticationController;
+@property (nonatomic, strong) PhotoBlock photoBlock;
+@property (nonatomic, strong) UIButton *fullfacePhoto;
+@property (nonatomic, strong) UIButton *negativePhoto;
+
 @end
 
 NS_ASSUME_NONNULL_END

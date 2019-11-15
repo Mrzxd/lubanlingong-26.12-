@@ -13,7 +13,6 @@
 
 @interface LoginViewController () <UITextFieldDelegate>
 {
-    
     UIImageView *imageView;
     UITextField *phoneTextField;
     UITextField *passWordTextField;
@@ -29,7 +28,6 @@
     [self addSubViews];
 }
 - (void)addSubViews {
-    
     imageView = [[UIImageView alloc] initWithFrame:CGRectMake(154*ScalePpth, statusHeight + 63*ScalePpth, 67*ScalePpth, 67*ScalePpth)];
     imageView.image = [UIImage imageNamed:@"register_logo"];
     imageView.clipsToBounds = YES;
@@ -122,8 +120,29 @@
     return YES;
 }
 - (void)loginButtonAction:(UIButton *)button {
-    LBTabBarController *tabbarVc = [LBTabBarController new];
-    [self presentViewController:tabbarVc animated:YES completion:nil];
+    if (![self isMobileNumberOnly:phoneTextField.text NonNull]) {
+        [WHToast showErrorWithMessage:@"请输入正确的手机号码"];
+        return;
+    }
+    if (passWordTextField.text.length < 6) {
+        [WHToast showErrorWithMessage:@"请输入6位数以上密码"];
+        return;
+    }
+    WeakSelf;
+    [ZXD_NetWorking putWithUrl:[rootUrl stringByAppendingString:@"/login"]params:@{
+                                                                       @"username":phoneTextField.text,
+                                                                       @"password":passWordTextField.text,
+                                                                       } success:^(id  _Nonnull response) {
+                                                                           if (response && [response[@"code"] intValue] == 0) {
+                                                                               [[NSUserDefaults standardUserDefaults] setObject:@"yes" forKey:@"login_state"];
+                                                                               LBTabBarController *tabbarVc = [LBTabBarController new];
+                                                                                [weakSelf presentViewController:tabbarVc animated:YES completion:nil];
+                                                                           } else {
+                                                                               [WHToast showErrorWithMessage:@"登录失败"];
+                                                                           }
+    } fail:^(NSError * _Nonnull error) {
+        [WHToast showErrorWithMessage:@"网络错误"];
+    } showHUD:YES];
 }
 - (void)textFieldDidEndEditing:(UITextField *)textField {
 }

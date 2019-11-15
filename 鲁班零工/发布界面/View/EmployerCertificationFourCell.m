@@ -28,10 +28,11 @@
     _nameLabel.text = @"上传营业执照";
     [self.contentView addSubview:_nameLabel];
     
-    UIButton *fullfacePhoto = [[UIButton alloc] initWithFrame:AutoFrame(90, 50, 196, 126)];
-    [fullfacePhoto setImage:[UIImage imageNamed:@"business"] forState:UIControlStateNormal];
-    fullfacePhoto.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    [self.contentView addSubview:fullfacePhoto];
+    _fullfacePhoto = [[UIButton alloc] initWithFrame:AutoFrame(90, 50, 196, 126)];
+    [_fullfacePhoto setImage:[UIImage imageNamed:@"business"] forState:UIControlStateNormal];
+    _fullfacePhoto.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    [_fullfacePhoto addTarget:self action:@selector(fullfacePhotoAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView addSubview:_fullfacePhoto];
     
     UILabel *fullfacePhotoLabel = [[UILabel alloc] initWithFrame:AutoFrame(100, 190, 175, 13)];
     fullfacePhotoLabel.font  = [UIFont systemFontOfSize:13*ScalePpth];
@@ -40,16 +41,21 @@
     fullfacePhotoLabel.textAlignment = NSTextAlignmentCenter;
     [self.contentView addSubview:fullfacePhotoLabel];
     
-    UIButton *loginButton = [[UIButton alloc] initWithFrame:CGRectMake(38*ScalePpth, 235*ScalePpth, 300*ScalePpth, 45*ScalePpth)];
-    [loginButton setTitle:@"提交" forState:UIControlStateNormal];
-    [loginButton setTitleColor:UIColor.blackColor forState:UIControlStateNormal];
-    loginButton.titleLabel.font = FontSize(17);
-    loginButton.backgroundColor = RGBHex(0xFFD301);
-    loginButton.layer.cornerRadius = 45.0/2*ScalePpth;
-    loginButton.layer.masksToBounds = YES;
-    loginButton.clipsToBounds = YES;
-    [self.contentView addSubview:loginButton];
+    _loginButton = [[UIButton alloc] initWithFrame:CGRectMake(38*ScalePpth, 235*ScalePpth, 300*ScalePpth, 45*ScalePpth)];
+    [_loginButton setTitle:@"提交" forState:UIControlStateNormal];
+    [_loginButton setTitleColor:UIColor.blackColor forState:UIControlStateNormal];
+    _loginButton.titleLabel.font = FontSize(17);
+    _loginButton.backgroundColor = RGBHex(0xFFD301);
+    _loginButton.layer.cornerRadius = 45.0/2*ScalePpth;
+    _loginButton.layer.masksToBounds = YES;
+    _loginButton.clipsToBounds = YES;
+    [self.contentView addSubview:_loginButton];
     
+}
+- (void)fullfacePhotoAction:(UIButton *)button {
+    if (_photoBlock) {
+        _photoBlock(0);
+    }
 }
 
 @end

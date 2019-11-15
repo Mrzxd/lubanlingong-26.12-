@@ -168,8 +168,8 @@
     [super viewDidLoad];
     self.navigationController.navigationBar.translucent = NO;
     self.view.backgroundColor = RGBHex(0xf0f0f0);
+    GlobalSingleton.gS_ShareInstance.contentType = @"abc";
     [self.view addSubview:self.tableView];
-
 }
 
 - (void)viewWillAppear:(BOOL)animated {

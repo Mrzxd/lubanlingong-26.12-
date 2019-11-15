@@ -28,10 +28,12 @@
     _nameLabel.text = @"身份证照片";
     [self.contentView addSubview:_nameLabel];
     
-    UIButton *fullfacePhoto = [[UIButton alloc] initWithFrame:AutoFrame(90, 50, 196, 126)];
-    [fullfacePhoto setImage:[UIImage imageNamed:@"front"] forState:UIControlStateNormal];
-    fullfacePhoto.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    [self.contentView addSubview:fullfacePhoto];
+    _fullfacePhoto = [[UIButton alloc] initWithFrame:AutoFrame(90, 50, 196, 126)];
+    [_fullfacePhoto setImage:[UIImage imageNamed:@"front"] forState:UIControlStateNormal];
+    _fullfacePhoto.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    _fullfacePhoto.tag = 100;
+    [_fullfacePhoto addTarget:self action:@selector(PhotoAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView addSubview:_fullfacePhoto];
     
     UILabel *fullfacePhotoLabel = [[UILabel alloc] initWithFrame:AutoFrame(100, 190, 175, 13)];
     fullfacePhotoLabel.font  = [UIFont systemFontOfSize:13*ScalePpth];
@@ -40,10 +42,12 @@
     fullfacePhotoLabel.textAlignment = NSTextAlignmentCenter;
     [self.contentView addSubview:fullfacePhotoLabel];
     
-    UIButton *negativePhoto = [[UIButton alloc] initWithFrame:AutoFrame(90, 241, 196, 126)];
-    [negativePhoto setImage:[UIImage imageNamed:@"contrary"] forState:UIControlStateNormal];
-    negativePhoto.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    [self.contentView addSubview:negativePhoto];
+    _negativePhoto = [[UIButton alloc] initWithFrame:AutoFrame(90, 241, 196, 126)];
+    [_negativePhoto setImage:[UIImage imageNamed:@"contrary"] forState:UIControlStateNormal];
+    _negativePhoto.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    _negativePhoto.tag = 101;
+    [_negativePhoto addTarget:self action:@selector(PhotoAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView addSubview:_negativePhoto];
     
     UILabel *negativePhotoLabel = [[UILabel alloc] initWithFrame:AutoFrame(100, 381, 175, 13)];
     negativePhotoLabel.font  = [UIFont systemFontOfSize:13*ScalePpth];
@@ -52,6 +56,12 @@
     negativePhotoLabel.textAlignment = NSTextAlignmentCenter;
     [self.contentView addSubview:negativePhotoLabel];
     
+}
+
+- (void)PhotoAction:(UIButton *)button {
+    if (_photoBlock) {
+        _photoBlock(button.tag-100);
+    }
 }
 
 - (void)setIsServiceAuthenticationController:(BOOL)isServiceAuthenticationController {

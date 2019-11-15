@@ -11,8 +11,13 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface GlobalSingleton : NSObject
+
 @property (nonatomic, strong) UIWindow *systemWindow;
+
+@property (nonatomic, strong) NSString *contentType;
+
 @property (nonatomic, assign) NSInteger times;
+@property (nonatomic, assign) NSInteger state;
 
 + (instancetype)gS_ShareInstance;
 @end

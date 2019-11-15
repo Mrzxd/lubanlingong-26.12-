@@ -18,6 +18,7 @@ typedef NS_ENUM(NSUInteger, ZXD_NetWorking_ENUM) {
     ZXD_NetWorking_ENUM_NONE,
     ZXD_NetWorking_ENUM_GET,
     ZXD_NetWorking_ENUM_POST,
+    ZXD_NetWorking_ENUM_PUT,
 };
 
 @implementation ZXD_NetWorking
@@ -47,6 +48,9 @@ typedef NS_ENUM(NSUInteger, ZXD_NetWorking_ENUM) {
 + (ZXDURLSessionTask *)postWithUrl:(NSString *)url params:(NSDictionary *)params success:(ZXDResponseSuccess)success fail:(ZXDResponseFail)fail showHUD:(BOOL)showHUD {
     return [self baseRequestType:ZXD_NetWorking_ENUM_POST url:url params:params success:success fail:fail showHUD:showHUD];
 }
++ (ZXDURLSessionTask *)putWithUrl:(NSString *)url params:(NSDictionary *)params success:(ZXDResponseSuccess)success fail:(ZXDResponseFail)fail showHUD:(BOOL)showHUD {
+    return [self baseRequestType:ZXD_NetWorking_ENUM_PUT url:url params:params success:success fail:fail showHUD:showHUD];
+}
 
 +(ZXDURLSessionTask *)baseRequestType:(ZXD_NetWorking_ENUM)type
                                  url:(NSString *)url
@@ -66,8 +70,11 @@ typedef NS_ENUM(NSUInteger, ZXD_NetWorking_ENUM) {
     //检查地址中是否有中文
     NSString *urlStr=[NSURL URLWithString:url]?url:[self strUTF8Encoding:url];
     AFHTTPSessionManager *manager = [self getAFManager];
+    if (GlobalSingleton.gS_ShareInstance.contentType) {
+        [manager.requestSerializer setValue:GlobalSingleton.gS_ShareInstance.contentType forHTTPHeaderField:GlobalSingleton.gS_ShareInstance.contentType];
+    }
     ZXDURLSessionTask *sessionTask=nil;
-    if (type == 1) {
+    if (type == ZXD_NetWorking_ENUM_GET) {
         sessionTask = [manager GET:urlStr parameters:params progress:^(NSProgress * _Nonnull downloadProgress) {
             
         } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -89,7 +96,7 @@ typedef NS_ENUM(NSUInteger, ZXD_NetWorking_ENUM) {
                 [MBProgressHUD hideHUDForView:[GlobalSingleton gS_ShareInstance].systemWindow animated:YES];
             }
         }];
-    } else {
+    } else if (type == ZXD_NetWorking_ENUM_POST) {
         
         sessionTask = [manager POST:urlStr parameters:params progress:^(NSProgress * _Nonnull uploadProgress) {
         } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -99,6 +106,25 @@ typedef NS_ENUM(NSUInteger, ZXD_NetWorking_ENUM) {
             }
             [[self tasks] removeObject:sessionTask];
             if (showHUD==YES) {
+                [MBProgressHUD hideHUDForView:[GlobalSingleton gS_ShareInstance].systemWindow animated:YES];
+            }
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            DLog(@"error=%@",error);
+            if (fail) {
+                fail(error);
+            }
+            [[self tasks] removeObject:sessionTask];
+            if (showHUD==YES) {
+                [MBProgressHUD hideHUDForView:[GlobalSingleton gS_ShareInstance].systemWindow animated:YES];
+            }
+        }];
+    }  else if (type == ZXD_NetWorking_ENUM_PUT){
+        sessionTask = [manager PUT:urlStr parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            if (success) {
+                success(responseObject);
+            }
+            [[self tasks] removeObject:sessionTask];
+            if (showHUD == YES) {
                 [MBProgressHUD hideHUDForView:[GlobalSingleton gS_ShareInstance].systemWindow animated:YES];
             }
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {

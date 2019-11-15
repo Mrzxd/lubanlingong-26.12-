@@ -12,8 +12,16 @@
 #import "EmployerCertificationFourCell.h"
 
 @interface EmployerCertificationController () <UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate>
+
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIView *headerView;
+@property (nonatomic, strong) EmployerCertificationOneCell *cell;
+@property (nonatomic, strong) NSString *fullfaceEncodedImageStr;
+@property (nonatomic, strong) NSString *negativeEncodedImageStr;
+@property (nonatomic, strong) NSString *businessLicenseEncodedImageStr;
+
+@property (nonatomic, strong) NSMutableArray *textFieldArray;
+
 @end
 
 @implementation EmployerCertificationController
@@ -22,6 +30,8 @@
     [super viewDidLoad];
     self.title = @"雇主认证";
     [self.view addSubview:self.tableView];
+    _textFieldArray = [NSMutableArray new];
+    [self toNetWork];
 }
 - (UIView *)headerView {
     if (!_headerView) {
@@ -58,6 +68,13 @@
     return _tableView;
 }
 
+- (void)toNetWork {
+    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingString:@"/updateMemberNews/updatEmployerNewsCaredId"] params:@{} success:^(id  _Nonnull response) {
+        
+    } fail:^(NSError * _Nonnull error) {
+        
+    } showHUD:YES];
+}
 
 #pragma mark ------ UITableViewDelegate
 
@@ -100,25 +117,108 @@
     if (indexPath.section == 0 ) {
         if (indexPath.row == 0) {
             EmployerCertificationOneCell *cell = [tableView dequeueReusableCellWithIdentifier:@"EmployerCertificationOneCell" forIndexPath:indexPath];
+            _cell = cell;
             return cell;
         } else {
-            
+            if (_textFieldArray.count == 2) {
+                EmployerCertificationTexyfieldCell *cell = _textFieldArray[indexPath.row - 1];
+                return cell;
+            }
             EmployerCertificationTexyfieldCell *cell = [tableView dequeueReusableCellWithIdentifier:@"EmployerCertificationTexyfieldCell" forIndexPath:indexPath];
+            if (_textFieldArray.count < 2) {
+                [_textFieldArray addObject:cell];
+            }
             cell.textField.delegate = self;
             cell.nameLabel.text = @[@"",@"真实姓名",@" 身份证号"][indexPath.row];
             cell.textField.placeholder =  @[@"",@"请输入真实姓名",@"请输入身份证号"][indexPath.row];
             return cell;
         }
-      
     } else if (indexPath.section == 1) {
+        
         EmployerCertificationThreeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"EmployerCertificationThreeCell" forIndexPath:indexPath];
+       
+        WeakSelf;
+        __weak typeof(cell) weakCell = cell;
+        cell.photoBlock = ^(NSInteger index) {
+             [weakSelf pickImageWithCompletionHandler:^(NSData *imageData, UIImage *image) {
+            if (index == 0) {
+                 weakSelf.fullfaceEncodedImageStr = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+                 [weakCell.fullfacePhoto setImage:image forState:UIControlStateNormal];
+             } else {
+                 weakSelf.negativeEncodedImageStr = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+                 [weakCell.negativePhoto setImage:image forState:UIControlStateNormal];
+             }
+           }];
+        };
         return cell;
     } else {
+        WeakSelf;
         EmployerCertificationFourCell *cell = [tableView dequeueReusableCellWithIdentifier:@"EmployerCertificationFourCell" forIndexPath:indexPath];
+        __weak typeof(cell) weakCell = cell;
+        [cell.loginButton addTarget:self action:@selector(submitAction:) forControlEvents:UIControlEventTouchUpInside];
+        cell.photoBlock = ^(NSInteger index) {
+            [weakSelf pickImageWithCompletionHandler:^(NSData *imageData, UIImage *image) {
+            weakSelf.businessLicenseEncodedImageStr = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+            [weakCell.fullfacePhoto setImage:image forState:UIControlStateNormal];
+        }];
+        };
         return cell;
     }
 }
-
-
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.row == 0) {
+        WeakSelf;
+        UIAlertAction *alertAction1 = [UIAlertAction actionWithTitle:@"公司" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            weakSelf.cell.rightLabel.text = @"公司";
+            weakSelf.cell.rightLabel.textColor = RGBHex(0x333333);
+        }];
+        UIAlertAction *alertAction2 = [UIAlertAction actionWithTitle:@"个人" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            weakSelf.cell.rightLabel.text = @"个人";
+            weakSelf.cell.rightLabel.textColor = RGBHex(0x333333);
+        }];
+        UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"" message:@"请选择雇主类型" preferredStyle:UIAlertControllerStyleActionSheet];
+        [controller addAction:alertAction1];
+        [controller addAction:alertAction2];
+        [self presentViewController:controller animated:YES completion:nil];
+    }
+}
+- (void)submitAction:(UIButton *)button {
+    if ([_cell.rightLabel.text isEqualToString:@"请选择"]) {
+        [WHToast showErrorWithMessage:@"请先选择雇主类型"];
+        return;
+    }
+    if ([_cell.rightLabel.text isEqualToString:@"公司"] && (NoneNull(_businessLicenseEncodedImageStr).length == 0)) {
+        [WHToast showErrorWithMessage:@"请选择营业执照"];
+        return;
+    }
+    EmployerCertificationTexyfieldCell *cell1 = _textFieldArray[0];
+    EmployerCertificationTexyfieldCell *cell2 = _textFieldArray[1];
+    if (cell1.textField.text.length == 0) {
+        [WHToast showErrorWithMessage:@"请填写姓名"];
+        return;
+    }
+    if (![self verifyIDCardNumber:NoneNull(cell2.textField.text)]) {
+        [WHToast showErrorWithMessage:@"请填写正确的身份证号"];
+        return;
+    }
+    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingString:@"/updateMemberNews/updatEmployerNewsCaredId"] params:@{
+                                                                                                                         @"cardImagez":_fullfaceEncodedImageStr NonNull,
+                                                                                                                         @"base64z":@"data:image/png;base64,",
+                                                                                                                         @"cardImageb":_negativeEncodedImageStr NonNull,
+                                                                                                                         @"base64b":@"data:image/png;base64,",
+                                                                                                                         @"Licensez":_businessLicenseEncodedImageStr NonNull,
+                                                                                                                         @"base64lz":@"data:image/png;base64,",
+                                                                                                                         @"name":cell1.textField.text NonNull,
+                                                                                                                         @"cardId":NoneNull(cell2.textField.text),
+                                                                                                                         } success:^(id  _Nonnull response) {
+                                                                                                                             if (response && [response[@"code"] intValue] == 0) {
+                                                                                                                                 [WHToast showSuccessWithMessage:@"上传成功"];
+                                                                                                                             } else {
+                                                                                                                                 [WHToast showErrorWithMessage:@"上传失败"];
+                                                                                                                             }
+    } fail:^(NSError * _Nonnull error) {
+        [WHToast showErrorWithMessage:@"网络错误"];
+    } showHUD:YES];
+}
 
 @end
