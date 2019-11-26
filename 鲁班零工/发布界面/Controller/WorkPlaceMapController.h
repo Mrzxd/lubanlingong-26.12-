@@ -10,7 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef void(^AdressInMapBlock)(NSString *address,NSString *longitude,NSString *latitude);
+
 @interface WorkPlaceMapController : ZXDBaseViewController
+
+@property (nonatomic, strong) AdressInMapBlock adressBlock;
 
 @end
 

@@ -18,6 +18,7 @@
 #import "PublishingServiceController.h"
 
 @interface PublishingServiceController () <UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UITextViewDelegate,UIPickerViewDelegate,UIPickerViewDataSource>
+
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UITextView *textView;
 @property (nonatomic, strong) UIView *footerView;
@@ -27,10 +28,20 @@
 @property (strong, nonatomic) UIDatePicker *dateView;
 @property (strong, nonatomic) UIDatePicker *dateView2;
 @property (nonatomic, strong) NSArray *JobArray;
+
 @property (nonatomic, strong) EmployerCertificationOneCell * cell;
+@property (nonatomic, strong) ServiceTimeCell *timeCell;
+
+@property (nonatomic, strong) NSArray <HomeListModel *>*homeListModelArray;
 @property (nonatomic, strong) NSMutableArray *selectTimeArray;
 @property (nonatomic, strong) NSMutableArray *selectCellArray;
 @property (nonatomic, strong) NSMutableArray *textViewCellArray;
+@property (nonatomic, strong) NSMutableArray *mutableArray;
+@property (nonatomic, strong) NSMutableArray *mutableIDArray;
+@property (nonatomic, strong) NSMutableArray *textFieldCellArray;
+@property (nonatomic, strong) NSMutableArray *encodedBase64ImageArray;
+@property (nonatomic, strong) NSString *selectID;
+
 @end
 
 @implementation PublishingServiceController
@@ -48,10 +59,23 @@
 }
 - (void)setAllDatas {
     
-    _JobArray = @[@"零工1",@"零工2",@"零工3"];
+//    _JobArray = @[@"零工1",@"零工2",@"零工3"];
     _textViewCellArray = [[NSMutableArray alloc] init];
     _selectCellArray = [[NSMutableArray alloc] init];
     _selectTimeArray = [[NSMutableArray alloc] init];
+    _textFieldCellArray = [[NSMutableArray alloc] init];
+    
+     _encodedBase64ImageArray = @[@"",@"",@""].mutableCopy;
+    _homeListModelArray = [HomeListModel mj_objectArrayWithKeyValuesArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"HomeListModelArray"]];
+    _mutableIDArray = [[NSMutableArray alloc] init];
+    _mutableArray = [[NSMutableArray alloc] init];
+    for (NSInteger i = 0; i < _homeListModelArray.count; i ++) {
+        for (NSInteger j = 0; j < [_homeListModelArray[i] list].count; j ++) {
+            [_mutableArray addObject:[[_homeListModelArray[i] list][j] typeWork]];
+            [_mutableIDArray addObject:[[_homeListModelArray[i] list][j] idName]];
+        }
+    }
+    
     [_selectTimeArray addObject:@""];
     [_selectTimeArray addObject:@""];
     
@@ -117,7 +141,70 @@
     _cell.rightLabel.text = [NSString stringWithFormat:@"%@至%@",_selectTimeArray[0],_selectTimeArray[1]];
     _cell.rightLabel.textColor = RGBHex(0x333333);
 }
-
+- (void)publishButtonAction:(UIButton *)button {
+    if ([_textFieldCellArray[0] textField].text.length == 0) {
+        [WHToast showErrorWithMessage:@"请输入需求名称"];
+        return;
+    }
+    if ([[_selectCellArray[0][@"section_0_row_2"] rightLabel].text containsString:@"请"]) {
+         [WHToast showErrorWithMessage:@"请选择零工类型"];
+        return;
+    }
+    if ([_textFieldCellArray[1] textField].text.length == 0) {
+        [WHToast showErrorWithMessage:@"请输入服务费"];
+        return;
+    }
+    if ([_selectTimeArray[0] length] == 0) {
+        [WHToast showErrorWithMessage:@"请选择服务时间"];
+        return;
+    }
+    __block NSString *weekTime;
+    [_timeCell.weekButtonArray enumerateObjectsUsingBlock:^(UIButton * _Nonnull timeButton, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (timeButton.isSelected) {
+            if (!weekTime) {
+                weekTime = [NSString stringWithFormat:@"%ld",idx+1];
+            } else {
+                weekTime = [weekTime stringByAppendingString:[NSString stringWithFormat:@",%ld",idx+1]];
+            }
+        }
+    }];
+    if (!weekTime) {
+        [WHToast showErrorWithMessage:@"请选择周一至周日的服务时间段"];
+        return;
+    }
+    if ([[_textViewCellArray[0][@"section_2_row_3"] textView].text containsString:@"请输入"]) {
+         [WHToast showErrorWithMessage:@"请输入我的优势"];
+        return;
+    }
+    if ([[_textViewCellArray[1][@"section_3_row_1"] textView].text containsString:@"请详细"]) {
+            [WHToast showErrorWithMessage:@"请输入服务介绍"];
+           return;
+       }
+    WeakSelf;
+    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingString:@"/ReleaseSkill/add/skill"] params:@{
+        @"skillName":[_textFieldCellArray[0] textField].text,
+        @"skillType":[_selectCellArray[0][@"section_0_row_2"] rightLabel].text,
+        @"skillTypeId":_selectID NonNull,
+        @"skillSalary":[_textFieldCellArray[1] textField].text,
+        @"skillSalaryDay":[_selectCellArray[1][@"section_1_row_1"] rightLabel].text,
+        @"skillTimeEnd":_selectTimeArray[1],
+        @"skillTimeStart":_selectTimeArray[0],
+        @"skillDate":weekTime,
+        @"skillVirtue":[_textViewCellArray[0][@"section_2_row_3"] textView].text,
+        @"skillInfo":[_textViewCellArray[1][@"section_3_row_1"] textView].text,
+        @"skillLink":_encodedBase64ImageArray[0],
+        @"skillLink2":_encodedBase64ImageArray[1],
+        @"skillLink3":_encodedBase64ImageArray[2],
+    } success:^(id  _Nonnull response) {
+        if ([response[@"code"] intValue] == 0) {
+            [WHToast showSuccessWithMessage:@"发布成功" duration:1 finishHandler:^{
+                [weakSelf dismissViewControllerAnimated:YES completion:nil];
+            }];
+        }
+    } fail:^(NSError * _Nonnull error) {
+        
+    } showHUD:YES];
+}
 - (UIPickerView *)pickerView {
     if (!_pickerView) {
         _pickerSuperView =  [[UIView alloc] initWithFrame:self.view.bounds];
@@ -171,6 +258,7 @@
         publishButton.layer.cornerRadius = 45.0/2*ScalePpth;
         publishButton.layer.masksToBounds = YES;
         publishButton.clipsToBounds = YES;
+        [publishButton addTarget:self action:@selector(publishButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         [_footerView addSubview:publishButton];
     }
     return _footerView;
@@ -267,6 +355,7 @@
 -(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component{
     if (_cell) {
         [_cell rightLabel].text = _JobArray[row];
+        _selectID = _mutableIDArray[row];
         _cell.rightLabel.textColor = RGBHex(0x333333);
     }
     [pickerView reloadAllComponents];
@@ -331,6 +420,9 @@
                   EmployerCertificationTexyfieldCell *cell = [tableView dequeueReusableCellWithIdentifier:@"EmployerCertificationTexyfieldCell" forIndexPath:indexPath];
                   cell.nameLabel.text = @[@"",@"名称",@"",@"人数"][indexPath.row ];
                   cell.textField.placeholder =  @[@"",@"请输入需求名称",@"",@"请输入零工需求数量"][indexPath.row ];
+                  if (_textFieldCellArray.count < 2 && ![_textFieldCellArray containsObject:cell]) {
+                      [_textFieldCellArray addObject:cell];
+                  }
                   return cell;
               } else {
                     EmployerCertificationOneCell *cell;
@@ -365,11 +457,15 @@
                   EmployerCertificationTexyfieldCell *cell = [tableView dequeueReusableCellWithIdentifier:@"EmployerCertificationTexyfieldCell" forIndexPath:indexPath];
                   cell.nameLabel.text = @"服务费";
                   cell.textField.placeholder =  @"你想赚多少钱（元）";
+                  if (_textFieldCellArray.count < 3 && ![_textFieldCellArray containsObject:cell]) {
+                                       [_textFieldCellArray addObject:cell];
+                                   }
                   return cell;
               }
           }  else if (indexPath.section == 2) {
               if (indexPath.row == 1) {
                   ServiceTimeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ServiceTimeCell" forIndexPath:indexPath];
+                 _timeCell = cell;
                   return cell;
               } else if (indexPath.row == 2) {
                 EmployerCertificationOneCell *cell;
@@ -422,15 +518,19 @@
               cell.buttonBlock = ^(UIButton * _Nonnull button) {
                   
                   [weakSelf pickImageWithCompletionHandler:^(NSData *imageData, UIImage *image) {
-                      if (image) {
-                          [button setImage:image forState:UIControlStateNormal];
-                          if (button.tag == 300) {
-                              weakCell.imageButton1.hidden = NO;
-                          } else if (button.tag == 301) {
+                    if (imageData) {
+                         [button setImage:image forState:UIControlStateNormal];
+                         if (button.tag == 300) {
+                             weakSelf.encodedBase64ImageArray[0] = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+                             weakCell.imageButton1.hidden = NO;
+                         } else if (button.tag == 301) {
+                              weakSelf.encodedBase64ImageArray[1] = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
                               weakCell.imageButton2.hidden = NO;
-                          }
-                          button.enabled = NO;
-                      }
+                         } else {
+                              weakSelf.encodedBase64ImageArray[2] = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+                         }
+                             button.enabled = NO;
+                     }
                   }];
               };
               return cell;
@@ -458,7 +558,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [_textView endEditing:YES];
     if (indexPath.section == 0 && indexPath.row == 2) {
-        _JobArray = @[@"零工1",@"零工2",@"零工3"];
+        _JobArray = _mutableArray;
         _cell = _selectCellArray[0][@"section_0_row_2"];
         self.pickerSuperView.hidden = NO;
     } else if (indexPath.section == 1 && indexPath.row == 1) {

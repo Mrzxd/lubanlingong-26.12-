@@ -10,6 +10,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
+
+
 @interface OrderStatusCell : UITableViewCell
 
 @property (nonatomic, strong) UIButton *startWorkButton;
@@ -20,6 +23,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UILabel *saleLabel;
 @property (nonatomic, strong) UILabel *timeCTLabel;
 @property (nonatomic, strong) UILabel *saleCTLabel;
+
+@property (nonatomic, strong) MyOddJobModel *jobModel;
+
+@property (nonatomic, strong) OrderFirstButtonBlock firstButtonBlock;
+@property (nonatomic, strong) OrderStatusCellBlock cellBlock;
+@property (nonatomic, strong) OrderMiddleButtonBlock middlleButtonBlock;
+
 
 @end
 

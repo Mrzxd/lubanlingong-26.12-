@@ -12,11 +12,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef void(^OrderBlock)(id model);
 
+typedef NS_ENUM(NSInteger,Person_Type) {
+    Person_Type_Employer = 0,//显示雇主信息
+    Person_Type_Employee     //显示雇员
+};
 
 @interface OrderDetailsController : ZXDBaseViewController
 
 @property (nonatomic, strong) OrderBlock orderBlock;
-
+@property (nonatomic, strong) NSString*orderId;
+@property (nonatomic, assign) Person_Type type;
 @property (nonatomic, assign) OrderDetail_Type detail_Type;
 
 @end

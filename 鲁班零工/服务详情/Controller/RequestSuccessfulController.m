@@ -8,6 +8,7 @@
 //
 
 #import "OddJobCell.h"
+#import "OrderDetailsOfMyEmployeesController.h"
 #import "RequestSuccessfulController.h"
 
 @interface RequestSuccessfulController () <UITableViewDelegate,UITableViewDataSource>
@@ -21,8 +22,8 @@
     [super viewDidLoad];
     self.title = @"请求成功";
     [self.view addSubview:self.tableView];
+   
 }
-
 - (UIView *)headerView {
     if (!_headerView) {
         _headerView = [[UIView alloc] initWithFrame:AutoFrame(0, 0, 375, 266)];
@@ -69,7 +70,7 @@
     nowLabel.textAlignment = NSTextAlignmentCenter;
     [_headerView addSubview:nowLabel];
     
-    NSArray *titleArray = @[@"查看接单状态",@" 拨打电话"];
+    NSArray *titleArray = @[@"查看接单状态",@"拨打电话"];
     for (NSInteger i = 0; i < 2; i ++) {
         UIButton *button  = [[UIButton alloc] initWithFrame:AutoFrame(78 + i *120, 180, 100, 30)];
         [button setTitle:titleArray[i] forState:UIControlStateNormal];
@@ -78,6 +79,8 @@
         button.clipsToBounds = YES;
         button.layer.masksToBounds = YES;
         button.layer.cornerRadius = 5*ScalePpth;
+        button.tag = 100 +i;
+        [button addTarget:self action:@selector(requestButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         if (i == 0) {
             button.layer.borderColor = RGBHex(0xCCCCCC).CGColor;
             button.layer.borderWidth = 0.5;
@@ -100,6 +103,17 @@
     [_headerView addSubview:bottomView];
 }
 
+- (void)requestButtonAction:(UIButton *)button {
+    if (button.tag == 100) {
+        OrderDetailsOfMyEmployeesController *odvc = [OrderDetailsOfMyEmployeesController new];
+        odvc.detail_Type = OrderDetail_Type_Agree_wait;
+        odvc.idName = NoneNull(_idName);
+        [self.navigationController pushViewController:odvc animated:YES];
+    } else {
+        NSMutableString *phone=[[NSMutableString alloc] initWithFormat:@"telprompt://%@",_phone NonNull];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:phone]];
+    }
+}
 
 #pragma mark ------ UITableViewDelegate
 

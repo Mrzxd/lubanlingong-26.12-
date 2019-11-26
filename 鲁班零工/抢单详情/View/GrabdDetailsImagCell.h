@@ -7,10 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GrabdDetailsModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef void(^LoadImageBlock)(CGFloat cellHeight);
+
 @interface GrabdDetailsImagCell : UITableViewCell
+
+@property (nonatomic, strong) GrabdDetailsModel *detailModel;
+@property (nonatomic, assign) CGFloat cellHeight;
+@property (nonatomic, strong) LoadImageBlock imageBlock;
 
 @end
 

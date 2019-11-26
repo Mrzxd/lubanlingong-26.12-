@@ -12,6 +12,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ServiceTimeCell : UITableViewCell
 
+@property(nonatomic, strong) NSMutableArray *weekButtonArray;
+
+- (void)closeButtonEnabledWithString:(NSString *)string;
+
 @end
 
 NS_ASSUME_NONNULL_END

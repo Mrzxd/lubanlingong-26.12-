@@ -17,7 +17,7 @@
 @property (nonatomic, strong) UIButton *imageButton1;
 @property (nonatomic, strong) UIButton *imageButton2;
 @property (nonatomic, strong) UIButton *imageButton;
-
+@property (nonatomic, strong) NSMutableArray *mutableStringBase64Array;
 
 @end
 
@@ -26,7 +26,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"取消订单";
-    
+    _mutableStringBase64Array = NSMutableArray.array;
     self.view.backgroundColor = RGBHex(0xf0f0f0);
     
     UIView *topCoverView = [[UIView alloc] initWithFrame:AutoFrame(7.5, 10, 360, 120)];
@@ -117,7 +117,31 @@
     submitButton.layer.cornerRadius = 45.0/2*ScalePpth;
     submitButton.layer.masksToBounds = YES;
     submitButton.clipsToBounds = YES;
+    [submitButton addTarget:self action:@selector(submit:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:submitButton];
+}
+- (void)submit:(UIButton *)button {
+    WeakSelf;
+    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/WorkerCore/CancelWork"] params:@{
+        @"id":NoneNull(_idName),
+        @"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userId"],
+        @"msg":NoneNull(_textView.text),
+        @"database":_mutableStringBase64Array
+    } success:^(id  _Nonnull response) {
+        if (response && [response[@"code"] intValue] == 0) {
+            [WHToast showSuccessWithMessage:@"取消成功" duration:1 finishHandler:^{
+                [weakSelf.navigationController popViewControllerAnimated:YES];
+            }];
+        } else {
+            if (response[@"msg"]) {
+                [WHToast showErrorWithMessage:response[@"msg"]];
+            } else {
+                [WHToast showErrorWithMessage:@"取消失败"];
+            }
+        }
+    } fail:^(NSError * _Nonnull error) {
+        [WHToast showErrorWithMessage:@"网络错误"];
+    } showHUD:YES];
 }
 - (void)setUpimageButton:(UIView *)coverView {
     _imageButton = [[UIButton alloc] initWithFrame:AutoFrame(7.5, 233.5, 100, 100)];
@@ -168,12 +192,16 @@
 - (void)imageButtonAction:(UIButton *)button {
     WeakSelf;
     [self pickImageWithCompletionHandler:^(NSData *imageData, UIImage *image) {
+        NSString *base64String = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
         if (image) {
+            [weakSelf.mutableStringBase64Array addObject:base64String];
             [button setImage:image forState:UIControlStateNormal];
             if (button.tag == 300) {
                 weakSelf.imageButton1.hidden = NO;
             } else if (button.tag == 301) {
                 weakSelf.imageButton2.hidden = NO;
+            } else {
+                
             }
                 button.enabled = NO;
         }

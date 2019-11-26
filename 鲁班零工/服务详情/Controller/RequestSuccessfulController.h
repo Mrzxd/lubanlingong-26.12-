@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface RequestSuccessfulController : ZXDBaseViewController
 
+@property (nonatomic, strong) NSString *idName;
+@property (nonatomic, strong) NSString *phone;
 @end
 
 NS_ASSUME_NONNULL_END

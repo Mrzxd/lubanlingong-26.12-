@@ -12,7 +12,7 @@
 
 @optional
 
--(void) ratingChanged:(float) newRating;
+-(void) ratingChanged:(float) newRating:(NSObject *)ratingView;
 
 @end
 

@@ -24,7 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)intervalBeOverdueSinceLast:(NSString *)theDate;
 //车牌号格式校验(粤A8888澳)，18-05-21，增加新能源车牌校验
 - (BOOL)checkCarID:(NSString *)carID;
-
+#pragma mark ---- 将时间戳转换成时间
+- (NSString *)getTimeFromTimestamp:(NSString *)time;
 @end
 
 NS_ASSUME_NONNULL_END

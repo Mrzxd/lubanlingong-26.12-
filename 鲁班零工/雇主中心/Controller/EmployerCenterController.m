@@ -128,6 +128,8 @@
         [self.navigationController pushViewController:ojrvc animated:YES];
     } else if (button.tag == 505) {
         [self.navigationController pushViewController:[ThePersonIHiredController new] animated:YES];
+    } else if (button.tag == 503) {
+        [self.navigationController pushViewController:[EmployerInformationController new] animated:YES];
     }
 }
 

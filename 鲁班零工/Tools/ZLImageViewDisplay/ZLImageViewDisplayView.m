@@ -40,7 +40,7 @@
         _animationInterVale = 0.7;
         _currentPage = 1;                           //当前显示页面
         _imageViewcontentModel = UIViewContentModeScaleToFill;
-        self.clipsToBounds = YES;
+        self.clipsToBounds = YES;        
     }
     return self;
 }

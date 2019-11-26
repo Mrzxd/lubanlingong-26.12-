@@ -9,7 +9,9 @@
 
 #import "SendTableCell.h"
 
-@implementation SendTableCell
+@implementation SendTableCell {
+    UIImageView *imageView;
+}
 
 //- (void)drawRect:(CGRect)rect {
 //
@@ -49,9 +51,19 @@
     _rightLabel.textAlignment = NSTextAlignmentRight;
     [self.contentView addSubview:_rightLabel];
     
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:AutoFrame(200, 19, 10, 12)];
+    imageView = [[UIImageView alloc] initWithFrame:AutoFrame(200, 19, 10, 12)];
     imageView.image = [UIImage imageNamed:@"home_location"];
     [self.contentView addSubview:imageView];
+}
+
+- (void)setDetailModel:(GrabdDetailsModel *)detailModel {
+    _detailModel = detailModel;
+    if (detailModel) {
+        _rightLabel.text = NoneNull(detailModel.workPositino);
+        CGRect frame = imageView.frame;
+        frame.origin.x = ScreenWidth-( NoneNull(detailModel.workPositino).length *11*ScalePpth+58*ScalePpth);
+        imageView.frame = frame;
+    }
 }
 
 @end

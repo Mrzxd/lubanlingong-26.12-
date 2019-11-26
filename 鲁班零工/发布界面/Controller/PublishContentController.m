@@ -122,10 +122,18 @@
 }
 
 - (void)topViewGesture:(UITapGestureRecognizer *)gesture {
-    [self real_name_authentication_query:@"0"];
+    PublishOddJobsController *publishOddJobsontroller = [PublishOddJobsController new];
+    publishOddJobsontroller.isPresent = YES;
+    LBNavigationController *navi = [[LBNavigationController alloc] initWithRootViewController:publishOddJobsontroller];
+    [self presentViewController:navi animated:YES completion:nil];
+//    [self real_name_authentication_query:@"0"];
 }
 - (void)bottomViewGesture:(UITapGestureRecognizer *)gesture {
-     [self real_name_authentication_query:@"1"];
+   PublishingServiceController *publishingServiceController = [PublishingServiceController new];
+       publishingServiceController.isPresent = YES;
+       LBNavigationController *navi = [[LBNavigationController alloc] initWithRootViewController:publishingServiceController];
+       [self presentViewController:navi animated:YES completion:nil];
+//     [self real_name_authentication_query:@"1"];
 }
 - (void)real_name_authentication_query:(NSString *)type {
     WeakSelf;
@@ -167,11 +175,11 @@
                 break;
             case 3: {
                 [WHToast showErrorWithMessage:@"已上传身份证没审核,请等待审核通过" duration:1.5 finishHandler:^{
-                    if (type.intValue == 0) {
-                        [weakSelf toEmployerCertificationController];
-                    } else {
-                        [weakSelf toServiceAuthenticationController];
-                    }
+//                    if (type.intValue == 0) {
+//                        [weakSelf toEmployerCertificationController];
+//                    } else {
+//                        [weakSelf toServiceAuthenticationController];
+//                    }
                 }];
             }
                 break;

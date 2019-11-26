@@ -9,18 +9,38 @@
 //
 #import "OrderStatusCell.h"
 #import "OrderManagementOneChildController.h"
+#import "OrderDetailsOfMyEmployeesController.h"
 
 @interface OrderManagementOneChildController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) NSArray <MyOddJobModel *>*jobModelArray;
 
 @end
 
 @implementation OrderManagementOneChildController
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self netWorking];
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.tableView];
+}
+- (void)netWorking {
+    WeakSelf;
+    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingString:@"/employerCore/employerCore"] params:@{
+        @"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userId"],
+        @"type":@"0"
+    } success:^(id  _Nonnull response) {
+        if (response && [response[@"code"] intValue] == 0 && response[@"data"]) {
+            weakSelf.jobModelArray = [MyOddJobModel mj_objectArrayWithKeyValuesArray:response[@"data"]];
+            [weakSelf.tableView reloadData];
+        }
+    } fail:^(NSError * _Nonnull error) {
+        
+    } showHUD:YES];
 }
 - (UITableView *)tableView {
     if (!_tableView) {
@@ -41,7 +61,7 @@
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 4;
+    return _jobModelArray.count;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 1;
@@ -66,36 +86,39 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     OrderStatusCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OrderStatusCell" forIndexPath:indexPath];
     cell.timeLabel.text = @"发布时间";
-    if (indexPath.section == 0) {
+    cell.jobModel = _jobModelArray[indexPath.section];
+    if (cell.jobModel.orderStatusGz.intValue == 3 || cell.jobModel.orderStatusGz.intValue == 4) {
         cell.startWorkButton.hidden = YES;
-        cell.MiddleButton.hidden = NO;
+        cell.MiddleButton.hidden = YES;
         cell.waitLabel.text = @"进行中";
-        [cell.MiddleButton setTitle:@"确认完工" forState:UIControlStateNormal];
-        [cell.stateButton setTitle:@"终止" forState:UIControlStateNormal];
-    } else if (indexPath.section == 1) {
+        [cell.stateButton setTitle:@"确认完工" forState:UIControlStateNormal];
+    } else if (indexPath.section == 5) {
         cell.timeLabel.text = @"下架时间";
         cell.startWorkButton.hidden = YES;
         cell.MiddleButton.hidden = NO;
         cell.waitLabel.text = @"验收中";
-        [cell.MiddleButton setTitle:@"确认完成" forState:UIControlStateNormal];
-        [cell.stateButton setTitle:@"驳回" forState:UIControlStateNormal];
-    } else if (indexPath.section == 2) {
+        [cell.MiddleButton setTitle:@"驳回" forState:UIControlStateNormal];
+        [cell.stateButton setTitle:@"确认完工" forState:UIControlStateNormal];
+    } else if (indexPath.section == 6) {
         cell.timeLabel.text = @"驳回时间";
         cell.startWorkButton.hidden = YES;
-        cell.MiddleButton.hidden = YES;
+        cell.MiddleButton.hidden = NO;
         cell.waitLabel.text = @"已完成";
-        [cell.stateButton setTitle:@"删除订单" forState:UIControlStateNormal];
-    } else if (indexPath.section == 3) {
+        [cell.MiddleButton setTitle:@"删除订单" forState:UIControlStateNormal];
+        [cell.stateButton setTitle:@"去评价" forState:UIControlStateNormal];
+    } else if (indexPath.section == 7) {
         cell.startWorkButton.hidden = YES;
         cell.MiddleButton.hidden = YES;
-        cell.waitLabel.text = @"已终止";
+        cell.waitLabel.text = @"已评价";
         [cell.stateButton setTitle:@"删除订单" forState:UIControlStateNormal];
     }
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-
+    OrderDetailsOfMyEmployeesController *odvc = [OrderDetailsOfMyEmployeesController new];
+    
+    [self.navigationController pushViewController:odvc animated:YES];
 }
 
 @end

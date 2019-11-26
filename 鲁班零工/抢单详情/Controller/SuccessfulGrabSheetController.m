@@ -7,6 +7,7 @@
 //  Copyright © 2019 张兴栋. All rights reserved.
 //
 #import "OddJobCell.h"
+#import "OrderDetailsController.h"
 #import "SuccessfulGrabSheetController.h"
 
 @interface SuccessfulGrabSheetController () <UITableViewDelegate,UITableViewDataSource>
@@ -75,6 +76,7 @@
         button.titleLabel.font = FontSize(14);
         [button setTitleColor:UIColor.blackColor forState:UIControlStateNormal];
         button.clipsToBounds = YES;
+        button.tag = 300 + i;
         button.layer.masksToBounds = YES;
         button.layer.cornerRadius = 5*ScalePpth;
         if (i == 0) {
@@ -84,9 +86,10 @@
         } else {
             button.backgroundColor = RGBHex(0xFFD301);
         }
+        [button addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
         [_headerView addSubview:button];
     }
-    
+
     UILabel * remindLabel = [[UILabel alloc] initWithFrame:AutoFrame(50, 227,275, 9)];
     remindLabel.text = @"温馨提示：凡是要求不通过鲁班零工完成订单的，请当心上当受骗";
     remindLabel.font = FontSize(9);
@@ -99,6 +102,17 @@
     [_headerView addSubview:bottomView];
 }
 
+- (void)buttonAction:(UIButton *)button {
+    if (button.tag == 300) {
+        OrderDetailsController *orderDc = [OrderDetailsController new];
+        orderDc.orderId = self.orderId;
+        orderDc.type  = Person_Type_Employer;
+        [self.navigationController pushViewController:orderDc animated:YES];
+    } else {
+        NSMutableString *phone=[[NSMutableString alloc] initWithFormat:@"telprompt://%@",_phone NonNull];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:phone]];
+    }
+}
 
 #pragma mark ------ UITableViewDelegate
 

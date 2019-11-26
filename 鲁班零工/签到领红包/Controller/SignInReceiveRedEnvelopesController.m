@@ -5,7 +5,7 @@
 //  Created by 张昊 on 2019/10/22.
 //  Copyright © 2019 张兴栋. All rights reserved.
 //
-#import "OddJobCell.h"
+#import "SignInReceiveCell.h"
 #import "SignInReceiveRedEnvelopesController.h"
 
 @interface SignInReceiveRedEnvelopesController ()  <UITableViewDelegate,UITableViewDataSource>
@@ -38,7 +38,7 @@
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight) style:UITableViewStyleGrouped];
         _tableView.dataSource = self;
         _tableView.delegate = self;
-        [_tableView registerClass:[OddJobCell class] forCellReuseIdentifier:@"OddJobCell"];
+        [_tableView registerClass:[SignInReceiveCell class] forCellReuseIdentifier:@"SignInReceiveCell"];
         _tableView.tableHeaderView = self.mineheaderView;
         _tableView.backgroundColor = RGBHex(0xFFAA1A);
         _tableView.tableFooterView = [[UIView alloc] initWithFrame:AutoFrame(0, 0, 0.0000001, 0.0000001)];
@@ -185,9 +185,8 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    OddJobCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OddJobCell" forIndexPath:indexPath];
+    SignInReceiveCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SignInReceiveCell" forIndexPath:indexPath];
     cell.button.hidden = YES;
-    cell.contentView.backgroundColor = RGBHex(0xFFAA1A);
     return cell;
 }
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {

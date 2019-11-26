@@ -92,6 +92,7 @@
     NSArray *items = @[@"", @""];
     WaitPermissionController *one = [[WaitPermissionController alloc] init];
     OrderManagementController *two = [[OrderManagementController alloc] init];
+    one.idName = NoneNull(_idName);
     [self.segmentVC setUpWithItems:items ChildVCs:@[one,two]];
     self.segmentVC.segmentBar.selectIndex = 0;
     [self.segmentVC.segmentBar updateWithConfig:^(YTSegmentBarConfig *config) {

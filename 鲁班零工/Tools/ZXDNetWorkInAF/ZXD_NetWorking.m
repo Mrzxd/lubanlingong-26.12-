@@ -8,6 +8,7 @@
 
 #import "ZXD_NetWorking.h"
 #import <AFNetworking.h>
+#import "LoginViewController.h"
 #import <AFNetworkActivityIndicatorManager.h>
 
 
@@ -80,6 +81,11 @@ typedef NS_ENUM(NSUInteger, ZXD_NetWorking_ENUM) {
         } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
 //            DLog(@"请求结果=%@",responseObject);
             if (success) {
+                if (responseObject) {
+                                  if ([responseObject[@"code"] intValue] == 600) {
+                                      [UIApplication sharedApplication].keyWindow.rootViewController = [LoginViewController new];
+                                  }
+                              }
                 success(responseObject);
             }
             [[self tasks] removeObject:sessionTask];
@@ -102,6 +108,11 @@ typedef NS_ENUM(NSUInteger, ZXD_NetWorking_ENUM) {
         } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
 //             DLog(@"请求成功=%@",responseObject);
             if (success) {
+                if (responseObject) {
+                    if ([responseObject[@"code"] intValue] == 600) {
+                        [UIApplication sharedApplication].keyWindow.rootViewController = [LoginViewController new];
+                    }
+                }
                 success(responseObject);
             }
             [[self tasks] removeObject:sessionTask];
@@ -121,6 +132,11 @@ typedef NS_ENUM(NSUInteger, ZXD_NetWorking_ENUM) {
     }  else if (type == ZXD_NetWorking_ENUM_PUT){
         sessionTask = [manager PUT:urlStr parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
             if (success) {
+                if (responseObject) {
+                                  if ([responseObject[@"code"] intValue] == 600) {
+                                      [UIApplication sharedApplication].keyWindow.rootViewController = [LoginViewController new];
+                                  }
+                              }
                 success(responseObject);
             }
             [[self tasks] removeObject:sessionTask];

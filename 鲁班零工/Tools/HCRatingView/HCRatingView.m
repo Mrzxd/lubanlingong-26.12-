@@ -131,8 +131,8 @@
     }
     mStartRating = rating;
     mLastRating = rating;
-    if (mDelegate && [mDelegate respondsToSelector:@selector(ratingChanged:)])
-        [mDelegate ratingChanged:rating];
+    if (mDelegate && [mDelegate respondsToSelector:@selector(ratingChanged::)])
+        [mDelegate ratingChanged:rating :self];
 }
 
 -(void) touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{

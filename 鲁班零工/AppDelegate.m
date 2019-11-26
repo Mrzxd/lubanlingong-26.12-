@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "GrabdDetailsController.h"
 #import "LBTabBarController.h"
 #import "LoginViewController.h"
 

@@ -30,7 +30,7 @@
     _sendLabel.textColor = UIColor.blackColor;
     [self.contentView addSubview:_sendLabel];
     
-    _rightLabel = [[UILabel alloc] initWithFrame:AutoFrame(149, 23, 210, 11)];
+    _rightLabel = [[UILabel alloc] initWithFrame:AutoFrame(99, 23, 260, 11)];
     _rightLabel.font  = [UIFont systemFontOfSize:11*ScalePpth];
     _rightLabel.textColor = RGBHex(0x999999);
     _rightLabel.textAlignment = NSTextAlignmentRight;

@@ -21,6 +21,7 @@
         self.backgroundColor = [UIColor whiteColor];
         self.contentView.backgroundColor = [UIColor whiteColor];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
+        _weekButtonArray = [NSMutableArray new];
         [self setUpUI];
     }
     return self;
@@ -56,6 +57,7 @@
         weekButton.clipsToBounds = YES;
         [weekButton addTarget:self action:@selector(sureButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:weekButton];
+        [_weekButtonArray addObject:weekButton];
     }
 }
 - (void)sureButtonAction:(UIButton *)button {
@@ -71,8 +73,31 @@
         button.layer.borderColor = RGBHex(0xFFD301).CGColor;
         button.layer.borderWidth = 0;
     }
-   
     _lastButton = button;
+}
+- (void)closeButtonEnabledWithString:(NSString *)string {
+    NSArray *dayArray = [string componentsSeparatedByString:@","];
+    [_weekButtonArray enumerateObjectsUsingBlock:^(UIButton *button, NSUInteger idx, BOOL * _Nonnull stop) {
+        button.enabled = NO;
+        button.selected = NO;
+        NSInteger index = idx;
+        [dayArray enumerateObjectsUsingBlock:^(NSString *day, NSUInteger idx, BOOL * _Nonnull stop) {
+            if (day.integerValue == index+1) {
+                button.selected = YES;
+            }
+        }];
+        if (!button.selected) {
+                 button.backgroundColor = UIColor.whiteColor;
+                 button.layer.borderColor = RGBHex(0xCCCCCC).CGColor;
+                 button.layer.borderWidth = 0.4;
+                 button.backgroundColor = UIColor.whiteColor;
+         } else {
+             button.backgroundColor = RGBHex(0xFFD301);
+             button.backgroundColor = RGBHex(0xFFD301);
+             button.layer.borderColor = RGBHex(0xFFD301).CGColor;
+             button.layer.borderWidth = 0;
+         }
+    }];
 }
 
 @end

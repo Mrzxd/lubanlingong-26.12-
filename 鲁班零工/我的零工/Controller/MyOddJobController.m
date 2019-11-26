@@ -14,6 +14,7 @@
 #import "MyOddJobController.h"
 #import "OrderDetailsController.h"
 
+
 @interface MyOddJobController ()
 
 @property (nonatomic, strong) YTSegmentBarVC *segmentVC;
@@ -31,24 +32,37 @@
     self.segmentVC.view.frame = self.view.bounds;
     [self.view addSubview:self.segmentVC.view];
     NSArray *items = @[@"全部", @"有人邀请", @"进行中",@" 待付款",@"已完成"];
+    WeakSelf
     OneViewController *one = [[OneViewController alloc] init];
-    one.orderDetailBlock = ^(NSInteger type) {
+    one.orderDetailBlock = ^(NSString *idName) {
         OrderDetailsController *orderDc = [OrderDetailsController new];
-        orderDc.detail_Type = type;
-        [self.navigationController pushViewController:orderDc animated:YES];
+        orderDc.orderId = idName;
+        [weakSelf.navigationController pushViewController:orderDc animated:YES];
     };
     TwoViewController *two = [[TwoViewController alloc] init];
-    two.orderDetailBlock = ^(NSInteger type) {
+    two.orderDetailBlock = ^(NSString *idName) {
         OrderDetailsController *orderDc = [OrderDetailsController new];
-        [self.navigationController pushViewController:orderDc animated:YES];
+        orderDc.orderId = idName;
+        [weakSelf.navigationController pushViewController:orderDc animated:YES];
     };
     ThreeViewController *three = [[ThreeViewController alloc] init];
-    three.orderDetailBlock = ^(NSInteger type) {
+    three.orderDetailBlock = ^(NSString *idName) {
         OrderDetailsController *orderDc = [OrderDetailsController new];
-        [self.navigationController pushViewController:orderDc animated:YES];
+        orderDc.orderId = idName;
+        [weakSelf.navigationController pushViewController:orderDc animated:YES];
     };
     FourViewController *four = [[FourViewController alloc] init];
+    four.orderDetailBlock = ^(NSString *idName) {
+        OrderDetailsController *orderDc = [OrderDetailsController new];
+        orderDc.orderId = idName;
+        [weakSelf.navigationController pushViewController:orderDc animated:YES];
+    };
     FiveViewController *five = [[FiveViewController alloc] init];
+    five.orderDetailBlock = ^(NSString *idName) {
+       OrderDetailsController *orderDc = [OrderDetailsController new];
+        orderDc.orderId = idName;
+       [weakSelf.navigationController pushViewController:orderDc animated:YES];
+       };
     [self.segmentVC setUpWithItems:items ChildVCs:@[one,two,three,four,five]];
     self.segmentVC.segmentBar.selectIndex = 0;
     [self.segmentVC.segmentBar updateWithConfig:^(YTSegmentBarConfig *config) {

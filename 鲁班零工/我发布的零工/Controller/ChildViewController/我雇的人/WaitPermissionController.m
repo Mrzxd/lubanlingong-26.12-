@@ -8,19 +8,39 @@
 //
 #import "OrderStatusCell.h"
 #import "WaitPermissionController.h"
+#import "OrderDetailsOfMyEmployeesController.h"
 
 @interface WaitPermissionController () <UITableViewDelegate,UITableViewDataSource>
 
+@property (nonatomic, strong) NSArray <MyOddJobModel *>*jobModelArray;
 @property (nonatomic, strong) UITableView *tableView;
 
 @end
 
 @implementation WaitPermissionController
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self netWorking];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.tableView];
-    
+}
+- (void)netWorking {
+    WeakSelf;
+    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingString:@"/employerCore/employerCore"] params:@{
+        @"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userId"],
+        @"type":@"-1"
+    } success:^(id  _Nonnull response) {
+        if (response && [response[@"code"] intValue] == 0 && response[@"data"]) {
+            weakSelf.jobModelArray = [MyOddJobModel mj_objectArrayWithKeyValuesArray:response[@"data"]];
+            [weakSelf.tableView reloadData];
+        }
+    } fail:^(NSError * _Nonnull error) {
+        
+    } showHUD:YES];
 }
 - (UITableView *)tableView {
     if (!_tableView) {
@@ -42,7 +62,7 @@
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 8;
+    return _jobModelArray.count;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 1;
@@ -70,23 +90,35 @@
     cell.saleLabel.text = @"接单人";
     cell.timeCTLabel.text = @"300元/天";
     cell.saleCTLabel.text = @"李四";
-   if (indexPath.section == 0) {
+     cell.jobModel = _jobModelArray[indexPath.section];
+     if (cell.jobModel.orderStatusGz.intValue == 1) {
         cell.startWorkButton.hidden = YES;
         cell.MiddleButton.hidden = NO;
-        cell.waitLabel.text = @"等待同意";
+        cell.waitLabel.text = @"邀请等待同意";
         [cell.MiddleButton setTitle:@"拒绝" forState:UIControlStateNormal];
         [cell.stateButton setTitle:@"同意" forState:UIControlStateNormal];
-    } else if (indexPath.section == 1) {
+   } else  if (cell.jobModel.orderStatusGz.intValue == 2)  {
         cell.startWorkButton.hidden = YES;
         cell.MiddleButton.hidden = YES;
         cell.waitLabel.text = @"已拒绝";
         [cell.stateButton setTitle:@"删除订单" forState:UIControlStateNormal];
-    }
+   } else  if (cell.jobModel.orderStatusGz.intValue == 0) {
+         cell.startWorkButton.hidden = YES;
+         cell.MiddleButton.hidden = YES;
+         cell.waitLabel.text = @"等待雇员同意";
+         [cell.stateButton setTitle:@"取消订单" forState:UIControlStateNormal];
+   }
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-   
+    OrderDetailsOfMyEmployeesController *odvc = [OrderDetailsOfMyEmployeesController new];
+    if (indexPath.section %2 == 0) {
+        odvc.detail_Type = OrderDetail_Type_Agree;
+    } else {
+        odvc.detail_Type = OrderDetail_Type_StateButtonDelete;
+    }
+    [self.navigationController pushViewController:odvc animated:YES];
 }
 
 @end

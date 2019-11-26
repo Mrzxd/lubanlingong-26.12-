@@ -8,7 +8,14 @@
 
 #import "HomeTableCell.h"
 
-@implementation HomeTableCell
+@implementation HomeTableCell {
+    UILabel *nameLabel;
+    UILabel *dayPriceLabel;
+    UILabel *locationLabel;
+    UILabel *rateLabel;
+    UILabel *personLabel;
+    UILabel *timeLabel;
+}
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style
@@ -28,13 +35,13 @@
     self.contentView.layer.masksToBounds = YES;
     self.contentView.layer.cornerRadius = 5;
     
-    UILabel *nameLabel = [[UILabel alloc] initWithFrame:AutoFrame(15, 15, 200, 15)];
+    nameLabel = [[UILabel alloc] initWithFrame:AutoFrame(15, 15, 200, 15)];
     nameLabel.text =  @"济南市区外卖配送员";
     nameLabel.font = [UIFont boldSystemFontOfSize:15*ScalePpth];
     nameLabel.textColor = RGBHex(0x333333);
     [self.contentView addSubview:nameLabel];
     
-    UILabel *dayPriceLabel = [[UILabel alloc] initWithFrame:AutoFrame(240, 18, 100, 12)];
+    dayPriceLabel = [[UILabel alloc] initWithFrame:AutoFrame(240, 18, 100, 12)];
     dayPriceLabel.text =  @"25元/天";
     dayPriceLabel.textAlignment = NSTextAlignmentRight;
     dayPriceLabel.font = [UIFont systemFontOfSize:12*ScalePpth];
@@ -45,26 +52,26 @@
     imageView.image = [UIImage imageNamed:@"home_location"];
     [self.contentView addSubview:imageView];
     
-    UILabel *locationLabel = [[UILabel alloc] initWithFrame:AutoFrame(31, 42, 200, 12)];
+    locationLabel = [[UILabel alloc] initWithFrame:AutoFrame(31, 42, 200, 12)];
     locationLabel.text =  @"天桥区纬北路街道济南站";
     locationLabel.font = [UIFont systemFontOfSize:12*ScalePpth];
     locationLabel.textColor = RGBHex(0x999999);
     [self.contentView addSubview:locationLabel];
     
-    UILabel *rateLabel = [[UILabel alloc] initWithFrame:AutoFrame(240, 43, 100, 10)];
+    rateLabel = [[UILabel alloc] initWithFrame:AutoFrame(240, 43, 100, 10)];
     rateLabel.text =  @"好评率：88%";
     rateLabel.textAlignment = NSTextAlignmentRight;
     rateLabel.font = [UIFont systemFontOfSize:10*ScalePpth];
     rateLabel.textColor = RGBHex(0xcccccc);
     [self.contentView addSubview:rateLabel];
     
-    UILabel *personLabel = [[UILabel alloc] initWithFrame:AutoFrame(15, 68, 100, 12)];
+    personLabel = [[UILabel alloc] initWithFrame:AutoFrame(15, 68, 100, 12)];
     personLabel.text =  @"苏辉秉";
     personLabel.font = [UIFont systemFontOfSize:12*ScalePpth];
     personLabel.textColor = RGBHex(0x333333);
     [self.contentView addSubview:personLabel];
     
-    UILabel *timeLabel = [[UILabel alloc] initWithFrame:AutoFrame(15, 87, 30, 15)];
+    timeLabel = [[UILabel alloc] initWithFrame:AutoFrame(15, 87, 30, 15)];
     timeLabel.text =  @"计时";
     timeLabel.backgroundColor = RGBHex(0xDAF6FF);
     timeLabel.clipsToBounds = YES;
@@ -86,11 +93,21 @@
     [button setTitleColor:RGBHex(0x333333) forState:UIControlStateNormal];
     [self.contentView addSubview:button];
 }
-
+- (void)setListModel:(PageContentListModel *)listModel {
+    _listModel = listModel;
+    if (listModel) {
+        nameLabel.text = NoneNull(listModel.workName);
+        NSString *price = [NSString stringWithFormat:@"%@/%@", listModel.salary, listModel.salaryDay];
+        dayPriceLabel.text = NoneNull(price);
+        locationLabel.text = NoneNull(listModel.workPositino);
+        rateLabel.text = [[NSString stringWithFormat:@"好评率：%@",NoneNull(listModel.praise)] stringByAppendingString:@"%"];
+        personLabel.text = NoneNull(listModel.contactPeople);
+        timeLabel.text = [NSString stringWithFormat:@"按%@",NoneNull(listModel.salaryDay)];
+    }
+}
 - (void)buttonAction:(UIButton *)button {
-    if (_detailBlock) {
-        id model;
-        _detailBlock(model);
+    if (_detailBlock && _listModel) {
+        _detailBlock(_listModel);
     }
 }
 

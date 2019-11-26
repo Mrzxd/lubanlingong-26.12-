@@ -11,7 +11,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface SuccessfulGrabSheetController : ZXDBaseViewController
-
+@property (nonatomic, strong) NSString*orderId;
+@property (nonatomic, strong) NSString *phone;
 @end
 
 NS_ASSUME_NONNULL_END

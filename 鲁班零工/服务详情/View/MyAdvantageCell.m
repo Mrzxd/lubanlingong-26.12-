@@ -10,7 +10,9 @@
 
 #import "MyAdvantageCell.h"
 
-@implementation MyAdvantageCell
+@implementation MyAdvantageCell {
+    UILabel *contentLabel;
+}
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
@@ -30,11 +32,18 @@
     _sendLabel.text = @"【我的优势】";
     [self.contentView addSubview:_sendLabel];
     
-    UILabel *contentLabel = [[UILabel alloc] initWithFrame:AutoFrame(13.5, 45, 348, 12)];
+    contentLabel = [[UILabel alloc] initWithFrame:AutoFrame(13.5, 45, 348, 30)];
     contentLabel.font  = [UIFont systemFontOfSize:12*ScalePpth];
     contentLabel.textColor = RGBHex(0x999999);
     contentLabel.numberOfLines = 0;
     contentLabel.text = @"专业擦玻璃，瓷砖美缝，开荒保洁，除甲醛，地板打蜡";
     [self.contentView addSubview:contentLabel];
+}
+
+- (void)setDetailModel:(ServiceDetailModel *)detailModel {
+    _detailModel = detailModel;
+    if (detailModel) {
+        contentLabel.text = NoneNull(detailModel.skillVirtue);
+    }
 }
 @end

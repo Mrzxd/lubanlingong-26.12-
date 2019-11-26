@@ -32,13 +32,13 @@
     self.segmentVC.view.frame = self.view.bounds;
     self.segmentVC.segmentBar.showIndicator = YES;
     [self.view addSubview:self.segmentVC.view];
-    NSArray *items = @[@"全部", @"进行中",@"验收中",@"已完成",@"已终止"];
+    NSArray *items = @[@"全部", @"进行中",@"验收中",@"已完成"];
     OrderManagementOneChildController *one = [[OrderManagementOneChildController alloc] init];
     OrderManagementTwoChildController *two = [[OrderManagementTwoChildController alloc] init];
     OrderManagementThreeChildController *three = [[OrderManagementThreeChildController alloc] init];
     OrderManagementFourChildController *four = [[OrderManagementFourChildController alloc] init];
-    OrderManagementFiveChildController *five = [[OrderManagementFiveChildController alloc] init];
-    [self.segmentVC setUpWithItems:items ChildVCs:@[one,two,three,four,five]];
+//    OrderManagementFiveChildController *five = [[OrderManagementFiveChildController alloc] init];
+    [self.segmentVC setUpWithItems:items ChildVCs:@[one,two,three,four]];
     self.segmentVC.segmentBar.selectIndex = 0;
     [self.segmentVC.segmentBar updateWithConfig:^(YTSegmentBarConfig *config) {
         config.itemNormalColor (RGBHex(0x999999))

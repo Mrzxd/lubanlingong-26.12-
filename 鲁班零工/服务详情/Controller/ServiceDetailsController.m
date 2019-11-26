@@ -10,23 +10,51 @@
 #import "ServiceTimeCell.h"
 #import "MyAdvantageCell.h"
 #import "ServiceContentCell.h"
+#import "ServiceDetailModel.h"
 #import "EmployeeRecordsController.h"
 #import "ServiceDetailsController.h"
 #import "AcknowledgementOrderController.h"
 
 @interface ServiceDetailsController () <UITableViewDelegate,UITableViewDataSource>
+
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIView *headerView;
+
+@property (nonatomic, strong) ServiceDetailModel *detailModel;
+
 @end
 
-@implementation ServiceDetailsController
+@implementation ServiceDetailsController {
+    UILabel *sendLabel;
+    UILabel *timeLabel;
+    UILabel *dayPriceLabel;
+    UILabel *rateLabel;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"服务详情";
     [self.view addSubview:self.tableView];
+    [self netWorking];
 }
-
+- (void)netWorking {
+    WeakSelf;
+    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingString:@"/ReleaseSkill/select/skillinfo"] params:@{@"id":NoneNull(_idName)} success:^(id  _Nonnull response) {
+        if (response && response[@"data"] && [response[@"code"] intValue] == 0) {
+            weakSelf.detailModel = [ServiceDetailModel mj_objectWithKeyValues:response[@"data"]];
+            [weakSelf reloadData];
+            [weakSelf.tableView reloadData];
+        }
+    } fail:^(NSError * _Nonnull error) {
+        [WHToast showErrorWithMessage:@"网络错误"];
+    } showHUD:YES];
+}
+- (void)reloadData {
+    sendLabel.text = NoneNull(_detailModel.skillName);
+    timeLabel.text = [NSString stringWithFormat:@"按%@",NoneNull(_detailModel.skillSalaryDay)];
+    dayPriceLabel.text = [NSString stringWithFormat:@"%@元/%@",NoneNull(_detailModel.skillSalary),NoneNull(_detailModel.skillSalaryDay)];
+    rateLabel.text = [NSString stringWithFormat:@"好评率：%@%@",NoneNull(_detailModel.praise),@"%"];
+}
 - (UIView *)headerView {
     if (!_headerView) {
         _headerView = [[UIView alloc] initWithFrame:AutoFrame(0, 0, 375, 90)];
@@ -36,13 +64,13 @@
     return _headerView;
 }
 - (void)addSubViews {
-    UILabel *sendLabel = [[UILabel alloc] initWithFrame:AutoFrame(16, 15, 220, 14)];
+    sendLabel = [[UILabel alloc] initWithFrame:AutoFrame(16, 15, 220, 14)];
     sendLabel.text = @"济南市外卖配送员";
     sendLabel.font  = [UIFont boldSystemFontOfSize:14*ScalePpth];
     sendLabel.textColor = UIColor.blackColor;
     [_headerView addSubview:sendLabel];
     
-    UILabel *timeLabel = [[UILabel alloc] initWithFrame:AutoFrame(16, 37, 30, 15)];
+    timeLabel = [[UILabel alloc] initWithFrame:AutoFrame(16, 37, 30, 15)];
     timeLabel.text =  @"计时";
     timeLabel.backgroundColor = RGBHex(0xDAF6FF);
     timeLabel.clipsToBounds = YES;
@@ -53,13 +81,13 @@
     timeLabel.textColor = RGBHex(0x009CE0);
     [_headerView addSubview:timeLabel];
     
-    UILabel *dayPriceLabel = [[UILabel alloc] initWithFrame:AutoFrame(18, 60, 100, 12)];
+    dayPriceLabel = [[UILabel alloc] initWithFrame:AutoFrame(18, 60, 100, 12)];
     dayPriceLabel.text =  @"25元/天";
     dayPriceLabel.font = [UIFont systemFontOfSize:12*ScalePpth];
     dayPriceLabel.textColor = RGBHex(0xE50000);
     [_headerView addSubview:dayPriceLabel];
     
-    UILabel *rateLabel = [[UILabel alloc] initWithFrame:AutoFrame(250, 61, 100, 10)];
+    rateLabel = [[UILabel alloc] initWithFrame:AutoFrame(250, 61, 100, 10)];
     rateLabel.text =  @"好评率：88%";
     rateLabel.textAlignment = NSTextAlignmentRight;
     rateLabel.font = [UIFont systemFontOfSize:10*ScalePpth];
@@ -100,7 +128,9 @@
     [self.navigationController pushViewController:ERVC animated:NO];
 }
 - (void)immediatelyButtonAction {
-    [self.navigationController pushViewController:[AcknowledgementOrderController new] animated:YES];
+    AcknowledgementOrderController *adoc = [AcknowledgementOrderController new];
+    adoc.idName = _detailModel.idName NonNull;
+    [self.navigationController pushViewController:adoc animated:YES];
 }
 - (void)starButtonAction:(UIButton *)button {
     button.selected = !button.selected;
@@ -192,17 +222,20 @@
         if (indexPath.row < 2) {
             GrabdTableCell *cell = [tableView dequeueReusableCellWithIdentifier:@"GrabdTableCell" forIndexPath:indexPath];
             cell.sendLabel.text = @[@"服务方式",@"服务时间"][indexPath.row];
-            cell.rightLabel.text = @[@"去你那",@"05:00:00-09:00:00"][indexPath.row];
+            cell.rightLabel.text = @[@"...",[NSString stringWithFormat:@"%@至%@",NoneNull(_detailModel.skillTimeStart),NoneNull(_detailModel.skillTimeEnd)]][indexPath.row];
             return cell;
         } else {
             ServiceTimeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ServiceTimeCell" forIndexPath:indexPath];
+            [cell closeButtonEnabledWithString:NoneNull(_detailModel.skillDate)];
             return cell;
         }
     } else if (indexPath.section == 1) {
         MyAdvantageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MyAdvantageCell" forIndexPath:indexPath];
+        cell.detailModel = _detailModel;
         return cell;
     } else {
         ServiceContentCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ServiceContentCell" forIndexPath:indexPath];
+        cell.detailModel = _detailModel;
         return cell;
     }
 }

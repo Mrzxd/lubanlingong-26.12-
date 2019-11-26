@@ -7,7 +7,7 @@
 //
 
 #import "UIScrollView+MJRefreshEX.h"
-//#import "MJRefresh.h"
+#import "MJRefresh.h"
 #import <objc/runtime.h>
 
 typedef void(^RefreshBlock)(NSInteger pageIndex);

@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CancleOrderController : ZXDBaseViewController
 
-
+@property (nonatomic, strong) NSString *idName;
 
 @end
 

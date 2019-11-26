@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LookingForListModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -14,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) UILabel *nameLabel;
 @property (nonatomic, strong) UILabel *modeLabel;
+
+@property (nonatomic, strong) LookingForListModel *listModel;
 
 @end
 

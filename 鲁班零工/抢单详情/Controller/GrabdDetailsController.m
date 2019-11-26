@@ -8,6 +8,7 @@
 
 #import "SendTableCell.h"
 #import "GrabdTableCell.h"
+#import "GrabdDetailsModel.h"
 #import "GrabdDetailsImagCell.h"
 #import "JobRequirementsCell.h"
 #import "GrabdDetailsController.h"
@@ -21,11 +22,19 @@
 @property (nonatomic, assign) BOOL isJobRequirements;
 @property (nonatomic, strong) YTSegmentBar *segmentBar;
 @property (nonatomic, strong) UIView *grayView;
+@property (nonatomic, strong) GrabdDetailsModel *detailModel;
+@property (nonatomic, assign) CGFloat cellHeight;
+@property (nonatomic, strong) NSDictionary *netWork_data;
 
 @end
 
 @implementation GrabdDetailsController {
     UIView *footerView;
+    UILabel *sendLabel;
+    UILabel *timeLabel;
+    UILabel *rateLabel;
+    UILabel *dayPriceLabel;
+    UIButton *imageButton;
 }
 
 - (UIView *)grayView {
@@ -57,7 +66,7 @@
     [whiteView addSubview:Xbutton];
     
     UILabel *remindLabel = [[UILabel alloc] initWithFrame:AutoFrame(0, 77.5, 310, 19)];
-    remindLabel.text = @"请缴纳服务费10.00元";
+    remindLabel.text = [NSString stringWithFormat:@"请缴纳服务费%@元",_netWork_data[@"GrAmount"]];
     remindLabel.textColor = RGBHex(0x333333);
     remindLabel.textAlignment = NSTextAlignmentCenter;
     remindLabel.font = FontSize(19);
@@ -78,7 +87,7 @@
     immediatelyButton.titleLabel.font = [UIFont boldSystemFontOfSize:16 *ScalePpth];
     [immediatelyButton setTitle:@"立即支付" forState:UIControlStateNormal];
     [immediatelyButton setTitleColor:RGBHex(0x333333) forState:UIControlStateNormal];
-    [immediatelyButton addTarget:self action:@selector(immediatelyButtonAction) forControlEvents:UIControlEventTouchUpInside];
+    [immediatelyButton addTarget:self action:@selector(payButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [whiteView addSubview:immediatelyButton];
 }
 - (void)viewDidLoad {
@@ -86,7 +95,32 @@
     self.title = @"抢单详情";
     self.view.backgroundColor = RGBHex(0xffffff);
     [self.view addSubview:self.tableView];
+    [self netWorking];
 }
+- (void)netWorking {
+    WeakSelf;
+    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingString:@"/ReleaseWork/select/workinfo"] params:@{@"id":_listModel.idName NonNull} success:^(id  _Nonnull response) {
+        if (response && response[@"data"]) {
+            weakSelf.detailModel = [GrabdDetailsModel mj_objectWithKeyValues:response[@"data"]];
+            if (weakSelf.detailModel.timeSelect) {
+                [weakSelf.detailModel.timeSelect containsString:@"1"]? weakSelf.detailModel.timeSelect = [weakSelf.detailModel.timeSelect stringByReplacingOccurrencesOfString:@"1" withString:@"周一"]:@"";
+                [weakSelf.detailModel.timeSelect containsString:@"2"]? weakSelf.detailModel.timeSelect = [weakSelf.detailModel.timeSelect stringByReplacingOccurrencesOfString:@"2" withString:@"周二"]:@"";
+                [weakSelf.detailModel.timeSelect containsString:@"3"]? weakSelf.detailModel.timeSelect = [weakSelf.detailModel.timeSelect stringByReplacingOccurrencesOfString:@"3" withString:@"周三"]:@"";
+                [weakSelf.detailModel.timeSelect containsString:@"4"]? weakSelf.detailModel.timeSelect = [weakSelf.detailModel.timeSelect stringByReplacingOccurrencesOfString:@"4" withString:@"周四"]:@"";
+                [weakSelf.detailModel.timeSelect containsString:@"5"]? weakSelf.detailModel.timeSelect = [weakSelf.detailModel.timeSelect stringByReplacingOccurrencesOfString:@"5" withString:@"周五"]:@"";
+                [weakSelf.detailModel.timeSelect containsString:@"6"]? weakSelf.detailModel.timeSelect = [weakSelf.detailModel.timeSelect stringByReplacingOccurrencesOfString:@"6" withString:@"周六"]:@"";
+                [weakSelf.detailModel.timeSelect containsString:@"7"]? weakSelf.detailModel.timeSelect = [weakSelf.detailModel.timeSelect stringByReplacingOccurrencesOfString:@"7" withString:@"日"]:@"";
+            }
+            [weakSelf reloadData];
+            [weakSelf.tableView reloadData];
+        } else {
+            [WHToast showErrorWithMessage:@"暂无数据"];
+        }
+    } fail:^(NSError * _Nonnull error) {
+        [WHToast showErrorWithMessage:@"网络错误"];
+    } showHUD:YES];
+}
+
 - (void)XbuttonAction:(UIButton *)button {
     [_grayView removeFromSuperview];
 }
@@ -111,14 +145,20 @@
     }
     return _headerView;
 }
+- (void)reloadData {
+    sendLabel.text = NoneNull(_detailModel.workName);
+    timeLabel.text = [@"按" stringByAppendingString:NoneNull(_detailModel.salaryDay)];
+    dayPriceLabel.text = [NSString stringWithFormat:@"%@/%@",NoneNull(_detailModel.salary),NoneNull(_detailModel.salaryDay)];
+    rateLabel.text = [[NSString stringWithFormat:@"好评率：%@",NoneNull(_detailModel.praise)] stringByAppendingString:@"%"];
+}
 - (void)addSubViews {
-    UILabel *sendLabel = [[UILabel alloc] initWithFrame:AutoFrame(16, 15, 220, 14)];
+    sendLabel = [[UILabel alloc] initWithFrame:AutoFrame(16, 15, 220, 14)];
     sendLabel.text = @"济南市外卖配送员";
     sendLabel.font  = [UIFont boldSystemFontOfSize:14*ScalePpth];
     sendLabel.textColor = UIColor.blackColor;
     [_headerView addSubview:sendLabel];
     
-    UILabel *timeLabel = [[UILabel alloc] initWithFrame:AutoFrame(16, 37, 30, 15)];
+    timeLabel = [[UILabel alloc] initWithFrame:AutoFrame(16, 37, 30, 15)];
     timeLabel.text =  @"计时";
     timeLabel.backgroundColor = RGBHex(0xDAF6FF);
     timeLabel.clipsToBounds = YES;
@@ -129,20 +169,20 @@
     timeLabel.textColor = RGBHex(0x009CE0);
     [_headerView addSubview:timeLabel];
     
-    UILabel *dayPriceLabel = [[UILabel alloc] initWithFrame:AutoFrame(18, 60, 100, 12)];
+    dayPriceLabel = [[UILabel alloc] initWithFrame:AutoFrame(18, 60, 100, 12)];
     dayPriceLabel.text =  @"25元/天";
     dayPriceLabel.font = [UIFont systemFontOfSize:12*ScalePpth];
     dayPriceLabel.textColor = RGBHex(0xE50000);
     [_headerView addSubview:dayPriceLabel];
     
-    UILabel *rateLabel = [[UILabel alloc] initWithFrame:AutoFrame(250, 61, 100, 10)];
+    rateLabel = [[UILabel alloc] initWithFrame:AutoFrame(250, 61, 100, 10)];
     rateLabel.text =  @"好评率：88%";
     rateLabel.textAlignment = NSTextAlignmentRight;
     rateLabel.font = [UIFont systemFontOfSize:10*ScalePpth];
     rateLabel.textColor = RGBHex(0xcccccc);
     [_headerView addSubview:rateLabel];
     
-    UIButton *imageButton = [[UIButton alloc] initWithFrame:AutoFrame(310, 5, 45, 45)];
+    imageButton = [[UIButton alloc] initWithFrame:AutoFrame(310, 5, 45, 45)];
     [imageButton setImage:[UIImage imageNamed:@"details_head"] forState:UIControlStateNormal];
     imageButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     [imageButton addTarget:self action:@selector(imageButtonAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -188,7 +228,7 @@
         if (_isJobRequirements) {
             return UITableViewAutomaticDimension;
         }
-        return 401 *ScalePpth;
+        return _cellHeight;
     }
     return 50*ScalePpth;
 }
@@ -259,21 +299,35 @@
     if (indexPath.section == 1) {
         if (_isJobRequirements) {
             JobRequirementsCell *cell = [tableView dequeueReusableCellWithIdentifier:@"JobRequirementsCell" forIndexPath:indexPath];
+            if (!cell.detailModel) {
+                cell.detailModel = _detailModel;
+            }
             return cell;
         } else {
+            WeakSelf;
             GrabdDetailsImagCell *cell = [tableView dequeueReusableCellWithIdentifier:@"GrabdDetailsImagCell" forIndexPath:indexPath];
+            !cell.detailModel? (cell.detailModel = self.detailModel):nil;
+            cell.imageBlock = ^(CGFloat cellHeight) {
+                weakSelf.cellHeight = cellHeight;
+                [weakSelf.tableView reloadData];
+            };
             return cell;
         }
     }
     if (indexPath.section == 0 && indexPath.row == 2) {
         SendTableCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SendTableCell2" forIndexPath:indexPath];
+        cell.detailModel = self.detailModel;
         cell.sendLabel.text = @"上班地点";
-        cell.rightLabel.text = @"天桥区纬北路街道济南站";
+        cell.rightLabel.text = NoneNull(self.detailModel.workPositino);
         return cell;
     }
     GrabdTableCell *cell = [tableView dequeueReusableCellWithIdentifier:@"GrabdTableCell" forIndexPath:indexPath];
+    cell.detailModel = self.detailModel;
     cell.sendLabel.text = @[@"抢单有效期",@"上班时间",@"上班地点",@"已抢单人数"][indexPath.row];
-    cell.rightLabel.text = @[@"2019-09-21-2019-09-30",@"周一至周五 早8:00-23:45",@"",@"2人"][indexPath.row];
+    cell.rightLabel.text = @[[NSString stringWithFormat:@"%@-%@",NoneNull(_detailModel.orderStartTime),NoneNull(_detailModel.orderEndTime)],
+                             [NSString stringWithFormat:@"%@,%@至%@",NoneNull(_detailModel.timeSelect),NoneNull(_detailModel.startTime),NoneNull(_detailModel.endTime)],
+                             @"",
+                             NoneNull(_detailModel.workPeople)][indexPath.row];
     
     return cell;
 }
@@ -286,14 +340,43 @@
     [self.navigationController pushViewController:ERVC animated:NO];
 }
 - (void)immediatelyButtonAction {
-//    [[GlobalSingleton gS_ShareInstance].systemWindow addSubview:self.grayView];
-//    return;
-    SuccessfulGrabSheetController *successfulVc = [[SuccessfulGrabSheetController alloc] init];
-    [self.navigationController pushViewController:successfulVc animated:NO];
+    WeakSelf;
+    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingString:@"/ReleaseWork/selectServiceCost"] params:@{@"id": NoneNull(_detailModel.idName)} success:^(id  _Nonnull response) {
+        if (response && [response[@"code"] intValue] == 0) {
+            weakSelf.netWork_data = response[@"data"];
+            [[GlobalSingleton gS_ShareInstance].systemWindow addSubview:self.grayView];
+        }
+    } fail:^(NSError * _Nonnull error) {
+        [WHToast showErrorWithMessage:@"网络错误"];
+    } showHUD:YES];
+}
+- (void)payButtonAction:(UIButton *)button {
+    [_grayView removeFromSuperview];
+    WeakSelf;
+    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingString:@"/ReleaseWork/GrabTheOrder"] params:@{
+        @"id":_detailModel.idName NonNull,
+        @"amount":weakSelf.netWork_data[@"GrAmount"] NonNull,
+        @"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userId"]
+    } success:^(id  _Nonnull response) {
+        if (response && [response[@"code"] intValue] == 0) {
+            if (response[@"data"]) {
+                if ([response[@"data"][@"payStatus"] intValue] == 0) {
+                    SuccessfulGrabSheetController *successfulVc = [[SuccessfulGrabSheetController alloc] init];
+                    successfulVc.orderId = response[@"data"][@"orderId"];
+                    successfulVc.phone = response[@"data"][@"phone"];
+                    [weakSelf.navigationController pushViewController:successfulVc animated:NO];
+                } else {
+                    [WHToast showErrorWithMessage:@"余额不足"];
+                }
+            }
+        }
+    } fail:^(NSError * _Nonnull error) {
+        [WHToast showErrorWithMessage:@"网络错误"];
+    } showHUD:YES];
 }
 - (void)starButtonAction:(UIButton *)button {
     button.selected = !button.selected;
-    
 }
+
 
 @end

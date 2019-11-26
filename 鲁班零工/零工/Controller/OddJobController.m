@@ -7,13 +7,15 @@
 //
 #import "RemingView.h"
 #import "OddJobCell.h"
+#import "PageListModel.h"
 #import "DetailTableCell.h"
 #import "OddJobController.h"
 #import "GrabdDetailsController.h"
 #import "EmployerCenterController.h"
 #import "PublishContentController.h"
+#import <CoreLocation/CoreLocation.h>
 
-@interface OddJobController () <UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate>
+@interface OddJobController () <UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,UITextFieldDelegate,CLLocationManagerDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIView *headerView;
@@ -30,14 +32,30 @@
 @property (nonatomic, strong) NSMutableArray *cellArray2;
 @property (nonatomic, strong) UITableViewCell *lastSelectCell;
 @property (nonatomic, strong) DetailTableCell *lastSelectCell2;
+@property (nonatomic, assign) NSInteger selectIndex;
+@property (nonatomic, strong) NSArray <HomeListModel *>*homeListModelArray;
+@property (nonatomic, strong) NSString *select_Classification_ID;
+@property (nonatomic, strong) NSString *sort;
+@property (nonatomic, strong) NSString *pay;
+@property (nonatomic, strong) NSString *sex;
+@property (nonatomic, strong) PageListModel*pageListModel;
+@property (assign, nonatomic) NSInteger pageIndex;
+
+@property (nonatomic, strong) UITextField *rangeTextField;
+@property (nonatomic, strong) UITextField *priceTextField;
+@property (nonatomic, strong) UITextField *priceTextField2;
+
+@property (nonatomic, strong) CLLocation *clannotation;
+@property (nonatomic, strong) CLLocationManager *locationManager;
+
 
 @end
 
 @implementation OddJobController {
     UIView *segmentView;
-    UILabel *firstLabel;
+    UIButton *firstButton;
     UIView *lineView;
-    UILabel *secondLabel;
+    UIButton *secondButton;
     UIButton *newButton;
     UIButton *yesButton;
 }
@@ -47,11 +65,18 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self startLocation];
     _cellArray = [[NSMutableArray alloc] init];
     _cellArray2 = [[NSMutableArray alloc] init];
     self.view.backgroundColor = RGBHex(0xf0f0f0);
+    _sort = @"";
+    _pay = @"";
+    _sex = @"";
+    _homeListModelArray = [HomeListModel mj_objectArrayWithKeyValuesArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"HomeListModelArray"]];
+    _select_Classification_ID = @"";
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.headerView];
+    [self netWorking];
 }
 
 - (UIView *)alphaGrayView {
@@ -72,7 +97,83 @@
     }
     return _screenView;
 }
+- (UITextField *)rangeTextField {
+    if (!_rangeTextField) {
+        _rangeTextField = [[UITextField alloc] initWithFrame:AutoFrame((21), 116, 113, 26)];
+        _rangeTextField.delegate = self;
+        _rangeTextField.keyboardType = UIKeyboardTypeNumberPad;
+        _rangeTextField.backgroundColor = RGBHex(0xF5F5F5);
+        _rangeTextField.placeholder = @"请输入范围";
+        _rangeTextField.font = FontSize(11);
+        _rangeTextField.textAlignment = NSTextAlignmentCenter;
+        _rangeTextField.borderStyle = UITextBorderStyleNone;
+        _rangeTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
+        _rangeTextField.layer.cornerRadius = 3*ScalePpth;
+        _rangeTextField.layer.masksToBounds = YES;
+    }
+    return _rangeTextField;
+}
+- (UITextField *)priceTextField {
+    if (!_priceTextField) {
+        _priceTextField = [[UITextField alloc] initWithFrame:AutoFrame(21, 195, 113, 26)];
+        _priceTextField.delegate = self;
+        _priceTextField.keyboardType = UIKeyboardTypeNumberPad;
+        _priceTextField.backgroundColor = RGBHex(0xF5F5F5);
+        _priceTextField.placeholder = @"输入最低价格";
+        _priceTextField.font = FontSize(11);
+        _priceTextField.textAlignment = NSTextAlignmentCenter;
+        _priceTextField.borderStyle = UITextBorderStyleNone;
+        _priceTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
+        _priceTextField.layer.cornerRadius = 3*ScalePpth;
+        _priceTextField.layer.masksToBounds = YES;
+    }
+    return _priceTextField;
+}
+- (UITextField *)priceTextField2 {
+    if (!_priceTextField2) {
+        _priceTextField2 = [[UITextField alloc] initWithFrame:AutoFrame(163, 195, 113, 26)];
+        _priceTextField2.delegate = self;
+        _priceTextField2.keyboardType = UIKeyboardTypeNumberPad;
+        _priceTextField2.backgroundColor = RGBHex(0xF5F5F5);
+        _priceTextField2.placeholder = @"输入最高价格";
+        _priceTextField2.font = FontSize(11);
+        _priceTextField2.textAlignment = NSTextAlignmentCenter;
+        _priceTextField2.borderStyle = UITextBorderStyleNone;
+        _priceTextField2.clearButtonMode = UITextFieldViewModeWhileEditing;
+        _priceTextField2.layer.cornerRadius = 3*ScalePpth;
+        _priceTextField2.layer.masksToBounds = YES;
+    }
+    return _priceTextField2;
+}
+- (void)startLocation {
+    NSString *version = [UIDevice currentDevice].systemVersion;
+    if (version.doubleValue >= 8.0) {
+        // 由于iOS8中定位的授权机制改变, 需要进行手动授权
+        [self.locationManager requestAlwaysAuthorization];
+        [self.locationManager requestWhenInUseAuthorization];
+    }
+    [self.locationManager requestAlwaysAuthorization];
+    [self.locationManager requestWhenInUseAuthorization];
+    [self.locationManager startUpdatingLocation];
+}
+- (CLLocationManager *)locationManager {
+    if (!_locationManager) {
+        _locationManager = [[CLLocationManager alloc] init];
+        _locationManager.delegate = self;
+        _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        CLLocationDistance distance = 2000;
+        _locationManager.distanceFilter = distance;
+    }
+    return _locationManager;
+}
 
+#pragma mark ---------- CLLocationManagerDelegate
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
+    CLLocation *currentLocation = locations.lastObject;
+    _clannotation = currentLocation;
+    
+}
 - (void)addSubViews {
     UILabel *typeLabel = [[UILabel alloc] initWithFrame:AutoFrame(19, 9, 100, 13)];
     typeLabel.text = @"报酬类型";
@@ -87,6 +188,7 @@
         remunerationButton.titleLabel.font = FontSize(11);
         remunerationButton.clipsToBounds= YES;
         remunerationButton.layer.masksToBounds = YES;
+        remunerationButton.tag = 400 +i;
         remunerationButton.layer.cornerRadius = 3*ScalePpth;
         i == 0?([remunerationButton setTitleColor:UIColor.blackColor forState:UIControlStateNormal]):([remunerationButton setTitleColor:RGBHex(0x999999) forState:UIControlStateNormal]);
         i == 0?(remunerationButton.backgroundColor = RGBHex(0xFFD301)):(remunerationButton.backgroundColor = RGBHex(0xEEEEEE));
@@ -100,30 +202,32 @@
         lineView.backgroundColor = RGBHex(0xEEEEEE);
         [_screenView addSubview:lineView];
     }
-    
+     
     UILabel *sectionLabel = [[UILabel alloc] initWithFrame:AutoFrame(19, 89, 100, 13)];
-    sectionLabel.text = @"范围区间";
+    sectionLabel.text = @"范围";
     sectionLabel.textColor = UIColor.blackColor;
     sectionLabel.font = FontSize(13);
     [_screenView addSubview:sectionLabel];
     
-    NSArray *sectionArray = @[@"最低",@"最高"];
-    for (NSInteger i = 0; i < 2; i ++) {
-        UIButton *sectionButton  = [[UIButton alloc] initWithFrame:AutoFrame((21+i *143), 116, 113, 26)];
-        [sectionButton setTitle:sectionArray[i] forState:UIControlStateNormal];
-        sectionButton.titleLabel.font = FontSize(11);
-        sectionButton.clipsToBounds= YES;
-        sectionButton.layer.masksToBounds = YES;
-        sectionButton.layer.cornerRadius = 3*ScalePpth;
-        [sectionButton setTitleColor:RGBHex(0x999999) forState:UIControlStateNormal];
-        sectionButton.backgroundColor = RGBHex(0xF5F5F5);
-        [_screenView addSubview:sectionButton];
-    }
-    UIView *sectionLineView = [[UIView alloc] initWithFrame:AutoFrame(139, 129, 18, 1)];
-    sectionLineView.backgroundColor = RGBHex(0xB3B3B3);
-    [_screenView addSubview:sectionLineView];
+    [_screenView addSubview:self.rangeTextField];
+//    NSArray *sectionArray = @[@"最低",@"最高"];
+//
+//        UIButton *sectionButton  = [[UIButton alloc] initWithFrame:AutoFrame((21), 116, 113, 26)];
+//        [sectionButton setTitle:@"范围" forState:UIControlStateNormal];
+//        sectionButton.titleLabel.font = FontSize(11);
+//        sectionButton.clipsToBounds= YES;
+//        sectionButton.layer.masksToBounds = YES;
+//        sectionButton.layer.cornerRadius = 3*ScalePpth;
+//        [sectionButton setTitleColor:RGBHex(0x999999) forState:UIControlStateNormal];
+//        sectionButton.backgroundColor = RGBHex(0xF5F5F5);
+//        [_screenView addSubview:sectionButton];
+
     
-    UILabel *lengthLabel = [[UILabel alloc] initWithFrame:AutoFrame(284, 124, 100, 11)];
+//    UIView *sectionLineView = [[UIView alloc] initWithFrame:AutoFrame(139, 129, 18, 1)];
+//    sectionLineView.backgroundColor = RGBHex(0xB3B3B3);
+//    [_screenView addSubview:sectionLineView];
+    
+    UILabel *lengthLabel = [[UILabel alloc] initWithFrame:AutoFrame(142, 124, 100, 11)];
     lengthLabel.text = @"公里";
     lengthLabel.textColor = UIColor.blackColor;
     lengthLabel.font = FontSize(11);
@@ -134,23 +238,24 @@
     priceSectionLabel.textColor = UIColor.blackColor;
     priceSectionLabel.font = FontSize(13);
     [_screenView addSubview:priceSectionLabel];
-    
-    NSArray *pricesectionArray = @[@"1000",@"最高"];
-    for (NSInteger i = 0; i < 2; i ++) {
-        UIButton *sectionButton  = [[UIButton alloc] initWithFrame:AutoFrame((21+i *143), 195, 113, 26)];
-        [sectionButton setTitle:pricesectionArray[i] forState:UIControlStateNormal];
-        sectionButton.titleLabel.font = FontSize(11);
-        sectionButton.clipsToBounds= YES;
-        sectionButton.layer.masksToBounds = YES;
-        sectionButton.layer.cornerRadius = 3*ScalePpth;
-        [sectionButton setTitleColor:RGBHex(0x999999) forState:UIControlStateNormal];
-        sectionButton.backgroundColor = RGBHex(0xF5F5F5);
-        [_screenView addSubview:sectionButton];
-    }
+    [_screenView addSubview:self.priceTextField];
+    [_screenView addSubview:self.priceTextField2];
+//    NSArray *pricesectionArray = @[@"1000",@"最高"];
+//    for (NSInteger i = 0; i < 2; i ++) {
+//        UIButton *sectionButton  = [[UIButton alloc] initWithFrame:AutoFrame((21+i *143), 195, 113, 26)];
+//        [sectionButton setTitle:pricesectionArray[i] forState:UIControlStateNormal];
+//        sectionButton.titleLabel.font = FontSize(11);
+//        sectionButton.clipsToBounds= YES;
+//        sectionButton.layer.masksToBounds = YES;
+//        sectionButton.layer.cornerRadius = 3*ScalePpth;
+//        [sectionButton setTitleColor:RGBHex(0x999999) forState:UIControlStateNormal];
+//        sectionButton.backgroundColor = RGBHex(0xF5F5F5);
+//        [_screenView addSubview:sectionButton];
+//    }
     UIView *priceSectionLineView = [[UIView alloc] initWithFrame:AutoFrame(139, 209, 18, 1)];
     priceSectionLineView.backgroundColor = RGBHex(0xB3B3B3);
     [_screenView addSubview:priceSectionLineView];
-    
+
     UILabel *moneyLabel = [[UILabel alloc] initWithFrame:AutoFrame(284, 204, 100, 11)];
     moneyLabel.text = @"元";
     moneyLabel.textColor = UIColor.blackColor;
@@ -172,6 +277,7 @@
         sexButton.layer.masksToBounds = YES;
         sexButton.layer.cornerRadius = 3*ScalePpth;
         i == 0?(_selectSexButton = sexButton):0;
+        sexButton.tag = 500 +i;
         [sexButton addTarget:self action:@selector(sexButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         i == 0?([sexButton setTitleColor:UIColor.blackColor forState:UIControlStateNormal]):([sexButton setTitleColor:RGBHex(0x999999) forState:UIControlStateNormal]);
         i == 0?(sexButton.backgroundColor = RGBHex(0xFFD301)):(sexButton.backgroundColor = RGBHex(0xEEEEEE));
@@ -189,6 +295,7 @@
     UIButton *yesButton = [[UIButton alloc] initWithFrame:AutoFrame(188, 308, 189, 40)];
     [yesButton setTitle:@"完成" forState:UIControlStateNormal];
     [yesButton setTitleColor:UIColor.blackColor forState:UIControlStateNormal];
+    yesButton.tag = 101;
     [yesButton addTarget:self action:@selector(yesButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     yesButton.backgroundColor = RGBHex(0xFFD301);
     yesButton.titleLabel.font = FontSize(17);
@@ -201,7 +308,13 @@
     [button setTitleColor:UIColor.blackColor forState:UIControlStateNormal];
     button.backgroundColor = RGBHex(0xFFD301);
     _selectRemunerationButton = button;
-    
+    if (button.tag == 400) {
+        _pay = @"";
+    } else if (button.tag == 401) {
+        _pay = @"1";
+    } else {
+        _pay = @"2";
+    }
 }
 - (void)sexButtonAction:(UIButton *)button {
     [_selectSexButton setTitleColor:RGBHex(0x999999) forState:UIControlStateNormal];
@@ -210,12 +323,24 @@
     [button setTitleColor:UIColor.blackColor forState:UIControlStateNormal];
     button.backgroundColor = RGBHex(0xFFD301);
     _selectSexButton = button;
-    
+    if (button.tag == 500) {
+        _sex = @"";
+    } else if (button.tag == 501) {
+        _sex = @"1";
+    } else
+    {
+        _sex = @"2";
+    }
 }
 - (void)screenViewNewButtonAction:(UIButton *)button {
     [_screenView removeFromSuperview];
     _screenView  = nil;
     [segmentView addSubview:self.screenView];
+    _pay = @"";
+    _rangeTextField.text = @"";
+    _priceTextField.text = @"";
+    _priceTextField2.text = @"";
+    _sex = @"";
 }
 - (UITableView *)tableView {
     if (!_tableView) {
@@ -230,6 +355,65 @@
         _tableView.tableFooterView = [[UIView alloc] initWithFrame:AutoFrame(0, 0, 0.00001, 0.000001)];
         _tableView.showsVerticalScrollIndicator = NO;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        WeakSelf;
+        [_tableView addHeaderWithHeaderWithBeginRefresh:YES animation:YES refreshBlock:^(NSInteger pageIndex) {
+            weakSelf.pageIndex = pageIndex;
+            [ZXD_NetWorking postWithUrl:[rootUrl  stringByAppendingString:@"/ReleaseWork/select/workListSolr"] params:@{
+                   @"page":@"1",
+                   @"pageSize":@"10",
+                   @"Sort":weakSelf.sort,
+                   @"workTypeId":weakSelf.select_Classification_ID,
+                   @"solr":NoneNull(weakSelf.searchBar.text),
+                   @"filter":@{
+                            @"pay":weakSelf.pay,
+                            @"price":@{@"low":NoneNull(weakSelf.priceTextField.text),@"hig":NoneNull(weakSelf.priceTextField2.text)},
+                            @"sex":weakSelf.sex,
+                            @"byAway":NoneNull(weakSelf.rangeTextField.text),
+                            @"location":[NSString stringWithFormat:@"%lf,%lf",weakSelf.clannotation.coordinate.longitude,weakSelf.clannotation.coordinate.latitude],
+                   }
+               } success:^(id  _Nonnull response) {
+                weakSelf.pageListModel = [PageListModel mj_objectWithKeyValues:response[@"data"]];
+                [weakSelf.tableView reloadData];
+               } fail:^(NSError * _Nonnull error) {
+                   
+               } showHUD:YES];
+        }];
+        [_tableView addFooterWithWithHeaderWithAutomaticallyRefresh:YES loadMoreBlock:^(NSInteger pageIndex) {
+            weakSelf.pageIndex = pageIndex;
+            [ZXD_NetWorking postWithUrl:[rootUrl  stringByAppendingString:@"/ReleaseWork/select/workListSolr"] params:@{
+                                  @"page":@(pageIndex),
+                                  @"pageSize":@"10",
+                                  @"Sort":weakSelf.sort,
+                                  @"workTypeId":weakSelf.select_Classification_ID,
+                                  @"solr":NoneNull(weakSelf.searchBar.text),
+                                  @"filter":@{
+                                           @"pay":weakSelf.pay,
+                                           @"price":@{@"low":NoneNull(weakSelf.priceTextField.text),@"hig":NoneNull(weakSelf.priceTextField2.text)},
+                                           @"sex":weakSelf.sex,
+                                           @"byAway":NoneNull(weakSelf.rangeTextField.text),
+                                           @"location":[NSString stringWithFormat:@"%lf,%lf",weakSelf.clannotation.coordinate.longitude,weakSelf.clannotation.coordinate.latitude],
+                                  }
+               } success:^(id  _Nonnull response) {
+                if (response) {
+                    if ([response[@"data"][@"pageNum"] isEqual:response[@"data"][@"pages"]]) {
+                        [weakSelf.tableView endFooterNoMoreData];
+                    }
+                }
+                [weakSelf.tableView endFooterRefresh];
+                if (weakSelf.pageIndex <= [response[@"data"][@"pages"] integerValue] && weakSelf.pageIndex > 1) {
+                    
+                    NSMutableArray *listArray = weakSelf.pageListModel.list.mutableCopy ?:[NSMutableArray new];
+                        weakSelf.pageListModel = [PageListModel mj_objectWithKeyValues:response[@"data"]];
+                    [weakSelf.pageListModel.list enumerateObjectsUsingBlock:^(PageContentListModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                        [listArray addObject:obj];
+                    }];
+                    weakSelf.pageListModel.list = listArray;
+                    [weakSelf.tableView reloadData];
+                }
+               } fail:^(NSError * _Nonnull error) {
+
+               } showHUD:YES];
+        }];
     }
     return _tableView;
 }
@@ -268,6 +452,7 @@
     if (!_headerView) {
         _headerView = [[UIView alloc] initWithFrame:AutoFrame(0,statusHeight/ScalePpth, 375, 141)];
         _headerView.backgroundColor = RGBHex(0xf0f0f0);
+        _headerView.clipsToBounds = YES;
         UIButton *addressButton =  [[UIButton alloc] initWithFrame:CGRectMake(25*ScalePpth,  15*ScalePpth, 60*ScalePpth, 18.1*ScalePpth)];
         [addressButton setTitle:@"济南" forState:UIControlStateNormal];
         [addressButton setImage:[UIImage imageNamed:@"home_arrow_bottom"] forState:UIControlStateNormal];
@@ -312,22 +497,25 @@
     backView2.layer.mask = maskLayer;
     [backView addSubview:backView2];
     [_headerView addSubview:segmentView];
-    firstLabel = [[UILabel alloc] initWithFrame:AutoFrame(25, 61, 0, 0)];
-    firstLabel.text = @"离我最近";
-    firstLabel.textColor = UIColor.blackColor;
-    firstLabel.font = FontSize(11);
-    [firstLabel sizeToFit];
-    [segmentView addSubview:firstLabel];
+    firstButton = [[UIButton alloc] initWithFrame:AutoFrame(25, 51, 330, 31)];
+    [firstButton setTitle:@"离我最近" forState:UIControlStateNormal];
+    firstButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [firstButton setTitleColor:UIColor.blackColor forState:UIControlStateNormal];
+    firstButton.titleLabel.font = FontSize(11);
+    [firstButton addTarget:self action:@selector(firstButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [segmentView addSubview:firstButton];
     
     lineView = [[UIView alloc] initWithFrame:AutoFrame(25, 89, 325, 0.4)];
     lineView.backgroundColor = RGBHex(0xeeeeee);
     [segmentView addSubview:lineView];
    
-    secondLabel = [[UILabel alloc] initWithFrame:AutoFrame(25, 108, 100, 11)];
-    secondLabel.text = @"最新发布";
-    secondLabel.textColor = UIColor.lightGrayColor;
-    secondLabel.font = FontSize(11);
-    [segmentView addSubview:secondLabel];
+    secondButton = [[UIButton alloc] initWithFrame:AutoFrame(25, 98, 330, 31)];
+    [secondButton setTitle:@"最新发布" forState:UIControlStateNormal];
+    secondButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [secondButton setTitleColor:UIColor.lightGrayColor forState:UIControlStateNormal];
+    [secondButton addTarget:self action:@selector(secondButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    secondButton.titleLabel.font = FontSize(11);
+    [segmentView addSubview:secondButton];
     
     NSArray *titleArr = @[@"默认排序",@"零工类型",@"筛选"];
     for (NSInteger i  = 0; i < 3; i ++) {
@@ -374,11 +562,48 @@
     yesButton = [[UIButton alloc] initWithFrame:AutoFrame(188, 271, 189, 40)];
     [yesButton setTitle:@"完成" forState:UIControlStateNormal];
     [yesButton setTitleColor:UIColor.blackColor forState:UIControlStateNormal];
+    yesButton.tag = 100;
     [yesButton addTarget:self action:@selector(yesButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     yesButton.backgroundColor = RGBHex(0xFFD301);
     yesButton.titleLabel.font = FontSize(17);
     [segmentView addSubview:yesButton];
 }
+//离我最近
+- (void)firstButtonAction:(UIButton *)button {
+    _sort = @"1";
+    [self netWorking];
+}
+//最新发布
+- (void)secondButtonAction:(UIButton *)button {
+    _sort = @"2";
+    [self netWorking];
+}
+
+- (void)netWorking {
+    WeakSelf;
+    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingString:@"/ReleaseWork/select/workListSolr"] params:@{
+        @"page":@"1",
+        @"pageSize":@"10",
+        @"Sort":_sort,
+        @"workTypeId":_select_Classification_ID,
+        @"solr":NoneNull(_searchBar.text),
+        @"filter":@{
+                 @"pay":_pay,
+                 @"price":@{@"low":NoneNull(_priceTextField.text),@"hig":NoneNull(_priceTextField2.text)},
+                 @"sex":_sex,
+                 @"byAway":NoneNull(_rangeTextField.text),
+                 @"location":[NSString stringWithFormat:@"%lf,%lf",_clannotation.coordinate.longitude,_clannotation.coordinate.latitude],
+        },
+    } success:^(id  _Nonnull response) {
+        if (response && response[@"data"]) {
+            weakSelf.pageListModel = [PageListModel mj_objectWithKeyValues:response[@"data"]];
+            [weakSelf.tableView reloadData];
+        }
+    } fail:^(NSError * _Nonnull error) {
+            [WHToast showErrorWithMessage:@"网络错误"];
+    } showHUD:YES];
+}
+
 - (void)newButtonAction:(UIButton *)button {
     [_tableView2 removeFromSuperview];
     [_tableView3 removeFromSuperview];
@@ -394,12 +619,14 @@
     [segmentView addSubview:self.tableView3];
     [_tableView2 reloadData];
     [_tableView3 reloadData];
+    _select_Classification_ID = @"";
 }
 - (void)yesButtonAction:(UIButton *)button {
     _lastButton.selected = !_lastButton.selected;
     segmentView.frame = AutoFrame(0, 92, 375, 49);
     _headerView.frame = AutoFrame(0,statusHeight/ScalePpth, 375, 141);
     [_alphaGrayView removeFromSuperview];
+    [self netWorking];
 }
 - (void)typeButtonAction:(UIButton *)button {
     if (_lastButton != button) {
@@ -415,11 +642,10 @@
         _alphaGrayView = nil;
     }
     [_screenView removeFromSuperview];
-    if (button.tag == 300) {        
-        _headerView.frame = AutoFrame(0,statusHeight/ScalePpth, 375, 141);
-        firstLabel.hidden  = NO;
+    if (button.tag == 300) {
+        firstButton.hidden  = NO;
         lineView.hidden = NO;
-        secondLabel.hidden = NO;
+        secondButton.hidden = NO;
         _tableView2.hidden = YES;
         _tableView3.hidden = YES;
          button.selected = !button.selected;
@@ -428,8 +654,10 @@
         }
         if (button.isSelected) {
             segmentView.frame = AutoFrame(0, 92, 375, 145);
+             _headerView.frame = AutoFrame(0,statusHeight/ScalePpth, 375, (92+145));
             [GlobalSingleton.gS_ShareInstance.systemWindow addSubview:self.alphaGrayView];
         } else {
+             _headerView.frame = AutoFrame(0,statusHeight/ScalePpth, 375, 141);
              segmentView.frame = AutoFrame(0, 92, 375, 49);
             [_alphaGrayView removeFromSuperview];
         }
@@ -439,9 +667,9 @@
         _tableView3.hidden = NO;
         yesButton.hidden = NO;
         newButton.hidden = NO;
-        firstLabel.hidden  = YES;
+        firstButton.hidden  = YES;
         lineView.hidden = YES;
-        secondLabel.hidden = YES;
+        secondButton.hidden = YES;
           button.selected = !button.selected;
         if (_lastButton != button) {
             button.selected = YES;
@@ -459,9 +687,9 @@
             [_alphaGrayView removeFromSuperview];
         }
     } else {
-        firstLabel.hidden  = YES;
+        firstButton.hidden  = YES;
         lineView.hidden = YES;
-        secondLabel.hidden = YES;
+        secondButton.hidden = YES;
         _tableView2.hidden = YES;
         _tableView3.hidden = YES;
         button.selected = !button.selected;
@@ -501,7 +729,11 @@
     }
     [GlobalSingleton.gS_ShareInstance.systemWindow addSubview:self.remindView];
 }
-
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [_priceTextField endEditing:YES];
+    [_priceTextField2 endEditing:YES];
+    [_rangeTextField endEditing:YES];
+}
 - (UISearchBar *)searchBar {
     if (!_searchBar) {
         _searchBar = [[UISearchBar alloc] initWithFrame:AutoFrame(10, 44, 355, 38)];
@@ -565,6 +797,13 @@
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    if (tableView == _tableView2) {
+        return _homeListModelArray.count;
+    } else if (tableView == _tableView3) {
+        return [_homeListModelArray[_selectIndex] list].count;
+    } else {
+        return _pageListModel.list.count;
+    }
     return 8;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -608,7 +847,7 @@
             cell.textLabel.font = FontSize(13);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.contentView.backgroundColor = RGBHex(0xf6f6f6);
-            cell.textLabel.text = @[@"家政/安保",@"普工/技工",@"餐饮",@"运动健身",@"养生理疗",@"酒店",@"教育培训",@"百货超市"][indexPath.section];
+            cell.textLabel.text = [_homeListModelArray[indexPath.section] typeWork];
             if (indexPath.section == 0) {
                 _lastSelectCell = cell;
                 cell.textLabel.textColor = UIColor.blackColor;
@@ -625,11 +864,12 @@
         DetailTableCell *cell = [tableView dequeueReusableCellWithIdentifier:[NSString stringWithFormat:@"DetailTableCell%ld",(long)indexPath.section]];
         if (indexPath.section < _cellArray.count) {
             cell = _cellArray[indexPath.section];
+            cell.textContent = [[_homeListModelArray[_selectIndex] list][indexPath.section] typeWork];
             return cell;
         }
         if (!cell) {
             cell = [[DetailTableCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DetailTableCell%ld"];
-            cell.textContent = @[@"保洁",@"月嫂",@"保姆",@"护理",@"保安",@"钟点工",@"育儿嫂",@"家庭医生"][indexPath.section];
+            cell.textContent = [[_homeListModelArray[_selectIndex] list][indexPath.section] typeWork];
             if (indexPath.section == 0) {
                 cell.label.textColor = UIColor.blackColor;
                 _lastSelectCell2 = cell;
@@ -642,9 +882,12 @@
     }
     
     OddJobCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OddJobCell" forIndexPath:indexPath];
+    cell.listModel = _pageListModel.list[indexPath.section];
     WeakSelf;
-    cell.detailBlock = ^(id  _Nonnull model) {
-        [weakSelf.navigationController pushViewController:[GrabdDetailsController new] animated:NO];
+    cell.detailBlock = ^(PageContentListModel * model) {
+        GrabdDetailsController *gdc = [GrabdDetailsController new];
+        gdc.listModel = model;
+        [weakSelf.navigationController pushViewController:gdc animated:NO];
     };
     return cell;
 }
@@ -655,11 +898,14 @@
         UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         cell.textLabel.textColor = UIColor.blackColor;
         _lastSelectCell = cell;
+         _selectIndex = indexPath.section;
+        [_tableView3 reloadData];
     } else if (_tableView3 == tableView) {
         DetailTableCell *cell = (DetailTableCell *)[tableView cellForRowAtIndexPath:indexPath];
         _lastSelectCell2.label.textColor = RGBHex(0x999999);
         cell.label.textColor = RGBHex(0x333333);
         _lastSelectCell2 = cell;
+        _select_Classification_ID = [[_homeListModelArray[_selectIndex] list][indexPath.section] idName];
     }
 }
 

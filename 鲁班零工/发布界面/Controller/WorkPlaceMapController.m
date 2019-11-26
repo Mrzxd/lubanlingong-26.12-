@@ -287,9 +287,7 @@
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
     return [[UIView alloc] initWithFrame:AutoFrame(0, 0, 0.0000001, 0.0000001)];
 }
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
     MapTableCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MapTableCell" forIndexPath:indexPath];
     cell.pointView.backgroundColor = indexPath.row == 0?RGBHex(0xEA4B32):RGBHex(0xDEDEDE);
       MKMapItem *item = _placeArray[indexPath.row];
@@ -298,4 +296,16 @@
     cell.stressLabel.text = item.placemark.addressDictionary[@"FormattedAddressLines"][0];
     return cell;
 }
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+     MKMapItem *item = _placeArray[indexPath.row];
+    if (_adressBlock) {
+        _adressBlock(item.placemark.addressDictionary[@"FormattedAddressLines"][0] NonNull,[NSString stringWithFormat:@"%lf",item.placemark.coordinate.longitude],[NSString stringWithFormat:@"%lf",item.placemark.coordinate.latitude]);
+    }
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+
+
+
+
 @end

@@ -10,7 +10,9 @@
 
 #import "OrderStatusCell.h"
 
-@implementation OrderStatusCell
+@implementation OrderStatusCell {
+    UILabel *adressCTLabel;
+}
 
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
@@ -85,7 +87,7 @@
     [contentView addSubview:adressLabel];
     
     
-    UILabel *adressCTLabel = [[UILabel alloc] initWithFrame:AutoFrame(145, 104, 200, 12)];
+    adressCTLabel = [[UILabel alloc] initWithFrame:AutoFrame(145, 104, 200, 12)];
     adressCTLabel.text =  @"历下区燕山街道东源大厦";
     adressCTLabel.textAlignment = NSTextAlignmentRight;
     adressCTLabel.font = [UIFont systemFontOfSize:12*ScalePpth];
@@ -129,16 +131,30 @@
     [_MiddleButton addTarget:self action:@selector(sureFanishedAction:) forControlEvents:UIControlEventTouchUpInside];
     [contentView addSubview:_MiddleButton];
 }
-
+//  取消订单
 - (void)immediatelyButtonAction:(UIButton *)button {
-    
+    if (_cellBlock) {
+        _cellBlock(_jobModel);
+    }
 }
 - (void)startButtonAction:(UIButton *)button {
-    
+        if (_firstButtonBlock) {
+            _firstButtonBlock(_jobModel);
+        }
 }
 - (void)sureFanishedAction:(UIButton *)button {
-    
+    if (_middlleButtonBlock) {
+        _middlleButtonBlock(_jobModel);
+    }
 }
-
+- (void)setJobModel:(MyOddJobModel *)jobModel {
+    _jobModel = jobModel;
+    if (jobModel) {
+        _timeCTLabel.text = [self getTimeFromTimestamp:NoneNull(jobModel.creatOrderTime)];
+        _saleCTLabel.text = [NSString stringWithFormat:@"%@/%@",NoneNull(jobModel.orderSalary),NoneNull(jobModel.orderSalaryDay)];
+        adressCTLabel.text = NoneNull(jobModel.orderLocation);
+        _saleLabel.text = NoneNull(jobModel.orderOrderName);
+    }
+}
 
 @end

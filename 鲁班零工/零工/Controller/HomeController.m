@@ -5,9 +5,12 @@
 //
 //  Created by 张昊 on 2019/10/12.
 //  Copyright © 2019 张兴栋. All rights reserved.
+
 #import "RemingView.h"
 #import "YTSegmentBar.h"
+#import "PageListModel.h"
 #import "HomeTableCell.h"
+#import "HomeListModel.h"
 #import "UIView+YTSegmentBar.h"
 #import "CategoryLabel.h"
 #import "HomeController.h"
@@ -23,7 +26,14 @@
 @property (nonatomic, strong) UISearchBar *searchBar;
 @property (nonatomic, strong) YTSegmentBar *segmentBar;
 @property (nonatomic, strong) RemingView *remindView;
+@property (nonatomic, strong) NSArray <HomeListModel*>*listModelArray;
 @property (nonatomic, strong) ZLImageViewDisplayView *headerImageView;
+
+@property (nonatomic, assign) NSInteger toIndex;
+@property (nonatomic, assign) NSInteger pageIndex;
+
+@property (nonatomic, strong) PageListModel*pageListModel;
+@property (nonatomic, assign) BOOL isNoMoreData;
 
 @end
 
@@ -67,6 +77,49 @@
         _tableView.tableFooterView = [[UIView alloc] initWithFrame:AutoFrame(0, 0, 0.00001, 0.000001)];
         _tableView.showsVerticalScrollIndicator = NO;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
+        _tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
+        WeakSelf;
+        [_tableView addHeaderWithHeaderWithBeginRefresh:YES animation:YES refreshBlock:^(NSInteger pageIndex) {
+            weakSelf.pageIndex = pageIndex;
+            [ZXD_NetWorking postWithUrl:[rootUrl  stringByAppendingString:@"/ReleaseWork/select/workListHoem"] params:@{
+                   @"page":@"1",
+                   @"pageSize":@"10",
+                   @"workTypeId":@(weakSelf.toIndex),
+               } success:^(id  _Nonnull response) {
+                weakSelf.pageListModel = [PageListModel mj_objectWithKeyValues:response[@"data"]];
+                [weakSelf.tableView reloadData];
+               } fail:^(NSError * _Nonnull error) {
+                   
+               } showHUD:YES];
+        }];
+        [_tableView addFooterWithWithHeaderWithAutomaticallyRefresh:YES loadMoreBlock:^(NSInteger pageIndex) {
+            weakSelf.pageIndex = pageIndex;
+            [ZXD_NetWorking postWithUrl:[rootUrl  stringByAppendingString:@"/ReleaseWork/select/workListHoem"] params:@{
+                   @"page":@(pageIndex),
+                   @"pageSize":@"10",
+                   @"workTypeId":@(weakSelf.toIndex),
+               } success:^(id  _Nonnull response) {
+                if (response) {
+                    if ([response[@"data"][@"pageNum"] isEqual:response[@"data"][@"pages"]]) {
+                        [weakSelf.tableView endFooterNoMoreData];
+                    }
+                }
+                [weakSelf.tableView endFooterRefresh];
+                if (weakSelf.pageIndex <= [response[@"data"][@"pages"] integerValue] && weakSelf.pageIndex > 1) {
+                    
+                    NSMutableArray *listArray = weakSelf.pageListModel.list.mutableCopy ?:[NSMutableArray new];
+                        weakSelf.pageListModel = [PageListModel mj_objectWithKeyValues:response[@"data"]];
+                    [weakSelf.pageListModel.list enumerateObjectsUsingBlock:^(PageContentListModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                        [listArray addObject:obj];
+                    }];
+                    weakSelf.pageListModel.list = listArray;
+                    [weakSelf.tableView reloadData];
+                }
+               } fail:^(NSError * _Nonnull error) {
+
+               } showHUD:YES];
+        }];
     }
     return _tableView;
 }
@@ -95,14 +148,29 @@
 - (void)addsegmentBar {
     [_headerView addSubview:self.segmentBar];
     self.segmentBar.frame = AutoFrame(0, 228, 355, 50);
-    self.segmentBar.items = @[@"今日推荐",@"抢单中心",@"保洁",@"货物搬运",@"普工/技工"];
     self.segmentBar.showIndicator = YES;
     self.segmentBar.backgroundColor = [UIColor clearColor];
-    self.segmentBar.selectIndex = 0;
 }
 #pragma mark - YTSegmentBarDelegate
 - (void)segmentBar:(YTSegmentBar *)segmentBar didSelectIndex:(NSInteger)toIndex fromIndex:(NSInteger)fromIndex{
-    //    [self showChildVCViewAtIndex:toIndex];
+    _toIndex = toIndex;
+    if (toIndex == 0) {
+        _toIndex = -1;
+    } else if (toIndex == 1) {
+        _toIndex = -2;
+    } else {
+        _toIndex = [[_listModelArray[toIndex-2] idName] NonNull integerValue];
+    }
+    WeakSelf;
+    [ZXD_NetWorking postWithUrl:[rootUrl  stringByAppendingString:@"/ReleaseWork/select/workListHoem"] params:@{
+                      @"page":@(1),
+                      @"pageSize":@"10",
+                      @"workTypeId":@((weakSelf.toIndex)),
+                  } success:^(id  _Nonnull response) {
+                     weakSelf.pageListModel = [PageListModel mj_objectWithKeyValues:response[@"data"]];
+                    [weakSelf.tableView reloadData];
+                  } fail:^(NSError * _Nonnull error) {
+                  } showHUD:YES];
 }
 - (UISearchBar *)searchBar {
     if (!_searchBar) {
@@ -135,7 +203,6 @@
     }
     return nil;
 }
-
 /**
  *  生成图片
  *
@@ -162,6 +229,8 @@
     [searchBar endEditing:YES];
 }
 
+
+
 #pragma mark ----- viewDidLoad
 
 - (void)viewDidLoad {
@@ -170,14 +239,42 @@
     self.view.backgroundColor = RGBHex(0xf0f0f0);
     GlobalSingleton.gS_ShareInstance.contentType = @"abc";
     [self.view addSubview:self.tableView];
-}
+    WeakSelf;
+    [ZXD_NetWorking getWithUrl:[rootUrl stringByAppendingString:@"/ReleaseWork/WorkSort1"] params:@{} success:^(id  _Nonnull response) {
+        if (response && response[@"data"]) {
+            weakSelf.listModelArray = [HomeListModel mj_objectArrayWithKeyValuesArray:response[@"data"]];
+            [weakSelf addsegerbar];
+            [[NSUserDefaults standardUserDefaults] setObject:response[@"data"] forKey:@"HomeListModelArray"];
+        }
+    } fail:^(NSError * _Nonnull error) {
 
+    } showHUD:NO];
+    [ZXD_NetWorking postWithUrl:[rootUrl  stringByAppendingString:@"/ReleaseWork/select/workListHoem"] params:@{
+        @"page":@"1",
+        @"pageSize":@"10",
+        @"workTypeId":@"-1",
+    } success:^(id  _Nonnull response) {
+        weakSelf.pageListModel = [PageListModel mj_objectWithKeyValues:response[@"data"]];
+        [weakSelf.tableView reloadData];
+    } fail:^(NSError * _Nonnull error) {
+
+    } showHUD:YES];
+}
+- (void)addsegerbar {
+    NSMutableArray *mutableArray = [[NSMutableArray alloc] initWithArray: @[@"今日推荐",@"抢单中心"]];
+    [_listModelArray enumerateObjectsUsingBlock:^(HomeListModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [mutableArray addObject:obj.typeWork];
+    }];
+    self.segmentBar.items = mutableArray;
+    self.segmentBar.selectIndex = 0;
+}
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
 }
 
 #pragma mark ---- addbutton
+
 - (void)addAction:(UIButton *)button {
     if (!_remindView) {
         _remindView = [[RemingView alloc] init];
@@ -197,7 +294,7 @@
 #pragma mark ------ UITableViewDelegate
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 4;
+    return _pageListModel.list.count;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 1;
@@ -222,8 +319,11 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     HomeTableCell *cell = [tableView dequeueReusableCellWithIdentifier:@"HomeTableCell" forIndexPath:indexPath];
     WeakSelf;
-    cell.detailBlock = ^(id  _Nonnull model) {
-        [weakSelf.navigationController pushViewController:[GrabdDetailsController new] animated:NO];
+    cell.listModel = _pageListModel.list[indexPath.section];
+    cell.detailBlock = ^(PageContentListModel * model) {
+        GrabdDetailsController *gdc = [GrabdDetailsController new];
+        gdc.listModel = model;
+        [weakSelf.navigationController pushViewController:gdc animated:NO];
     };
     return cell;
 }

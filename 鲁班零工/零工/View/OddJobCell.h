@@ -7,12 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PageContentListModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 typedef void(^GrabdDetailsBlock)(id model);
 @interface OddJobCell : UITableViewCell
 @property (nonatomic, strong) UIButton *button;
 @property (nonatomic, strong) GrabdDetailsBlock detailBlock;
+@property (nonatomic, strong) PageContentListModel *listModel;
 @end
 
 NS_ASSUME_NONNULL_END

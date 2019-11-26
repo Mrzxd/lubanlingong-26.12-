@@ -11,15 +11,22 @@
 @interface ToEvaluateController () <HCRatingViewDelegate,UITextViewDelegate>
 
 @property  UITextView *textView;
+
+@property (nonatomic, strong)HCRatingView *ratingView1;
+@property (nonatomic, strong)HCRatingView *ratingView2;
+
 @end
 
-@implementation ToEvaluateController
+@implementation ToEvaluateController {
+    NSInteger rating1;
+    NSInteger rating2;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"去评价";
     self.view.backgroundColor = RGBHex(0xf0f0f0);
-    
+    rating1 = rating2 = 5;
     UIView *topCoverView = [[UIView alloc] initWithFrame:AutoFrame(7.5, 10, 360, 120)];
     topCoverView.backgroundColor = RGBHex(0xFfffff);
     topCoverView.layer.cornerRadius = 5;
@@ -34,11 +41,13 @@
     [topCoverView addSubview:[self typeLabel:@"雇主姓名" :14.5]];
     [topCoverView addSubview:[self typeLabel:@"工作名称" :54.5]];
     [topCoverView addSubview:[self typeLabel:@"工资" :95]];
-    
-    [topCoverView addSubview:[self rightLabel:@"张三" :14.5]];
-    [topCoverView addSubview:[self rightLabel:@"保险销售" :55.5]];
-    [topCoverView addSubview:[self rightLabel:@"200/天" :96]];
-    
+    NSString *name = _model.name?:_detailModel.name;
+    NSString *orderOrderName = _model.orderOrderName?:_detailModel.workName;
+    NSString *orderSalary = _model.orderSalary?:_detailModel.salary;
+    NSString *orderSalaryDay = _model.orderSalaryDay?:_detailModel.salaryDay;
+    [topCoverView addSubview:[self rightLabel:NoneNull(name) :14.5]];
+    [topCoverView addSubview:[self rightLabel:orderOrderName :55.5]];
+    [topCoverView addSubview:[self rightLabel:[NSString stringWithFormat:@"%@/%@",orderSalary,orderSalaryDay] :96]];
     [self addSubViews];
 }
 
@@ -66,8 +75,10 @@
     [self.view addSubview:bottomCoverView];
     [bottomCoverView addSubview:[self typeLabel:@"工作评价" :18.5]];
     [bottomCoverView addSubview:[self typeLabel:@"雇主评价" :51.5]];
-    [bottomCoverView addSubview:[self addHCRatingView:9]];
-    [bottomCoverView addSubview:[self addHCRatingView:42]];
+    _ratingView1 = [self addHCRatingView:9];
+    [bottomCoverView addSubview:_ratingView1];
+    _ratingView2 = [self addHCRatingView:42];
+    [bottomCoverView addSubview:_ratingView2];
     
     _textView = [[UITextView alloc] initWithFrame:AutoFrame(7.5, 79, 345, 127)];
     _textView.clipsToBounds = YES;
@@ -87,15 +98,49 @@
     submitButton.layer.cornerRadius = 45.0/2*ScalePpth;
     submitButton.layer.masksToBounds = YES;
     submitButton.clipsToBounds = YES;
+    [submitButton addTarget:self action:@selector(submitButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:submitButton];
+}
+- (void)submitButtonAction:(UIButton *)button {
+    NSString *idName = _model.idName?:_detailModel.idName;
+    NSString *result = _textView.text;
+    if ([result containsString:@"请输"]) {
+        result = @"";
+    }
+    WeakSelf;
+    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/WorkerCore/EvaluationButton"] params:@{
+        @"id":NoneNull(idName),
+        @"workEvaluation":@(rating1),
+        @"workerEvaluation":@(rating2),
+        @"EvaluationInfo":NoneNull(result),
+    } success:^(id  _Nonnull response) {
+        if (response && response[@"code"] && [response[@"code"] intValue] == 0) {
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+        } else {
+            if (response[@"msg"]) {
+               [WHToast showErrorWithMessage:response[@"msg"]];
+            } else {
+               [WHToast showErrorWithMessage:@"评价失败"];
+            }
+        }
+    } fail:^(NSError * _Nonnull error) {
+        [WHToast showErrorWithMessage:@"网络错误"];
+    } showHUD:YES];
 }
 - (HCRatingView *)addHCRatingView:(CGFloat)height {
     HCRatingView *ratingView = [[HCRatingView alloc] initWithFrame:AutoFrame(230, height, 140, 30)];
     ratingView.isFull = NO; //设置是否允许半颗星
     WeakSelf;
     [ratingView setImagesDeselected:@"details_no_collected" partlySelected:@"星3" fullSelected:@"details_collected" userInteractionEnabled:YES andDelegate:weakSelf];
-    [ratingView disPlayRating:4];//设置默认分数
+    [ratingView disPlayRating:5];//设置默认分数    
     return ratingView;
+}
+-(void) ratingChanged:(float)newRating :(NSObject *)ratingView {
+    if (ratingView == _ratingView1) {
+        rating1 = newRating;
+    } else {
+        rating2 = newRating;
+    }
 }
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     [_textView endEditing:YES];

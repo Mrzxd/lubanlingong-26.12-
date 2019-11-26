@@ -27,7 +27,7 @@
     _nameLabel.text = @"雇主类型";
     [self.contentView addSubview:_nameLabel];
     
-    _rightLabel = [[UILabel alloc] initWithFrame:AutoFrame(203, 18, 145, 15)];
+    _rightLabel = [[UILabel alloc] initWithFrame:AutoFrame(103, 18, 245, 15)];
     _rightLabel.font  = [UIFont systemFontOfSize:15*ScalePpth];
     _rightLabel.textColor = RGBHex(0xcccccc);
     _rightLabel.text = @"请选择";
@@ -37,7 +37,6 @@
     UIImageView *arrowImgView = [[UIImageView alloc] initWithFrame:AutoFrame(352, 21, 6, 10)];
     arrowImgView.image = [UIImage imageNamed:@"issue_arrow"];
     [self.contentView addSubview:arrowImgView];
-    
 }
 
 @end

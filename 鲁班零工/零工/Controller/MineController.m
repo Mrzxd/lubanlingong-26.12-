@@ -303,6 +303,8 @@
         }
     } else if (indexPath.row == 1) {
         [self.navigationController pushViewController:[EmployerCenterController new] animated:YES];
+    } else if (indexPath.row == 2) {
+        [self presentViewController:[SharingAwardsController new] animated:YES completion:nil];
     }
 }
 
