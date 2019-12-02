@@ -14,6 +14,7 @@
 @interface SMSVerificationCodeController () <UITextFieldDelegate>
 
 @property (nonatomic, strong) UITextField *textField;
+
 @end
 
 @implementation SMSVerificationCodeController
@@ -21,11 +22,28 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"手机短信验证码";
+    [self getVerificationCode];
+    [self netWorking];
     [self setUPUI];
+}
+- (void)getVerificationCode {
+    WeakSelf;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/apiBank/verificationCode"] params:weakSelf.cardDictionary success:^(id  _Nonnull response) {
+               if (response && response[@"code"] && [response[@"code"] intValue] == 0 && response[@"data"] && [response[@"data"] count]) {
+                   weakSelf.textField.text = response[@"data"][@"Vcode"];
+                   [WHToast showSuccessWithMessage:@"请输入收到的验证码"];
+               }
+       } fail:^(NSError * _Nonnull error) {
+       } showHUD:YES];
+    });
+}
+- (void)netWorking {
+   
 }
 - (void)setUPUI {
     UILabel *remindLabel = [[UILabel alloc] initWithFrame:AutoFrame(15, 25, 300, 12)];
-    remindLabel.text = @"请输入手机139****3456收到的短信验证码";
+    remindLabel.text = [NSString stringWithFormat:@"请输入手机%@收到的短信验证码",_cardDictionary[@"bankPhone"]];
     remindLabel.textColor = RGBHex(0x999999);
     remindLabel.font = FontSize(12);
     [self.view addSubview:remindLabel];
@@ -58,6 +76,7 @@
     [notRecivtedButton setTitle:@"收不到验证码？" forState:UIControlStateNormal];
     [notRecivtedButton setTitleColor:RGBHex(0x999999) forState:UIControlStateNormal];
     notRecivtedButton.titleLabel.font = FontSize(12);
+    [notRecivtedButton addTarget:self action:@selector(notRecivtedButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     notRecivtedButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     [self.view addSubview:notRecivtedButton];
     
@@ -69,9 +88,38 @@
     loginButton.layer.cornerRadius = 45.0/2*ScalePpth;
     loginButton.layer.masksToBounds = YES;
     loginButton.clipsToBounds = YES;
-//    [loginButton addTarget:self action:@selector(cardButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [loginButton addTarget:self action:@selector(cardButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:loginButton];
 }
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField endEditing:YES];
+    return YES;
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [_textField endEditing:YES];
+}
+
+- (void)cardButtonAction:(UIButton *)button {
+    if (_textField.text.length <4) {
+        [WHToast showErrorWithMessage:@"请输入正确的验证码"];
+        return;
+    }
+    WeakSelf;
+    NSMutableDictionary *dic1 = [NSDictionary dictionaryWithDictionary:_cardDictionary].mutableCopy;
+    [dic1 setValue:NoneNull(_textField.text) forKey:@"Vcode"];
+    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/apiBank/registeredMembers"] params:dic1 success:^(id  _Nonnull response) {
+        
+    } fail:^(NSError * _Nonnull error) {
+        
+    } showHUD:YES];
+}
+
+- (void)notRecivtedButtonAction:(UIButton *)button {
+    [self getVerificationCode];
+}
+
 
 
 @end

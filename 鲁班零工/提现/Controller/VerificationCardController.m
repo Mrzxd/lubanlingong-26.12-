@@ -65,7 +65,7 @@
     [_mineheaderView addSubview:cashLabel];
     
     UILabel *cashDetailLabel = [[UILabel alloc] initWithFrame:AutoFrame(90, 32.5, 190, 16)];
-    cashDetailLabel.text = @"中国建设银行储蓄卡";
+    cashDetailLabel.text = _cardDictionary[@"bank"] NonNull;
     cashDetailLabel.textColor = RGBHex(0x999999);
     cashDetailLabel.font = FontSize(16);
     [_mineheaderView addSubview:cashDetailLabel];
@@ -77,7 +77,7 @@
     [_mineheaderView addSubview:amountLabel];
     
     UILabel *amountDetailLabel = [[UILabel alloc] initWithFrame:AutoFrame(90, 104, 230, 16)];
-    amountDetailLabel.text = @"6245 8595 5141 7894 238";
+    amountDetailLabel.text = _cardDictionary[@"bankCard"];
     amountDetailLabel.textColor = RGBHex(0x999999);
     amountDetailLabel.font = FontSize(16);
     [_mineheaderView addSubview:amountDetailLabel];
@@ -115,8 +115,29 @@
     
 }
 
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [_textField endEditing:YES];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField endEditing:YES];
+    return YES;
+}
+
 - (void)cardButtonAction:(UIButton *)button {
-    [self.navigationController pushViewController:[SMSVerificationCodeController new] animated:YES];
+    if (![self isMobileNumberOnly:NoneNull(_textField.text)]) {
+        [WHToast showErrorWithMessage:@"请输入正确的手机号"];
+    }
+    WeakSelf;
+    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/apiBank/addPhone"] params:@{@"bankPhone":NoneNull(_textField.text),@"id":_cardDictionary[@"id"] NonNull} success:^(id  _Nonnull response) {
+        if (response && response[@"code"] && [response[@"code"] intValue] == 0 && response[@"data"] && [response[@"data"] count]) {
+            SMSVerificationCodeController *svc = [SMSVerificationCodeController new];
+            svc.cardDictionary = response[@"data"];
+            [weakSelf.navigationController pushViewController:svc animated:YES];
+        }
+    } fail:^(NSError * _Nonnull error) {
+            [WHToast showErrorWithMessage:@"网络错误"];
+    } showHUD:YES];
 }
 
 @end

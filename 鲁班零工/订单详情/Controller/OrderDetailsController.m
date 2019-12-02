@@ -447,7 +447,6 @@
            _waitLabel.text = @"已评价";
            [_stateButton setTitle:@"删除订单" forState:UIControlStateNormal];
        }
-    
     [_stateButton setTitleColor:RGBHex(0x333333) forState:UIControlStateNormal];
     [_stateButton addTarget:self action:@selector(cancleButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [footerView addSubview:_stateButton];

@@ -69,7 +69,6 @@
 		611B072C2359E43300A2983F /* MapTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 611B072B2359E43300A2983F /* MapTableCell.m */; };
 		611D0EF2234D8BBE00391470 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 611D0EF1234D8BBE00391470 /* AppDelegate.m */; };
 		611D0EFA234D8BBF00391470 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 611D0EF9234D8BBF00391470 /* Assets.xcassets */; };
-		611D0EFD234D8BBF00391470 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 611D0EFB234D8BBF00391470 /* LaunchScreen.storyboard */; };
 		611D0F00234D8BBF00391470 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 611D0EFF234D8BBF00391470 /* main.m */; };
 		611D0F0A234D8BBF00391470 /* ____Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 611D0F09234D8BBF00391470 /* ____Tests.m */; };
 		611D0F15234D8BBF00391470 /* ____UITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 611D0F14234D8BBF00391470 /* ____UITests.m */; };
@@ -139,6 +138,7 @@
 		612D4E402355D41F002B7E9E /* star.png in Resources */ = {isa = PBXBuildFile; fileRef = 612D4E3F2355D41E002B7E9E /* star.png */; };
 		612FE0512388E2E000967094 /* MyOddJobModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 612FE0502388E2E000967094 /* MyOddJobModel.m */; };
 		61353ABE238D196900BDAA5F /* ReleasedJobsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 61353ABD238D196900BDAA5F /* ReleasedJobsModel.m */; };
+		614007512394B6E8004BB03E /* QueryBoundBankCardModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 614007502394B6E8004BB03E /* QueryBoundBankCardModel.m */; };
 		61492E59235B1B620020DDA3 /* xButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61492E58235B1B620020DDA3 /* xButton.png */; };
 		61492E5C235B21C90020DDA3 /* LookForServicesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 61492E5B235B21C90020DDA3 /* LookForServicesCell.m */; };
 		61492E63235B2AF20020DDA3 /* RealNameAuthenticationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61492E62235B2AF20020DDA3 /* RealNameAuthenticationController.m */; };
@@ -320,7 +320,6 @@
 		611D0EF0234D8BBE00391470 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		611D0EF1234D8BBE00391470 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		611D0EF9234D8BBF00391470 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		611D0EFC234D8BBF00391470 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		611D0EFE234D8BBF00391470 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		611D0EFF234D8BBF00391470 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		611D0F05234D8BBF00391470 /* 鲁班零工Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "鲁班零工Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -449,6 +448,8 @@
 		612FE0502388E2E000967094 /* MyOddJobModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyOddJobModel.m; sourceTree = "<group>"; };
 		61353ABC238D196900BDAA5F /* ReleasedJobsModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReleasedJobsModel.h; sourceTree = "<group>"; };
 		61353ABD238D196900BDAA5F /* ReleasedJobsModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReleasedJobsModel.m; sourceTree = "<group>"; };
+		6140074F2394B6E8004BB03E /* QueryBoundBankCardModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QueryBoundBankCardModel.h; sourceTree = "<group>"; };
+		614007502394B6E8004BB03E /* QueryBoundBankCardModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QueryBoundBankCardModel.m; sourceTree = "<group>"; };
 		61492E58235B1B620020DDA3 /* xButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xButton.png; sourceTree = "<group>"; };
 		61492E5A235B21C90020DDA3 /* LookForServicesCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LookForServicesCell.h; sourceTree = "<group>"; };
 		61492E5B235B21C90020DDA3 /* LookForServicesCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LookForServicesCell.m; sourceTree = "<group>"; };
@@ -1069,7 +1070,6 @@
 				612B69E9234D8FF000447686 /* GPAdaptationHeader.h */,
 				61137C67237E76E500983C67 /* Swift_M_H.swift */,
 				611D0EF9234D8BBF00391470 /* Assets.xcassets */,
-				611D0EFB234D8BBF00391470 /* LaunchScreen.storyboard */,
 				611D0EFE234D8BBF00391470 /* Info.plist */,
 				611D0EFF234D8BBF00391470 /* main.m */,
 			);
@@ -1514,6 +1514,8 @@
 		612CFEED235D56D800BDECD2 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				6140074F2394B6E8004BB03E /* QueryBoundBankCardModel.h */,
+				614007502394B6E8004BB03E /* QueryBoundBankCardModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2004,7 +2006,6 @@
 				612D238023614C7B00D22A74 /* noSelectedButton.png in Resources */,
 				612D4E3A2355D0FA002B7E9E /* firstImage.png in Resources */,
 				61492E59235B1B620020DDA3 /* xButton.png in Resources */,
-				611D0EFD234D8BBF00391470 /* LaunchScreen.storyboard in Resources */,
 				6120E88C235EA8C70072E4F5 /* intergrial.png in Resources */,
 				611AAA6D235729F500F178AB /* starBar.gif in Resources */,
 				618E3939236052DC00CB8AFA /* postms.png in Resources */,
@@ -2195,6 +2196,7 @@
 				61353ABE238D196900BDAA5F /* ReleasedJobsModel.m in Sources */,
 				61137C6E237E974800983C67 /* OrderDetailsOfMyEmployeesController.m in Sources */,
 				618E38CF235FEAE400CB8AFA /* SMSVerificationCodeController.m in Sources */,
+				614007512394B6E8004BB03E /* QueryBoundBankCardModel.m in Sources */,
 				612B69DA234D8F8F00447686 /* SegmentTapView.m in Sources */,
 				611AAA5823570ED700F178AB /* SuccessfulGrabSheetController.m in Sources */,
 				611038332382258B000DE0FF /* ChangePhoneController.swift in Sources */,
@@ -2311,17 +2313,6 @@
 			targetProxy = 611D0F11234D8BBF00391470 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		611D0EFB234D8BBF00391470 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				611D0EFC234D8BBF00391470 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		611D0F17234D8BBF00391470 /* Debug */ = {
@@ -2441,9 +2432,10 @@
 			baseConfigurationReference = 69D7BFF37CCB4950CDE24548 /* Pods-鲁班零工.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 2WTMSF4J24;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2523,11 +2515,11 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "lubanlinggong-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = develop_1202_prof;
 				SWIFT_OBJC_BRIDGING_HEADER = "鲁班零工/我的/分享有奖/Controller/鲁班零工-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -2536,9 +2528,10 @@
 			baseConfigurationReference = 34B4DB1E80E6A0CE368E5714 /* Pods-鲁班零工.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 2WTMSF4J24;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2618,10 +2611,10 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "lubanlinggong-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = develop_1202_prof;
 				SWIFT_OBJC_BRIDGING_HEADER = "鲁班零工/我的/分享有奖/Controller/鲁班零工-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

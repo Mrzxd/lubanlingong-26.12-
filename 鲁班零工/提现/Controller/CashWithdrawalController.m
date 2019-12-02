@@ -5,6 +5,7 @@
 //  Created by 张昊 on 2019/10/21.
 //  Copyright © 2019 张兴栋. All rights reserved.
 //
+#import "QueryBoundBankCardModel.h"
 #import "AddCardController.h"
 #import "CashWithdrawalController.h"
 
@@ -13,19 +14,37 @@
 @property (nonatomic, strong) UIView *mineheaderView;
 @property (nonatomic, strong) UITextField *textField;
 @property (nonatomic, strong) UIView *footerView;
+@property (nonatomic, strong) NSArray <QueryBoundBankCardModel*>*bankCardModelArray;
 
 @end
 
-@implementation CashWithdrawalController
-
+@implementation CashWithdrawalController {
+    UIButton *cardButton;
+}
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self netWorking];
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"添加银行卡";
     [self.view addSubview:self.mineheaderView];
     [self.view addSubview:self.footerView];
-   
 }
-
+- (void)netWorking {
+    WeakSelf;
+    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/apiBank/list"] params:@{@"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userId"]} success:^(id  _Nonnull response) {
+        if (response && [response[@"code"] intValue] == 0 && response[@"data"] && [response[@"data"] count]) {
+            weakSelf.bankCardModelArray = [QueryBoundBankCardModel mj_objectArrayWithKeyValuesArray:response[@"data"]];
+            [weakSelf reloadData];
+        }
+    } fail:^(NSError * _Nonnull error) {
+        
+    } showHUD:YES];
+}
+- (void)reloadData {
+    [cardButton setTitle:[_bankCardModelArray[0] bank] forState:UIControlStateNormal];
+}
 - (UIView *)mineheaderView {
     if (!_mineheaderView) {
         _mineheaderView = [[UIView alloc] init];
@@ -34,7 +53,6 @@
         [self addSubView];
     }
     return _mineheaderView;
-    
 }
 
 - (UIView *)footerView {
@@ -56,14 +74,13 @@
 }
 - (void)addSubView {
     
-    
     UILabel *cashLabel = [[UILabel alloc] initWithFrame:AutoFrame(15, 20, 60, 40)];
     cashLabel.text = @"提现至";
     cashLabel.textColor = RGBHex(0x261900);
     cashLabel.font = FontSize(17);
     [_mineheaderView addSubview:cashLabel];
     
-    UIButton *cardButton = [[UIButton alloc] initWithFrame:AutoFrame(75, 18, 280, 45)];
+    cardButton = [[UIButton alloc] initWithFrame:AutoFrame(75, 18, 280, 45)];
     cardButton.titleLabel.font = FontSize(14);
     [cardButton setTitleColor:RGBHex(0x999999) forState:UIControlStateNormal];
     [cardButton setTitle:@"暂无银行卡" forState:UIControlStateNormal];
@@ -109,6 +126,15 @@
 - (void)cardButtonAction:(UIButton *)button {
     AddCardController *addCardVc = [AddCardController new];
     [self.navigationController pushViewController:addCardVc animated:YES];
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [_textField endEditing:YES];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField endEditing:YES];
+    return YES;
 }
 
 @end

@@ -1,7 +1,6 @@
 //
 //  EmployerCenterOrderDetailController.m
 //  鲁班零工
-//
 //  Created by 张昊 on 2019/10/25.
 //  Copyright © 2019 张兴栋. All rights reserved.
 
@@ -34,25 +33,25 @@
 }
 - (void)netWorking {
     WeakSelf;
-    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/ReleaseWork/select/workinfo"] params:@{@"id":_idName} success:^(id  _Nonnull response) {
+    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:_isService?@"/ReleaseSkill/select/skillinfo2":@"/ReleaseWork/select/workinfo"] params:@{@"id":_idName} success:^(id  _Nonnull response) {
         if (response && response[@"data"]) {
             weakSelf.detailModel = [GrabdDetailsModel mj_objectWithKeyValues:response[@"data"]];
             if (weakSelf.detailModel.timeSelect) {
-                [weakSelf.detailModel.timeSelect containsString:@"1"]? weakSelf.detailModel.timeSelect = [weakSelf.detailModel.timeSelect stringByReplacingOccurrencesOfString:@"1" withString:@"周一"]:@"";
-                [weakSelf.detailModel.timeSelect containsString:@"2"]? weakSelf.detailModel.timeSelect = [weakSelf.detailModel.timeSelect stringByReplacingOccurrencesOfString:@"2" withString:@"周二"]:@"";
-                [weakSelf.detailModel.timeSelect containsString:@"3"]? weakSelf.detailModel.timeSelect = [weakSelf.detailModel.timeSelect stringByReplacingOccurrencesOfString:@"3" withString:@"周三"]:@"";
-                [weakSelf.detailModel.timeSelect containsString:@"4"]? weakSelf.detailModel.timeSelect = [weakSelf.detailModel.timeSelect stringByReplacingOccurrencesOfString:@"4" withString:@"周四"]:@"";
-                [weakSelf.detailModel.timeSelect containsString:@"5"]? weakSelf.detailModel.timeSelect = [weakSelf.detailModel.timeSelect stringByReplacingOccurrencesOfString:@"5" withString:@"周五"]:@"";
-                [weakSelf.detailModel.timeSelect containsString:@"6"]? weakSelf.detailModel.timeSelect = [weakSelf.detailModel.timeSelect stringByReplacingOccurrencesOfString:@"6" withString:@"周六"]:@"";
-                [weakSelf.detailModel.timeSelect containsString:@"7"]? weakSelf.detailModel.timeSelect = [weakSelf.detailModel.timeSelect stringByReplacingOccurrencesOfString:@"7" withString:@"日"]:@"";
+                [weakSelf.detailModel.timeSelect containsString:@"1"] ? weakSelf.detailModel.timeSelect = [weakSelf.detailModel.timeSelect stringByReplacingOccurrencesOfString:@"1" withString:@"周一"]:@"";
+                [weakSelf.detailModel.timeSelect containsString:@"2"] ? weakSelf.detailModel.timeSelect = [weakSelf.detailModel.timeSelect stringByReplacingOccurrencesOfString:@"2" withString:@"周二"]:@"";
+                [weakSelf.detailModel.timeSelect containsString:@"3"] ? weakSelf.detailModel.timeSelect = [weakSelf.detailModel.timeSelect stringByReplacingOccurrencesOfString:@"3" withString:@"周三"]:@"";
+                [weakSelf.detailModel.timeSelect containsString:@"4"] ? weakSelf.detailModel.timeSelect = [weakSelf.detailModel.timeSelect stringByReplacingOccurrencesOfString:@"4" withString:@"周四"]:@"";
+                [weakSelf.detailModel.timeSelect containsString:@"5"] ? weakSelf.detailModel.timeSelect = [weakSelf.detailModel.timeSelect stringByReplacingOccurrencesOfString:@"5" withString:@"周五"]:@"";
+                [weakSelf.detailModel.timeSelect containsString:@"6"] ? weakSelf.detailModel.timeSelect = [weakSelf.detailModel.timeSelect stringByReplacingOccurrencesOfString:@"6" withString:@"周六"]:@"";
+                [weakSelf.detailModel.timeSelect containsString:@"7"] ? weakSelf.detailModel.timeSelect = [weakSelf.detailModel.timeSelect stringByReplacingOccurrencesOfString:@"7" withString:@"日"]:@"";
             }
-            [weakSelf reloadData];
-            [weakSelf.tableView reloadData];
+                [weakSelf reloadData];
+                [weakSelf.tableView reloadData];
         } else {
-            [WHToast showErrorWithMessage:@"暂无数据"];
+                [WHToast showErrorWithMessage:@"暂无数据"];
         }
     } fail:^(NSError * _Nonnull error) {
-          [WHToast showErrorWithMessage:@"网络错误"];
+                [WHToast showErrorWithMessage:@"网络错误"];
     } showHUD:YES];
 }
 - (void)reloadData {
@@ -345,11 +344,11 @@
     if (indexPath.section == 2 || indexPath.section == 3) {
         EmployerCenterOrderDetailCell2 *cell = [tableView dequeueReusableCellWithIdentifier:@"EmployerCenterOrderDetailCell2" forIndexPath:indexPath];
         if (indexPath.section == 2) {
-            cell.typelabel.text = @"工作要求";
-            cell.contentLabel.text = NoneNull(_detailModel.workContent);
+            cell.typelabel.text = _isService ? @"我的优势": @"工作要求";
+            cell.contentLabel.text = _isService ? NoneNull(_detailModel.skillVirtue):NoneNull(_detailModel.workContent);
         } else {
-            cell.typelabel.text = @"员工要求";
-            cell.contentLabel.text = NoneNull(_detailModel.personnelClaim);
+            cell.typelabel.text = _isService ? @"服务介绍": @"员工要求";
+            cell.contentLabel.text =  _isService ? NoneNull(_detailModel.skillInfo):NoneNull(_detailModel.personnelClaim);
         }
         return cell;
     }

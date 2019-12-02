@@ -34,10 +34,6 @@
 	<string>仅在使用时获取定位权限</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>take photo to acive image</string>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
-	<key>UIMainStoryboardFile</key>
-	<string></string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

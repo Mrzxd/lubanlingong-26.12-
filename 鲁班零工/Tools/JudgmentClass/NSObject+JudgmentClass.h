@@ -26,6 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)checkCarID:(NSString *)carID;
 #pragma mark ---- 将时间戳转换成时间
 - (NSString *)getTimeFromTimestamp:(NSString *)time;
+//银行卡校验
+- (BOOL) checkCardNo:(NSString*) cardNo;
 @end
 
 NS_ASSUME_NONNULL_END

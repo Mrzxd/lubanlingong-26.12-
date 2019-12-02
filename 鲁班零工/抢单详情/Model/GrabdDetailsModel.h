@@ -42,6 +42,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *workStop;
 @property (nonatomic, strong) NSString *workType;
 @property (nonatomic, strong) NSString *workTypeId;
+@property (nonatomic, strong) NSString *skillVirtue;
+@property (nonatomic, strong) NSString *skillInfo;
 
 @end
 
