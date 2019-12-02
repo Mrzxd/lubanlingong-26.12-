@@ -70,14 +70,21 @@
         make.top.equalTo(weakSelf.contentView.mas_top).offset(22*ScalePpth);
         make.bottom.equalTo(weakSelf.contentView.mas_bottom).offset(-1);
     }];
-    [self.contentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(weakSelf.backGroundmageView.mas_left).offset(20*ScalePpth);
-        make.top.equalTo(weakSelf.backGroundmageView.mas_top).offset(9*ScalePpth);
-        make.right.equalTo(weakSelf.backGroundmageView.mas_right).offset(-15*ScalePpth);
-        make.bottom.equalTo(weakSelf.backGroundmageView.mas_bottom).offset(-10*ScalePpth);
-        make.width.mas_lessThanOrEqualTo(230*ScalePpth);
-    }];
+}
 
+- (void)setContent:(NSString *)content {
+    _content = content;
+    if (content) {
+        _contentLabel.text = content;
+        WeakSelf;
+        [self.contentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(weakSelf.backGroundmageView.mas_right).offset(-20*ScalePpth);
+            make.top.equalTo(weakSelf.backGroundmageView.mas_top).offset(9*ScalePpth);
+            make.left.equalTo(weakSelf.backGroundmageView.mas_left).offset(15*ScalePpth);
+            make.bottom.equalTo(weakSelf.backGroundmageView.mas_bottom).offset(-10*ScalePpth);
+            make.width.mas_lessThanOrEqualTo(230*ScalePpth);
+        }];
+    }
 }
 
 @end

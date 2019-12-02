@@ -8,10 +8,10 @@
 
 #import "ZXDBaseViewController.h"
 
-typedef void (^OrderDetailBlock)(NSString *idName);
-
+typedef void (^OrderDetaiBlock)(NSString *type);
 @interface TwoViewController : ZXDBaseViewController
 
-@property (nonatomic, strong) OrderDetailBlock orderDetailBlock;
+@property (nonatomic, strong) OrderDetaiBlock orderDetailBlock;
+
 
 @end

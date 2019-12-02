@@ -9,9 +9,11 @@
 #import "ZXDBaseViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
+typedef void (^OrderDetailBlock)(NSInteger type);
 
 @interface TheOddJobsIReleasedController : ZXDBaseViewController
 @property (nonatomic, strong) NSString *titles;
+@property (nonatomic, strong) OrderDetailBlock orderDetailBlock;
 @end
 
 NS_ASSUME_NONNULL_END

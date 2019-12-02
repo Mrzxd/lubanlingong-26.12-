@@ -7,6 +7,7 @@
 //  Copyright © 2019 张兴栋. All rights reserved.
 //
 #import "OrderStatusCell.h"
+#import "ToEvaluateEmployerController.h"
 #import "OrderDetailsOfMyEmployeesController.h"
 #import "OrderManagementFourChildController.h"
 
@@ -99,13 +100,54 @@
         cell.waitLabel.text = @"已评价";
         [cell.stateButton setTitle:@"删除订单" forState:UIControlStateNormal];
     }
+    WeakCell;
+    WeakSelf;
+    cell.cellBlock = ^(MyOddJobModel * model) {
+    if ([weakCell.stateButton.currentTitle isEqual:@"删除订单"]) {
+     [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/employerCore/deleteOrder"] params:@{@"id":NoneNull(model.idName)} success:^(id  _Nonnull response) {
+         if (response[@"code"] && [response[@"code"] intValue] == 0) {
+             [weakSelf netWorking];
+         } else {
+             if (response[@"msg"]) {
+                 [WHToast showErrorWithMessage:response[@"msg"]];
+             } else {
+                 [WHToast showErrorWithMessage:@"删除失败"];
+             }
+         }
+     } fail:^(NSError * _Nonnull error) {
+
+     } showHUD:YES];
+     } else if ([weakCell.stateButton.currentTitle isEqual:@"去评价"]) {
+         ToEvaluateEmployerController *teec = [ ToEvaluateEmployerController new];
+         teec.model = model;
+         [weakSelf.navigationController pushViewController:teec animated:YES];
+     }
+    };
+    cell.middlleButtonBlock = ^(MyOddJobModel * model) {
+    if ([weakCell.MiddleButton.currentTitle isEqual:@"删除订单"]) {
+           [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/employerCore/deleteOrder"] params:@{@"id":NoneNull(model.idName)} success:^(id  _Nonnull response) {
+               if (response[@"code"] && [response[@"code"] intValue] == 0) {
+                   [weakSelf netWorking];
+               } else {
+                   if (response[@"msg"]) {
+                       [WHToast showErrorWithMessage:response[@"msg"]];
+                   } else {
+                       [WHToast showErrorWithMessage:@"删除失败"];
+                   }
+               }
+           } fail:^(NSError * _Nonnull error) {
+               
+           } showHUD:YES];
+        }
+    };
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    OrderDetailsOfMyEmployeesController *odvc = [OrderDetailsOfMyEmployeesController new];
-    
-    [self.navigationController pushViewController:odvc animated:YES];
+   NSString *idName = [_jobModelArray[indexPath.section] idName];
+   OrderDetailsOfMyEmployeesController *odvc = [OrderDetailsOfMyEmployeesController new];
+   odvc.idName = NoneNull(idName);
+   [self.navigationController pushViewController:odvc animated:YES];
 }
 
 @end

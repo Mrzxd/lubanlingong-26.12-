@@ -23,6 +23,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSString *orderNumbering;
 
+@property (nonatomic, strong) NSString *orderLocationX;
+@property (nonatomic, strong) NSString *orderLocationY;
+
 @end
 
 NS_ASSUME_NONNULL_END

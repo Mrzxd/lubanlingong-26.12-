@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface LeftUserCell : UITableViewCell
 
+@property(nonatomic, strong) NSString *content;
+
 @end
 
 NS_ASSUME_NONNULL_END

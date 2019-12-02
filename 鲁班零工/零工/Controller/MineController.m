@@ -22,10 +22,17 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIView *mineheaderView;
+@property (nonatomic, strong) NSDictionary *data;
 
 @end
 
-@implementation MineController
+@implementation MineController {
+    UILabel *balanceLabel;
+    UILabel *leftNumLabel;
+    UILabel *centerNumLabel;
+    UILabel *rightNumLabel;
+    UILabel *myNameLabel;
+}
 
 - (UIView *)mineheaderView {
     if (!_mineheaderView) {
@@ -46,7 +53,7 @@
     imageView.layer.masksToBounds = YES;
     [_mineheaderView addSubview:imageView];
     
-    UILabel *myNameLabel = [[UILabel alloc] initWithFrame:AutoFrame(59, 19, 0, 16)];
+    myNameLabel = [[UILabel alloc] initWithFrame:AutoFrame(59, 19, 0, 16)];
     myNameLabel.text = @"鲁班";
     myNameLabel.font = FontSize(16);
     myNameLabel.textColor = [UIColor blackColor];
@@ -94,7 +101,7 @@
     [mybalanceLabel sizeToFit];
     [backGroundView addSubview:mybalanceLabel];
     
-    UILabel *balanceLabel = [[UILabel alloc] initWithFrame:AutoFrame(18, 41, 0, 0)];
+    balanceLabel = [[UILabel alloc] initWithFrame:AutoFrame(18, 41, 300, 0)];
     balanceLabel.text = @"88.66";
     balanceLabel.font = [UIFont boldSystemFontOfSize:38*ScalePpth];
     balanceLabel.textColor = [UIColor whiteColor];
@@ -160,21 +167,21 @@
     [arrIMg setImage:[UIImage imageNamed:@"sign_detailed"]];
     [cashWithdrawalDetailButton addSubview:arrIMg];
     
-    UILabel *leftNumLabel = [[UILabel alloc] initWithFrame:AutoFrame(0, 204, 375.0/3, 18)];
+    leftNumLabel = [[UILabel alloc] initWithFrame:AutoFrame(0, 204, 375.0/3, 18)];
     leftNumLabel.text = @"89.5";
     leftNumLabel.textAlignment = NSTextAlignmentCenter;
     leftNumLabel.font = [UIFont systemFontOfSize:18*ScalePpth];
     leftNumLabel.textColor = [UIColor blackColor];
     [_mineheaderView addSubview:leftNumLabel];
     
-    UILabel *centerNumLabel = [[UILabel alloc] initWithFrame:AutoFrame(375.0/3, 204, 375.0/3, 18)];
+    centerNumLabel = [[UILabel alloc] initWithFrame:AutoFrame(375.0/3, 204, 375.0/3, 18)];
     centerNumLabel.text = @"38";
     centerNumLabel.textAlignment = NSTextAlignmentCenter;
     centerNumLabel.font = [UIFont systemFontOfSize:18*ScalePpth];
     centerNumLabel.textColor = [UIColor blackColor];
     [_mineheaderView addSubview:centerNumLabel];
     
-    UILabel *rightNumLabel = [[UILabel alloc] initWithFrame:AutoFrame(375.0 *2/3, 204, 375.0/3, 18)];
+    rightNumLabel = [[UILabel alloc] initWithFrame:AutoFrame(375.0 *2/3, 204, 375.0/3, 18)];
     rightNumLabel.text = @"3";
     rightNumLabel.textAlignment = NSTextAlignmentCenter;
     rightNumLabel.font = [UIFont systemFontOfSize:18*ScalePpth];
@@ -222,8 +229,8 @@
     }
     return _tableView;
 }
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     self.navigationController.navigationBarHidden = YES;
 }
 - (void)viewDidLoad {
@@ -231,8 +238,29 @@
     self.navigationController.navigationBar.translucent = NO;
     self.view.backgroundColor = RGBHex(0xffffff);
     [self.view addSubview:self.tableView];
+    [self netWorking];
 }
-
+- (void)netWorking {
+    WeakSelf;
+    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/CoreInfo/Core"] params:@{@"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userId"]} success:^(id  _Nonnull response) {
+        if (response[@"code"] && [response[@"code"] intValue] == 0) {
+            weakSelf.data = response[@"data"];
+            if (weakSelf.data.count) {
+                [weakSelf reloadData];
+            }
+        }
+    } fail:^(NSError * _Nonnull error) {
+        
+    } showHUD:YES];
+}
+- (void)reloadData {
+    balanceLabel.text = _data[@"balance"];
+    (void)balanceLabel.sizeToFit;
+    leftNumLabel.text = _data[@"praise"];
+    centerNumLabel.text = _data[@"works"];
+    rightNumLabel.text = _data[@"collections"];
+    myNameLabel.text = _data[@"name"];
+}
 - (void)cashWithdrawalDetailButtonAction:(UIButton *)button {
     TransactionDetailsController *transationDetailVc = [TransactionDetailsController new];
     [self.navigationController pushViewController:transationDetailVc animated:YES];

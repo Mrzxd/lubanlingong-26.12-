@@ -31,16 +31,13 @@
     self.segmentVC.view.frame = self.view.bounds;
     [self.view addSubview:self.segmentVC.view];
     NSArray *items = @[@"全部", @"待审核", @"已上架",@" 已下架",@"已驳回"];
+    BOOL isService = [self.titles containsString:@"服务"] || [self.title containsString:@"服务"];
     AllViewController *one = [[AllViewController alloc] init];
-    one.orderDetailBlock = ^(NSInteger type) {
-        [self.navigationController pushViewController:[EmployerCenterOrderDetailController new] animated:YES];
-    };
     ToBeAuditedController *two = [[ToBeAuditedController alloc] init];
-
     OnShelvesViewController *three = [[OnShelvesViewController alloc] init];
-
     OffShelfController *four = [[OffShelfController alloc] init];
     RejectedController *five = [[RejectedController alloc] init];
+    one.isService = two.isService = three.isService = four.isService = five.isService = isService;
     [self.segmentVC setUpWithItems:items ChildVCs:@[one,two,three,four,five]];
     self.segmentVC.segmentBar.selectIndex = 0;
     [self.segmentVC.segmentBar updateWithConfig:^(YTSegmentBarConfig *config) {

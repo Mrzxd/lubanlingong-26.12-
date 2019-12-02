@@ -13,19 +13,22 @@ NS_ASSUME_NONNULL_BEGIN
 @interface OrderDetailModel : NSObject
 
 @property (nonatomic, strong) NSString *idName;
+@property (nonatomic, strong) NSString *orderLocationX;
+@property (nonatomic, strong) NSString *orderLocationY;
 @property (nonatomic, strong) NSString *creatTime;
 @property (nonatomic, strong) NSString *endTime;
-@property (nonatomic, strong) NSString *location;
+@property (nonatomic, strong) NSString *orderLocation;
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSString *orderNumbering;
 @property (nonatomic, strong) NSString *phone;
-@property (nonatomic, strong) NSString *salary;
+@property (nonatomic, strong) NSString *orderSalary;
 @property (nonatomic, strong) NSString *praise;
-@property (nonatomic, strong) NSString *salaryDay;
+@property (nonatomic, strong) NSString *orderSalaryDay;
 @property (nonatomic, strong) NSString *startTime;
-@property (nonatomic, strong) NSString *status;
-@property (nonatomic, strong) NSString *workName;
+@property (nonatomic, strong) NSString *orderStatusGr;
+@property (nonatomic, strong) NSString *orderOrderName;
 @property (nonatomic, strong) NSString *transactionNum;
+@property (nonatomic, strong) NSString *creatOrderTime;
 // 0 等待同意 取消订单
 // 1 有人邀请 同意 拒绝 
 //2 已拒绝

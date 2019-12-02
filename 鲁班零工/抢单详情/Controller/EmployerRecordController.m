@@ -5,6 +5,7 @@
 //  Created by 张昊 on 2019/10/16.
 //  Copyright © 2019   张兴栋. All rights reserved.
 //
+#import "ListRecordModel.h"
 #import "EvaluateCell.h"
 #import "EmployerRecordCell.h"
 #import "EmployerRecordController.h"
@@ -17,6 +18,8 @@
 @property (nonatomic, strong) NSMutableArray *array;
 @property (nonatomic, assign) NSInteger selectIndex;
 @property (nonatomic, strong) YTSegmentBar *segmentBar;
+@property (nonatomic, strong) NSDictionary *data;
+@property (nonatomic, strong) NSArray<ListRecordModel *> *recordModelArray;
 
 @end
 
@@ -35,13 +38,34 @@
     [_array addObject:[[NSMutableArray alloc] init]];
     [_array addObject:[[NSMutableArray alloc] init]];
     [self.view addSubview:self.tableView];
+    [self netWorking];
+}
+- (void)netWorking {
+    WeakSelf;
+    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/CoreInfo/Core2"] params:@{@"releaseId":NoneNull(_releaseId)} success:^(id  _Nonnull response) {
+        if (response[@"code"] && [response[@"code"] intValue] == 0 && response[@"data"]&& [response[@"data"] count]) {
+            weakSelf.data = response[@"data"];
+            [weakSelf addSubViews];
+        }
+      } fail:^(NSError * _Nonnull error) {
+          
+      } showHUD:YES];
+    //发单记录
+    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:_isService?@"/CoreInfo/PublishingServicesSkill":@"/CoreInfo/PublishingServices"] params:@{@"releaseId":NoneNull(_releaseId)} success:^(id  _Nonnull response) {
+        if (response[@"code"] && [response[@"code"] intValue] == 0 && response[@"data"]&& [response[@"data"] count]) {
+                weakSelf.recordModelArray = [ListRecordModel mj_objectArrayWithKeyValuesArray:response[@"data"]];
+                [weakSelf.tableView reloadData];
+        }
+    } fail:^(NSError * _Nonnull error) {
+        
+    } showHUD:YES];
 }
 - (YTSegmentBar *)segmentBar {
     if (!_segmentBar) {
         _segmentBar = [YTSegmentBar segmentBarWithFrame:AutoFrame(30, 33, 315, 43)];
         _segmentBar.clipsToBounds = YES;
         _segmentBar.delegate = self;
-        _segmentBar.items = @[@"发单记录",@"接单记录",@"雇员评价"];
+        _segmentBar.items = _isService ? @[@"发布服务",@"接单记录"] : @[@"发单记录",@"接单记录",@"雇员评价"];
         _segmentBar.showIndicator = YES;
         _segmentBar.selectIndex = 0;
         _segmentBar.backgroundColor = [UIColor clearColor];
@@ -53,7 +77,6 @@
         CGFloat height = 203 + 43 - 64 + 43;
         _headerView = [[UIView alloc] initWithFrame:AutoFrame(0, 0, 375, height)];
         _headerView.backgroundColor = RGBHex(0xFFB924);
-        [self addSubViews];
     }
     return _headerView;
 }
@@ -80,14 +103,14 @@
     userBtn.layer.masksToBounds = YES;
     [_headerView addSubview:userBtn];
     UILabel * userLabel = [[UILabel alloc] initWithFrame:AutoFrame(87, 13, 0, 0)];
-    userLabel.text = @"用户名名称";
+    userLabel.text = _data[@"name"];
     userLabel.font = FontSize(18);
     userLabel.textColor = UIColor.whiteColor;
     [userLabel sizeToFit];
     [_headerView addSubview:userLabel];
     
     UILabel * phoneLabel = [[UILabel alloc] initWithFrame:AutoFrame(87, 39, 104, 19)];
-    phoneLabel.text = @"130 5642 2255";
+    phoneLabel.text = _data[@"phone"];
     phoneLabel.backgroundColor = RGBHexAlpha(0x000000, 0.16);
     phoneLabel.font = FontSize(12);
     phoneLabel.clipsToBounds = YES;
@@ -109,7 +132,11 @@
     whiteView.clipsToBounds = YES;
     [_headerView addSubview:whiteView];
     
-    NSArray *numberArray = @[@"89",@"21",@"12",@"89%"];
+    NSString *str1 = _data[@"PublishingServices"];
+    NSString *str2 = _data[@"OrderRecord"];
+    NSString *str3 = _data[@"ServiceRecord"];
+    NSString *str4 = _data[@"Praise"];
+    NSArray *numberArray = @[NoneNull(str1),NoneNull(str2),NoneNull(str3),[NSString stringWithFormat:@"%@%@",NoneNull(str4),@"%"]];
     NSArray *nameArray = @[@"发单记录",@"接单记录",@"服务记录",@"好评率"];
     for (NSInteger i = 0; i < 4; i ++) {
         UILabel * numberLabel = [[UILabel alloc] initWithFrame:AutoFrame(355.0 * i/4, 28, 355.0/4, 18)];
@@ -125,11 +152,42 @@
         nameLabel.textAlignment = NSTextAlignmentCenter;
         [whiteView addSubview:nameLabel];
     }
-    
 }
 - (void)segmentBar:(YTSegmentBar *)segmentBar didSelectIndex:(NSInteger)toIndex fromIndex:(NSInteger)fromIndex {
     _selectIndex = toIndex;
-    [self.tableView reloadData];
+    _recordModelArray = nil;
+    [_tableView reloadData];
+    WeakSelf;
+    if (toIndex == 0) {
+        //发单记录
+        [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat: _isService?@"/CoreInfo/PublishingServicesSkill" : @"/CoreInfo/PublishingServices"] params:@{@"releaseId":NoneNull(_releaseId)} success:^(id  _Nonnull response) {
+            if (response[@"code"] && [response[@"code"] intValue] == 0 && response[@"data"]&& [response[@"data"] count]) {
+                    weakSelf.recordModelArray = [ListRecordModel mj_objectArrayWithKeyValuesArray:response[@"data"]];
+                    [weakSelf.tableView reloadData];
+            }
+        } fail:^(NSError * _Nonnull error) {
+            
+        } showHUD:YES];
+    } else if (toIndex == 1) {
+    
+        [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat: _isService?@"/CoreInfo/OrderRecordSkill":@"/CoreInfo/OrderRecord"] params:@{@"releaseId":NoneNull(_releaseId)} success:^(id  _Nonnull response) {
+            if (response[@"code"] && [response[@"code"] intValue] == 0 && response[@"data"]&& [response[@"data"] count]) {
+                    weakSelf.recordModelArray = [ListRecordModel mj_objectArrayWithKeyValuesArray:response[@"data"]];
+                    [weakSelf.tableView reloadData];
+            }
+        } fail:^(NSError * _Nonnull error) {
+            
+        } showHUD:YES];
+    } else {
+        [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/CoreInfo/EvaluationButtonLog"] params:@{@"releaseId":NoneNull(_releaseId)} success:^(id  _Nonnull response) {
+              if (response[@"code"] && [response[@"code"] intValue] == 0 && response[@"data"]&& [response[@"data"] count]) {
+                      weakSelf.recordModelArray = [ListRecordModel mj_objectArrayWithKeyValuesArray:response[@"data"]];
+                      [weakSelf.tableView reloadData];
+              }
+          } fail:^(NSError * _Nonnull error) {
+              
+          } showHUD:YES];
+    }
 }
 
 
@@ -140,12 +198,7 @@
     return 1;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 0) {
-        return 3;
-    } else{
-        return 2;
-    }
-    return 0;
+    return _recordModelArray.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -166,7 +219,7 @@
     UILabel *label = [[UILabel alloc] initWithFrame:AutoFrame(15, 15, 0, 0)];
     label.textColor = RGBHex(0x999999);
     label.font = FontSize(13);
-    label.text = @[@"发单记录（3）",@"接单记录（2）",@"雇员评价（2）"][_selectIndex];
+    label.text = @[[NSString stringWithFormat:_isService?@"发布服务（%ld）": @"发单记录（%ld）",_recordModelArray.count],[NSString stringWithFormat:@"接单记录（%ld）",_recordModelArray.count],[NSString stringWithFormat:@"雇员评价（%ld）",_recordModelArray.count]][_selectIndex];
     [label sizeToFit];
     [header addSubview:label];
     UIView *line = [[UIView alloc] initWithFrame:AutoFrame(15, 39.5, 365, 0.4/ScalePpth)];
@@ -177,19 +230,16 @@
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
       return [[UIView alloc] initWithFrame:AutoFrame(0, 0, 0.0000001, 0.0000001)];
 }
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     if (_selectIndex == 2) {
         EvaluateCell *cell = [tableView dequeueReusableCellWithIdentifier:@"EvaluateCell" forIndexPath:indexPath];
-        cell.leftLabel.text = @[@"电焊工  280/天",@"外卖配送员  280/天",@"外卖配送员  280/天"][indexPath.row];
-        cell.rightLabel.text = @[@"6条评价",@"2条评价",@"2条评价"][indexPath.row];
+        cell.leftLabel.text = [NSString stringWithFormat:@"%@   %@/%@",[_recordModelArray[indexPath.row] orderOrderName],[_recordModelArray[indexPath.row] orderSalary],[_recordModelArray[indexPath.row] orderSalaryDay]];
+        cell.rightLabel.text = [NSString stringWithFormat:@"%@条评价",[_recordModelArray[indexPath.row] Evaluations] NonNull];
         return cell;
     }
-    
     EmployerRecordCell *cell = [tableView dequeueReusableCellWithIdentifier:@"EmployerRecordCell" forIndexPath:indexPath];
-    cell.leftLabel.text = @[@"电焊工  280/天",@"外卖配送员  280/天",@"外卖配送员  280/天"][indexPath.row];
-    cell.rightLabel.text = @[@"2019-09-21-2019-09-30",@"2019-09-21-2019-09-30",@"2019-09-21-2019-09-30"][indexPath.row];
+    cell.leftLabel.text = [NSString stringWithFormat:@"%@   %@/%@",[_recordModelArray[indexPath.row] orderOrderName] NonNull,[_recordModelArray[indexPath.row] orderSalary] NonNull,[_recordModelArray[indexPath.row] orderSalaryDay] NonNull];
+    cell.rightLabel.text = [NSString stringWithFormat:@"%@至%@",[self getTimeFromTimestamp:[_recordModelArray[indexPath.row] startWorkTime]],[self getTimeFromTimestamp:[_recordModelArray[indexPath.row] overWorkTime]]];
     return cell;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

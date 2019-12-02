@@ -87,7 +87,7 @@
     [contentView addSubview:adressLabel];
     
     
-    adressCTLabel = [[UILabel alloc] initWithFrame:AutoFrame(145, 104, 200, 12)];
+    adressCTLabel = [[UILabel alloc] initWithFrame:AutoFrame(45, 104, 300, 12)];
     adressCTLabel.text =  @"历下区燕山街道东源大厦";
     adressCTLabel.textAlignment = NSTextAlignmentRight;
     adressCTLabel.font = [UIFont systemFontOfSize:12*ScalePpth];
@@ -134,17 +134,17 @@
 //  取消订单
 - (void)immediatelyButtonAction:(UIButton *)button {
     if (_cellBlock) {
-        _cellBlock(_jobModel);
+        _cellBlock(_jobModel?_jobModel:_releasedJobsModel);
     }
 }
 - (void)startButtonAction:(UIButton *)button {
         if (_firstButtonBlock) {
-            _firstButtonBlock(_jobModel);
+            _firstButtonBlock(_jobModel?_jobModel:_releasedJobsModel);
         }
 }
 - (void)sureFanishedAction:(UIButton *)button {
     if (_middlleButtonBlock) {
-        _middlleButtonBlock(_jobModel);
+        _middlleButtonBlock(_jobModel?_jobModel:_releasedJobsModel);
     }
 }
 - (void)setJobModel:(MyOddJobModel *)jobModel {
@@ -154,6 +154,16 @@
         _saleCTLabel.text = [NSString stringWithFormat:@"%@/%@",NoneNull(jobModel.orderSalary),NoneNull(jobModel.orderSalaryDay)];
         adressCTLabel.text = NoneNull(jobModel.orderLocation);
         _saleLabel.text = NoneNull(jobModel.orderOrderName);
+    }
+}
+
+- (void)setReleasedJobsModel:(ReleasedJobsModel *)releasedJobsModel {
+    _releasedJobsModel= releasedJobsModel;
+    if (releasedJobsModel) {
+        _timeCTLabel.text = [self getTimeFromTimestamp:NoneNull(releasedJobsModel.releaseTime)];
+        _saleCTLabel.text = [NSString stringWithFormat:@"%@/%@",NoneNull(releasedJobsModel.salary),NoneNull(releasedJobsModel.salaryDay)];
+        adressCTLabel.text = NoneNull(releasedJobsModel.workPositino);
+        _saleLabel.text = NoneNull(releasedJobsModel.workName);
     }
 }
 

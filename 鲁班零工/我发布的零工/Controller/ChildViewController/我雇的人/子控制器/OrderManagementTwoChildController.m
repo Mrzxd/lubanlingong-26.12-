@@ -90,13 +90,33 @@
     cell.MiddleButton.hidden = YES;
     cell.waitLabel.text = @"进行中";
     [cell.stateButton setTitle:@"确认完工" forState:UIControlStateNormal];
+    WeakSelf;
+    WeakCell;
+    cell.cellBlock = ^(MyOddJobModel * model) {    
+    if ([weakCell.stateButton.currentTitle isEqual:@"确认完工"]) {
+        [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/employerCore/confirmWorkButton"] params:@{@"id":NoneNull(model.idName)} success:^(id  _Nonnull response) {
+                    if (response && [response[@"code"] intValue] == 0) {
+                                      [weakSelf netWorking];
+                                  } else {
+                                      if (response[@"msg"]) {
+                                          [WHToast showErrorWithMessage:response[@"msg"]];
+                                      } else {
+                                          [WHToast showErrorWithMessage:@"确认完工失败"];
+                                      }
+                                  }
+                } fail:^(NSError * _Nonnull error) {
+                    
+                } showHUD:YES];
+            }
+       };
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    OrderDetailsOfMyEmployeesController *odvc = [OrderDetailsOfMyEmployeesController new];
-    
-    [self.navigationController pushViewController:odvc animated:YES];
+     NSString *idName = [_jobModelArray[indexPath.section] idName];
+       OrderDetailsOfMyEmployeesController *odvc = [OrderDetailsOfMyEmployeesController new];
+       odvc.idName = NoneNull(idName);
+       [self.navigationController pushViewController:odvc animated:YES];
 }
 
 @end

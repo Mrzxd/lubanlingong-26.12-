@@ -6,6 +6,7 @@ target '鲁班零工' do
   use_frameworks!
 
   # Pods for 鲁班零工
+  pod 'JMessage'
   # 网络请求
   pod 'AFNetworking'
   

@@ -12,6 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EmployerRecordController : ZXDBaseViewController
 
+@property (nonatomic, assign) BOOL isService;
+@property (nonatomic, strong) NSString *releaseId;
+
 @end
 
 NS_ASSUME_NONNULL_END

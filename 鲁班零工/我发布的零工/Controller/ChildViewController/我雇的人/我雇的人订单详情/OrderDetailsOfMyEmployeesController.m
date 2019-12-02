@@ -36,6 +36,7 @@
     
     UILabel *locationLabel;
     UILabel *timeLabel;
+    UIButton *_stateButton;
 }
 
 - (void)viewDidLoad {
@@ -52,21 +53,21 @@
             StrongSelf;
             weakSelf.detailModel = [OrderDetailModel mj_objectWithKeyValues:response[@"data"]];
             [weakSelf reloadData];
-        if (weakSelf.detailModel.status.intValue == 0) {
+        if (weakSelf.detailModel.orderStatusGr.intValue == 0) {
                 weakSelf.detail_Type = OrderDetail_Type_Cancle;
-            } else if (weakSelf.detailModel.status.intValue == 1) {
+            } else if (weakSelf.detailModel.orderStatusGr.intValue == 1) {
                 weakSelf.detail_Type = OrderDetail_Type_Agree;
-            } else if (weakSelf.detailModel.status.intValue == 2) {
+            } else if (weakSelf.detailModel.orderStatusGr.intValue == 2) {
                 weakSelf.detail_Type = OrderDetail_Type_Rejected;
-            } else if (weakSelf.detailModel.status.intValue == 3) {
+            } else if (weakSelf.detailModel.orderStatusGr.intValue == 3) {
                 weakSelf.detail_Type = OrderDetail_Type_Navigation;
-            } else if (weakSelf.detailModel.status.intValue == 4) {
+            } else if (weakSelf.detailModel.orderStatusGr.intValue == 4) {
                 weakSelf.detail_Type = OrderDetail_Type_ConfirmCompletion;
-            } else if (weakSelf.detailModel.status.intValue == 5) {
-                weakSelf.detail_Type = OrderDetail_Type_CustomerService;
-            } else if (weakSelf.detailModel.status.intValue == 6) {
+            } else if (weakSelf.detailModel.orderStatusGr.intValue == 5) {
+                weakSelf.detail_Type = OrderDetail_Type_Reject_bohui;
+            } else if (weakSelf.detailModel.orderStatusGr.intValue == 6) {
                 weakSelf.detail_Type = OrderDetail_Type_Delete;
-            } else if (weakSelf.detailModel.status.intValue == 7) {
+            } else if (weakSelf.detailModel.orderStatusGr.intValue == 7) {
                 weakSelf.detail_Type = OrderDetail_Type_HaveEvaluate;
             }
             [weakSelf addStateButton:strongSelf->footerView];
@@ -80,11 +81,11 @@
     rateLabel.text = [NSString stringWithFormat:@"好评率：%@%@",NoneNull(_detailModel.praise),@"%"];
     dealLabel.text = [NSString stringWithFormat:@"成交单%@单",NoneNull(_detailModel.transactionNum)];
     timeLabel.text = [NSString stringWithFormat:@"%@至%@",NoneNull(_detailModel.startTime),NoneNull(_detailModel.endTime)];
-    locationLabel.text = NoneNull(_detailModel.location);
+    locationLabel.text = NoneNull(_detailModel.orderLocation);
     
-    [bottomCoverView addSubview:[self typeLabel:NoneNull(_detailModel.workName) :14.5]];
-    [bottomCoverView addSubview:[self rightLabel:[NSString stringWithFormat:@"%@元/%@",_detailModel.salary NonNull,_detailModel.salaryDay NonNull] :14.5]];
-    [bottomCoverView addSubview:[self rightLabel:NoneNull(_detailModel.creatTime) :55.5]];
+    [bottomCoverView addSubview:[self typeLabel:NoneNull(_detailModel.orderOrderName) :14.5]];
+    [bottomCoverView addSubview:[self rightLabel:[NSString stringWithFormat:@"%@元/%@",_detailModel.orderSalary NonNull,_detailModel.orderSalaryDay NonNull] :14.5]];
+    [bottomCoverView addSubview:[self rightLabel:[self getTimeFromTimestamp:NoneNull(_detailModel.creatOrderTime)] :55.5]];
     [bottomCoverView addSubview:[self rightLabel:NoneNull(_detailModel.orderNumbering) :96]];
 }
 - (UIView *)grayView3 {
@@ -231,6 +232,7 @@
         
         UIButton *button = [[UIButton alloc] initWithFrame:AutoFrame(328, (66.5 + i *48), 47, 47)];
         button.userInteractionEnabled = YES;
+        button.tag = 100+i;
         [button addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
         [whiteView addSubview:button];
         if (i == 0) {
@@ -397,7 +399,7 @@
 }
 
 - (void)addStateButton:(UIView *)footerView {
-    UIButton *_stateButton = [[UIButton alloc] initWithFrame:AutoFrame(287, 10.5, 72, 26)];
+    _stateButton = [[UIButton alloc] initWithFrame:AutoFrame(287, 10.5, 72, 26)];
     _stateButton.backgroundColor = RGBHex(0xFED452);
     _stateButton.clipsToBounds = YES;
     _stateButton.layer.cornerRadius = 13 *ScalePpth;
@@ -417,11 +419,11 @@
     } else if (self.detail_Type == OrderDetail_Type_Agree) {
         _leftButton.hidden = YES;
         _middleButton.hidden = NO;
-        _waitLabel.text = @"邀请等待同意";
+        _waitLabel.text = @"等待同意";
         [_middleButton setTitle:@"拒绝" forState:UIControlStateNormal];
         [_stateButton setTitle:@"同意" forState:UIControlStateNormal];
     } else if (self.detail_Type == OrderDetail_Type_Navigation) {
-        _leftButton.hidden = NO;
+        _leftButton.hidden = YES;
         _middleButton.hidden = NO;
         _waitLabel.text = @"进行中";
         [_leftButton setTitle:@"开工" forState:UIControlStateNormal];
@@ -496,10 +498,55 @@
 }
 
 - (void)cancleButtonAction:(UIButton *)button {
+     WeakSelf;
     if (self.detail_Type == OrderDetail_Type_Cancle) {
-        [self.navigationController pushViewController:[CancleOrderController new] animated:YES];
+        CancleOrderController *coc = [[CancleOrderController alloc] init];
+        coc.detailModel = _detailModel;coc.isEmployer = YES;
+        [self.navigationController pushViewController:coc animated:YES];
     } else if (self.detail_Type == OrderDetail_Type_Agree) {
         // 同意
+       [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/employerCore/AgreeButtonEmp"] params:@{
+                      @"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userId"],
+                      @"id":NoneNull(_detailModel.idName)
+                  } success:^(id  _Nonnull response) {
+                      if (response && [response[@"code"] intValue] == 0) {
+                          [weakSelf.navigationController popViewControllerAnimated:YES];
+                      }
+                  } fail:^(NSError * _Nonnull error) {
+                      [WHToast showErrorWithMessage:@"网络错误"];
+                  } showHUD:YES];
+    }  else if (self.detail_Type == OrderDetail_Type_Rejected ||self.detail_Type ==  OrderDetail_Type_HaveEvaluate ||self.detail_Type ==  OrderDetail_Type_Delete) {
+           if ([_stateButton.currentTitle isEqual:@"删除订单"]) {
+               [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/employerCore/deleteOrder"] params:@{@"id":NoneNull(_idName)} success:^(id  _Nonnull response) {
+                   if (response[@"code"] && [response[@"code"] intValue] == 0) {
+                       [WHToast showSuccessWithMessage:@"删除成功" duration:1.2 finishHandler:^{
+                          [weakSelf.navigationController popViewControllerAnimated:YES];
+                       }];
+                   } else {
+                       if (response[@"msg"]) {
+                           [WHToast showErrorWithMessage:response[@"msg"]];
+                       } else {
+                           [WHToast showErrorWithMessage:@"删除失败"];
+                       }
+                   }
+               } fail:^(NSError * _Nonnull error) {
+                   
+               } showHUD:YES];
+           }
+       } else if (self.detail_Type == OrderDetail_Type_ConfirmCompletion) {
+            [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/employerCore/confirmWorkButton"] params:@{@"id":NoneNull(_detailModel.idName)} success:^(id  _Nonnull response) {
+           if (response && [response[@"code"] intValue] == 0) {
+                [weakSelf.navigationController popViewControllerAnimated:YES];
+             } else {
+                 if (response[@"msg"]) {
+                     [WHToast showErrorWithMessage:response[@"msg"]];
+                 } else {
+                     [WHToast showErrorWithMessage:@"确认完工失败"];
+                 }
+             }
+       } fail:^(NSError * _Nonnull error) {
+           
+       } showHUD:YES];
     }
 }
 - (void)contactButtonAction:(UIButton *)button {
@@ -508,6 +555,7 @@
 - (void)startButtonAction:(UIButton *)button {
 }
 - (void)sureFanishedAction:(UIButton *)button {
+    WeakSelf;
     if (self.detail_Type == OrderDetail_Type_Agree) {
         // 拒绝
         _waitLabel.text =  @"已拒绝";
@@ -516,9 +564,25 @@
     } else if (self.detail_Type == OrderDetail_Type_CustomerService) {
         [[GlobalSingleton gS_ShareInstance].systemWindow addSubview:self.grayView2];
     } else if (self.detail_Type == OrderDetail_Type_Delete) {
-        [self.navigationController pushViewController:[ToEvaluateController new] animated:YES];
+        ToEvaluateEmployerController *tecl = [ToEvaluateEmployerController new];
+        tecl.detailModel = _detailModel;
+        [self.navigationController pushViewController:tecl animated:YES];
     } else if (self.detail_Type == OrderDetail_Type_HaveEvaluate) {
         [[UIApplication sharedApplication].keyWindow addSubview:self.grayView3];
+    } else if (self.detail_Type == OrderDetail_Type_Navigation) {
+         [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/employerCore/confirmWorkButton"] params:@{@"id":NoneNull(_detailModel.idName)} success:^(id  _Nonnull response) {
+                   if (response && [response[@"code"] intValue] == 0) {
+                        [weakSelf.navigationController popViewControllerAnimated:YES];
+                     } else {
+                         if (response[@"msg"]) {
+                             [WHToast showErrorWithMessage:response[@"msg"]];
+                         } else {
+                             [WHToast showErrorWithMessage:@"确认完工失败"];
+                         }
+                     }
+               } fail:^(NSError * _Nonnull error) {
+                   
+               } showHUD:YES];
     }
 }
 - (void)closeButtonAction:(UIButton *)button {
@@ -535,12 +599,28 @@
     }
 }
 - (void)buttonAction:(UIButton *)button {
+   NSArray *reasonArray = @[@"工种不匹配",@"价格低",@"时间冲突",@"其他"];
+    NSString *reason = reasonArray[button.tag - 100];
     [_lastButton setImage:[UIImage imageNamed:@"no_checked"] forState:UIControlStateNormal];
     [button setImage:[UIImage imageNamed:@"checked"] forState:UIControlStateNormal];
     _lastButton = button;
     bottomCoverView.frame = AutoFrame(7.5, 280, 360, 161.5);
     [bottomCoverView addSubview:[self typeLabel:@"拒绝原因" :135.5]];
     [bottomCoverView addSubview:[self rightLabel:@"工种不匹配" :135.5]];
+    WeakSelf;
+    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/employerCore/refuseButtonEmp"] params:@{
+        @"id":NoneNull(_idName),
+        @"refuseCause":reason,
+    } success:^(id  _Nonnull response) {
+        if (response && [response[@"code"] intValue] == 0) {
+            // 拒绝
+            weakSelf.waitLabel.text =  @"已拒绝";
+            [weakSelf.grayView removeFromSuperview];
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+        }
+    } fail:^(NSError * _Nonnull error) {
+        [WHToast showErrorWithMessage:@"网络错误"];
+    } showHUD:YES];
 }
 - (void)closeButtonPaymentAction:(UIButton *)button {
     [_grayView2 removeFromSuperview];
@@ -549,6 +629,22 @@
 - (void)sureButtonAction:(UIButton *)button {
     [_grayView2 removeFromSuperview];
     [_grayView3 removeFromSuperview];
+    WeakSelf;
+    if (self.detail_Type == OrderDetail_Type_Reject_bohui) {
+            [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/employerCore/confirmWorkButton"] params:@{@"id":NoneNull(_detailModel.idName)} success:^(id  _Nonnull response) {
+           if (response && [response[@"code"] intValue] == 0) {
+                [weakSelf.navigationController popViewControllerAnimated:YES];
+             } else {
+                 if (response[@"msg"]) {
+                     [WHToast showErrorWithMessage:response[@"msg"]];
+                 } else {
+                     [WHToast showErrorWithMessage:@"确认完工失败"];
+                 }
+             }
+       } fail:^(NSError * _Nonnull error) {
+           
+       } showHUD:YES];
+    }
 }
 @end
 

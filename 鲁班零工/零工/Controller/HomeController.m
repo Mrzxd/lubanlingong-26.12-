@@ -19,7 +19,7 @@
 #import "EmployerCenterController.h"
 #import "PublishContentController.h"
 
-@interface HomeController () <UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,YTSegmentBarDelegate>
+@interface HomeController () <UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,YTSegmentBarDelegate,JMessageDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIView *headerView;
@@ -235,6 +235,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.navigationController.navigationBar.translucent = NO;
     self.view.backgroundColor = RGBHex(0xf0f0f0);
     GlobalSingleton.gS_ShareInstance.contentType = @"abc";
@@ -268,8 +269,8 @@
     self.segmentBar.items = mutableArray;
     self.segmentBar.selectIndex = 0;
 }
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     self.navigationController.navigationBarHidden = YES;
 }
 

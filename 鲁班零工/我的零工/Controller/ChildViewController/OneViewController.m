@@ -4,20 +4,23 @@
 //
 //  Created by 水晶岛 on 2018/12/3.
 //  Copyright © 2018 水晶岛. All rights reserved.
-
-
+#import <MapKit/MapKit.h>
+#import <CoreLocation/CoreLocation.h>
 #import "OrderStatusCell.h"
 #import "ToEvaluateController.h"
 #import "CancleOrderController.h"
 #import "OneViewController.h"
 
-@interface OneViewController () <UITableViewDelegate,UITableViewDataSource>
+@interface OneViewController () <UITableViewDelegate,UITableViewDataSource,CLLocationManagerDelegate>
 
 @property (nonatomic, strong) UIButton *lastButton;
 @property (nonatomic, strong) UIView *grayView;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) MyOddJobModel * model;
 @property (nonatomic, strong) NSArray <MyOddJobModel *>*jobModelArray;
+
+@property (nonatomic, strong) CLLocation *clannotation;
+@property (nonatomic, strong) CLLocationManager *locationManager;
 
 @end
 
@@ -46,6 +49,36 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.tableView];
+    [self startLocation];
+}
+- (void)startLocation {
+    NSString *version = [UIDevice currentDevice].systemVersion;
+    if (version.doubleValue >= 8.0) {
+        // 由于iOS8中定位的授权机制改变, 需要进行手动授权
+        [self.locationManager requestAlwaysAuthorization];
+        [self.locationManager requestWhenInUseAuthorization];
+    }
+    [self.locationManager requestAlwaysAuthorization];
+    [self.locationManager requestWhenInUseAuthorization];
+    [self.locationManager startUpdatingLocation];
+}
+- (CLLocationManager *)locationManager {
+    if (!_locationManager) {
+        _locationManager = [[CLLocationManager alloc] init];
+        _locationManager.delegate = self;
+        _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        CLLocationDistance distance = 2000;
+        _locationManager.distanceFilter = distance;
+    }
+    return _locationManager;
+}
+
+#pragma mark ---------- CLLocationManagerDelegate
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
+    CLLocation *currentLocation = locations.lastObject;
+    _clannotation = currentLocation;
+    
 }
 - (UIView *)grayView {
     if (!_grayView) {
@@ -133,7 +166,7 @@
     return label;
 }
 - (void)closeButtonAction:(UIButton *)button {
-    [button removeFromSuperview];
+    [_grayView removeFromSuperview];
 }
 - (void)buttonAction:(UIButton *)button {
     NSArray *reasonArray = @[@"工种不匹配",@"价格低",@"时间冲突",@"其他"];
@@ -255,7 +288,6 @@
          }
     };
     cell.middlleButtonBlock = ^(MyOddJobModel * model) {
-        WeakSelf;
          if ([weakCell.MiddleButton.currentTitle isEqual:@"拒绝"]) {
              weakSelf.model = model;
             [[GlobalSingleton gS_ShareInstance].systemWindow addSubview:self.grayView];
@@ -296,7 +328,7 @@
     cell.cellBlock = ^(MyOddJobModel * model) {
         if ([weakCell.stateButton.currentTitle isEqual:@"取消订单"]) {
             CancleOrderController *coc = [[CancleOrderController alloc] init];
-            coc.idName = NoneNull(model.idName);
+            coc.jobModel = model;
             [weakSelf.navigationController pushViewController:coc animated:YES];
         } else if ([weakCell.stateButton.currentTitle isEqual:@"同意"]) {
             [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/WorkerCore/AgreeButton"] params:@{
@@ -304,6 +336,7 @@
                 @"id":NoneNull(model.idName)
             } success:^(id  _Nonnull response) {
                 if (response && [response[@"code"] intValue] == 0) {
+                    [weakSelf netWorking];
                 }
             } fail:^(NSError * _Nonnull error) {
                 [WHToast showErrorWithMessage:@"网络错误"];
@@ -335,6 +368,8 @@
             } fail:^(NSError * _Nonnull error) {
                 
             } showHUD:YES];
+        } else if ([weakCell.stateButton.currentTitle isEqual:@"导航"]) {
+            [weakSelf setMapItemDatas:model];
         }
     };
     return cell;
@@ -345,4 +380,29 @@
         _orderDetailBlock(model.idName);
     }
 }
+
+
+
+- (void)setMapItemDatas:(MyOddJobModel * )typeModel {
+    CLLocationCoordinate2D coords1 = _clannotation.coordinate;
+    //目的地位置
+    CLLocationCoordinate2D coordinate2;
+    coordinate2.latitude = typeModel.orderLocationY.doubleValue;
+    coordinate2.longitude = typeModel.orderLocationX.doubleValue;
+    //起点
+    MKMapItem *currentLocation = [[MKMapItem alloc] initWithPlacemark:[[MKPlacemark alloc] initWithCoordinate:coords1 addressDictionary:nil]];
+    currentLocation.name = @"我的位置";
+    //目的地的位置
+    MKMapItem *toLocation = [[MKMapItem alloc] initWithPlacemark:[[MKPlacemark alloc] initWithCoordinate:coordinate2 addressDictionary:nil]];
+    toLocation.name = @"目的地";
+    if (NoneNull(typeModel.orderLocation)) {
+        toLocation.name = NoneNull(typeModel.orderLocation);
+    }
+    NSArray *items = @[currentLocation,toLocation];
+    NSDictionary *options = @{MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving,MKLaunchOptionsMapTypeKey:[NSNumber numberWithInteger:MKMapTypeStandard],MKLaunchOptionsShowsTrafficKey:@YES};
+    //打开苹果自身地图应用，并呈现特定的item
+    [MKMapItem openMapsWithItems:items launchOptions:options];
+}
+
+
 @end

@@ -130,7 +130,7 @@
     return label;
 }
 - (void)closeButtonAction:(UIButton *)button {
-    [button removeFromSuperview];
+    [_grayView removeFromSuperview];
 }
 - (void)buttonAction:(UIButton *)button {
     NSArray *reasonArray = @[@"工种不匹配",@"价格低",@"时间冲突",@"其他"];

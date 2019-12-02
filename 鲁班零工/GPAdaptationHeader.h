@@ -9,11 +9,18 @@
 #ifndef GPAdaptationHeader_h
 #define GPAdaptationHeader_h
 
+
+
 #ifdef __OBJC__
 
+
 #import "MyOddJobModel.h"
+#import "ReleasedJobsModel.h"
+
+#import "EmployerCenterOrderDetailController.h"
 #import "UIScrollView+MJRefreshEX.h"
 #import "ZXD_NetWorking.h"
+#import <JMessage/JMessage.h>
 #import <MJExtension/MJExtension.h>
 #import <MBProgressHUD.h>
 #import "WHToast.h"
@@ -36,6 +43,9 @@
 #else
 #   define DLog(...)
 #endif
+
+
+static  NSString *const App_Key = @"a34f53fdfb5897e85039d53b";
 
 typedef void(^OrderStatusCellBlock)(id model);
 typedef void(^OrderMiddleButtonBlock)(id model);
@@ -65,7 +75,8 @@ typedef NS_ENUM(NSInteger,OrderDetail_Type){
 #define NoneNull(x)  [NSString stringWithFormat:@"%@", [x isKindOfClass:[NSNumber class]]?(NSNumber *)(x?x:@0):(NSString *)([x isKindOfClass:[NSNull class]] ?(x = @""):(([x length] > 0)?x:@""))]
 
 #define WeakSelf  __weak __typeof(&*self)weakSelf = self;
-#define W_OBJ(obj)  __weak __typeof(&*obj)weakObj = obj;
+#define WeakCell  __weak __typeof(&*cell)weakCell = cell;
+#define WK_OBJ(weak_obj)  __weak __typeof(&*weak_obj)weakObj = weak_obj;
 #define StrongSelf  __strong typeof(weakSelf) strongSelf = weakSelf;
 #define Strong_OBJ(obj)  __strong __typeof(&*obj)strongObj = obj;
 

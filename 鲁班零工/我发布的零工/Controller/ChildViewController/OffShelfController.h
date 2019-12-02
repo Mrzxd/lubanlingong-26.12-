@@ -10,7 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef void (^OrderDetailBlock)(NSInteger type);
+
 @interface OffShelfController : ZXDBaseViewController
+@property (nonatomic, strong) OrderDetailBlock orderDetailBlock;
+@property (nonatomic, assign) BOOL isService;
 
 @end
 

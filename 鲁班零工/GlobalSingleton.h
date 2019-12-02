@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) UIWindow *systemWindow;
 
+@property (nonnull, strong) UIViewController *currentViewController;
 @property (nonatomic, strong) NSString *contentType;
 
 @property (nonatomic, assign) NSInteger times;

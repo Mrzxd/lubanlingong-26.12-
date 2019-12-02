@@ -136,6 +136,10 @@
                                                                            if (response && [response[@"code"] intValue] == 0) {
                                                                                [[NSUserDefaults standardUserDefaults] setObject:@"yes" forKey:@"login_state"];
                                                                                [[NSUserDefaults standardUserDefaults] setObject:response[@"data"][@"userId"] forKey:@"userId"];
+                                                                               if (weakSelf.isRe_visit) {
+                                                                                   [weakSelf dismissViewControllerAnimated:YES completion:nil];
+                                                                                   return ;
+                                                                               }
                                                                                LBTabBarController *tabbarVc = [LBTabBarController new];
                                                                                 [weakSelf presentViewController:tabbarVc animated:YES completion:nil];
                                                                            } else {

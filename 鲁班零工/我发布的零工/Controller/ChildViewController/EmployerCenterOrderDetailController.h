@@ -12,6 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EmployerCenterOrderDetailController : ZXDBaseViewController
 
+@property (nonatomic, assign) BOOL isService;
+@property (nonatomic, strong) NSString *idName;
+
 @end
 
 NS_ASSUME_NONNULL_END

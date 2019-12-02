@@ -39,14 +39,18 @@
         lineView3.backgroundColor = RGBHex(0xEEEEEE);
         [topCoverView addSubview:lineView3];
     }
-    
-    [topCoverView addSubview:[self typeLabel:@"保险销售" :14.5]];
+    NSString *orderOrderName =_jobModel.orderOrderName?:_detailModel.orderOrderName;
+    NSString *orderSalary =_jobModel.orderSalary?:_detailModel.orderSalary;
+    NSString *orderSalaryDay =_jobModel.orderSalaryDay?:_detailModel.orderSalaryDay;
+    NSString *orderNumbering =_jobModel.orderNumbering?:_detailModel.orderNumbering;
+    NSString *creatOrderTime =_jobModel.creatOrderTime?:_detailModel.creatOrderTime;
+    [topCoverView addSubview:[self typeLabel:NoneNull(orderOrderName) :14.5]];
     [topCoverView addSubview:[self typeLabel:@"创建时间" :54.5]];
     [topCoverView addSubview:[self typeLabel:@"订单编号" :95]];
     
-    [topCoverView addSubview:[self rightLabel:@"300元/天" :14.5]];
-    [topCoverView addSubview:[self rightLabel:@"2019-09-25 09:24:39" :55.5]];
-    [topCoverView addSubview:[self rightLabel:@"25663330032121120" :96]];
+    [topCoverView addSubview:[self rightLabel:[NSString stringWithFormat:@"%@/%@",NoneNull(orderSalary),NoneNull(orderSalaryDay)] :14.5]];
+    [topCoverView addSubview:[self rightLabel:[self getTimeFromTimestamp:NoneNull(creatOrderTime)] :55.5]];
+    [topCoverView addSubview:[self rightLabel:NoneNull(orderNumbering) :96]];
     
     [self addSubViews];
 }
@@ -122,8 +126,34 @@
 }
 - (void)submit:(UIButton *)button {
     WeakSelf;
+         NSString *idName = _jobModel.idName?:_detailModel.idName;
+    if (_isEmployer) {
+        [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/employerCore/CancelSkill"] params:@{
+            @"id":NoneNull(idName),
+            @"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userId"],
+            @"msg":NoneNull(_textView.text),
+            @"database":_mutableStringBase64Array
+        } success:^(id  _Nonnull response) {
+            if (response && [response[@"code"] intValue] == 0) {
+                [WHToast showSuccessWithMessage:@"取消成功" duration:1 finishHandler:^{
+                    [weakSelf.navigationController popViewControllerAnimated:YES];
+                }];
+            } else {
+                if (response[@"msg"]) {
+                    [WHToast showErrorWithMessage:response[@"msg"]];
+                } else {
+                    [WHToast showErrorWithMessage:@"取消失败"];
+                }
+            }
+        } fail:^(NSError * _Nonnull error) {
+            [WHToast showErrorWithMessage:@"网络错误"];
+        } showHUD:YES];
+        
+        return;
+    }
+  
     [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/WorkerCore/CancelWork"] params:@{
-        @"id":NoneNull(_idName),
+        @"id":NoneNull(idName),
         @"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userId"],
         @"msg":NoneNull(_textView.text),
         @"database":_mutableStringBase64Array

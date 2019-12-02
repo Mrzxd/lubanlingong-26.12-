@@ -5,13 +5,15 @@
 //  Created by 张昊 on 2019/10/23.
 //  Copyright © 2019 张兴栋. All rights reserved.
 //
+#import <MapKit/MapKit.h>
+#import <CoreLocation/CoreLocation.h>
 #import "OrderDetailModel.h"
 #import "ChatController.h"
 #import "ToEvaluateController.h"
 #import "CancleOrderController.h"
 #import "OrderDetailsController.h"
 
-@interface OrderDetailsController ()
+@interface OrderDetailsController () <CLLocationManagerDelegate>
 
 @property (nonatomic, strong) UIButton *leftButton;
 @property (nonatomic, strong) UIButton *middleButton;
@@ -21,6 +23,10 @@
 @property (nonatomic, strong) UIButton *lastButton;
 
 @property (nonatomic, strong) OrderDetailModel *detailModel;
+
+@property (nonatomic, strong) CLLocation *clannotation;
+@property (nonatomic, strong) CLLocationManager *locationManager;
+
 
 @end
 
@@ -40,7 +46,56 @@
     self.view.backgroundColor = RGBHex(0xF7F7F7);
     [self setUPUI];
     [self netWorking];
-}
+        [self startLocation];
+    }
+    - (void)startLocation {
+        NSString *version = [UIDevice currentDevice].systemVersion;
+        if (version.doubleValue >= 8.0) {
+            // 由于iOS8中定位的授权机制改变, 需要进行手动授权
+            [self.locationManager requestAlwaysAuthorization];
+            [self.locationManager requestWhenInUseAuthorization];
+        }
+        [self.locationManager requestAlwaysAuthorization];
+        [self.locationManager requestWhenInUseAuthorization];
+        [self.locationManager startUpdatingLocation];
+    }
+    - (CLLocationManager *)locationManager {
+        if (!_locationManager) {
+            _locationManager = [[CLLocationManager alloc] init];
+            _locationManager.delegate = self;
+            _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+            CLLocationDistance distance = 2000;
+            _locationManager.distanceFilter = distance;
+        }
+        return _locationManager;
+    }
+    - (void)setMapItemDatas:(OrderDetailModel * )typeModel {
+        CLLocationCoordinate2D coords1 = _clannotation.coordinate;
+        //目的地位置
+        CLLocationCoordinate2D coordinate2;
+        coordinate2.latitude = typeModel.orderLocationY.doubleValue;
+        coordinate2.longitude = typeModel.orderLocationX.doubleValue;
+        //起点
+        MKMapItem *currentLocation = [[MKMapItem alloc] initWithPlacemark:[[MKPlacemark alloc] initWithCoordinate:coords1 addressDictionary:nil]];
+        currentLocation.name = @"我的位置";
+        //目的地的位置
+        MKMapItem *toLocation = [[MKMapItem alloc] initWithPlacemark:[[MKPlacemark alloc] initWithCoordinate:coordinate2 addressDictionary:nil]];
+        toLocation.name = @"目的地";
+        if (NoneNull(typeModel.orderLocation)) {
+            toLocation.name = NoneNull(typeModel.orderLocation);
+        }
+        NSArray *items = @[currentLocation,toLocation];
+        NSDictionary *options = @{MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving,MKLaunchOptionsMapTypeKey:[NSNumber numberWithInteger:MKMapTypeStandard],MKLaunchOptionsShowsTrafficKey:@YES};
+        //打开苹果自身地图应用，并呈现特定的item
+        [MKMapItem openMapsWithItems:items launchOptions:options];
+    }
+    #pragma mark ---------- CLLocationManagerDelegate
+
+    - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
+        CLLocation *currentLocation = locations.lastObject;
+        _clannotation = currentLocation;
+        
+    }
 - (void)netWorking {
     WeakSelf;
     [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/WorkerCore/WorkOrderInfo"] params:@{@"id":NoneNull(_orderId)} success:^(id  _Nonnull response) {
@@ -48,21 +103,21 @@
             StrongSelf;
             weakSelf.detailModel = [OrderDetailModel mj_objectWithKeyValues:response[@"data"]];
             [weakSelf reloadData];
-            if (weakSelf.detailModel.status.intValue == 0) {
+            if (weakSelf.detailModel.orderStatusGr.intValue == 0) {
                 weakSelf.detail_Type = OrderDetail_Type_Cancle;
-            } else if (weakSelf.detailModel.status.intValue == 1) {
+            } else if (weakSelf.detailModel.orderStatusGr.intValue == 1) {
                 weakSelf.detail_Type = OrderDetail_Type_Agree;
-            } else if (weakSelf.detailModel.status.intValue == 2) {
+            } else if (weakSelf.detailModel.orderStatusGr.intValue == 2) {
                 weakSelf.detail_Type = OrderDetail_Type_Rejected;
-            } else if (weakSelf.detailModel.status.intValue == 3) {
+            } else if (weakSelf.detailModel.orderStatusGr.intValue == 3) {
                 weakSelf.detail_Type = OrderDetail_Type_Navigation;
-            } else if (weakSelf.detailModel.status.intValue == 4) {
+            } else if (weakSelf.detailModel.orderStatusGr.intValue == 4) {
                 weakSelf.detail_Type = OrderDetail_Type_ConfirmCompletion;
-            } else if (weakSelf.detailModel.status.intValue == 5) {
+            } else if (weakSelf.detailModel.orderStatusGr.intValue == 5) {
                 weakSelf.detail_Type = OrderDetail_Type_CustomerService;
-            } else if (weakSelf.detailModel.status.intValue == 6) {
+            } else if (weakSelf.detailModel.orderStatusGr.intValue == 6) {
                 weakSelf.detail_Type = OrderDetail_Type_Delete;
-            } else if (weakSelf.detailModel.status.intValue == 7) {
+            } else if (weakSelf.detailModel.orderStatusGr.intValue == 7) {
                 weakSelf.detail_Type = OrderDetail_Type_HaveEvaluate;
             }
             [weakSelf addStateButton:strongSelf->footerView];
@@ -76,10 +131,10 @@
     rateLabel.text = [NSString stringWithFormat:@"好评率：%@%@",NoneNull(_detailModel.praise),@"%"];
     dealLabel.text = [NSString stringWithFormat:@"成交单%@单",NoneNull(_detailModel.transactionNum)];
     timeLabel.text = [NSString stringWithFormat:@"%@至%@",NoneNull(_detailModel.startTime),NoneNull(_detailModel.endTime)];
-    locationLabel.text = NoneNull(_detailModel.location);
-     [bottomCoverView addSubview:[self typeLabel:NoneNull(_detailModel.workName) :14.5]];
-    [bottomCoverView addSubview:[self rightLabel:[NSString stringWithFormat:@"%@元/%@",_detailModel.salary NonNull,_detailModel.salaryDay NonNull] :14.5]];
-    [bottomCoverView addSubview:[self rightLabel:NoneNull(_detailModel.creatTime) :55.5]];
+    locationLabel.text = NoneNull(_detailModel.orderLocation);
+    [bottomCoverView addSubview:[self typeLabel:NoneNull(_detailModel.orderOrderName) :14.5]];
+    [bottomCoverView addSubview:[self rightLabel:[NSString stringWithFormat:@"%@元/%@",_detailModel.orderSalary NonNull,_detailModel.orderSalaryDay NonNull] :14.5]];
+    [bottomCoverView addSubview:[self rightLabel:[self getTimeFromTimestamp:NoneNull(_detailModel.creatOrderTime)] :55.5]];
     [bottomCoverView addSubview:[self rightLabel:NoneNull(_detailModel.orderNumbering) :96]];
 }
 - (UIView *)grayView {
@@ -416,13 +471,14 @@
 }
 
 - (void)cancleButtonAction:(UIButton *)button {
+    WeakSelf;
     if (self.detail_Type == OrderDetail_Type_Cancle) {
         CancleOrderController *coc = [[CancleOrderController alloc] init];
-        coc.idName = NoneNull(_orderId);
+        coc.detailModel = _detailModel;
         [self.navigationController pushViewController:coc animated:YES];
     } else if (self.detail_Type == OrderDetail_Type_Agree) {
         // 同意
-        WeakSelf;
+      
         [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/WorkerCore/AgreeButton"] params:@{
                        @"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userId"],
                        @"id":NoneNull(_orderId)
@@ -465,7 +521,23 @@
        } fail:^(NSError * _Nonnull error) {
            
        } showHUD:YES];
-    }
+    } else if (self.detail_Type == OrderDetail_Type_ConfirmCompletion) {
+        [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/WorkerCore/confirmWorkButton"] params:@{@"id":NoneNull(_detailModel.idName)} success:^(id  _Nonnull response) {
+       if (response && [response[@"code"] intValue] == 0) {
+                         [weakSelf.navigationController popViewControllerAnimated:YES];
+         } else {
+             if (response[@"msg"]) {
+                 [WHToast showErrorWithMessage:response[@"msg"]];
+             } else {
+                 [WHToast showErrorWithMessage:@"确认完工失败"];
+             }
+         }
+    } fail:^(NSError * _Nonnull error) {
+       
+    } showHUD:YES];
+  } else if (self.detail_Type == OrderDetail_Type_Navigation) {
+      [self setMapItemDatas:_detailModel];
+  }
 }
 - (void)contactButtonAction:(UIButton *)button {
     [self.navigationController pushViewController:[ChatController new] animated:YES];

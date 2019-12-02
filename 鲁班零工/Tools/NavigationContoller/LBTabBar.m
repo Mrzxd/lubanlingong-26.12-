@@ -51,16 +51,13 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-   
     //系统自带的按钮类型是UITabBarButton，找出这些类型的按钮，然后重新排布位置，空出中间的位置
     Class class = NSClassFromString(@"UITabBarButton");
-
+//    self.plusBtn.size = CGSizeMake(self.plusBtn.currentBackgroundImage.size.width, self.plusBtn.currentBackgroundImage.size.height);
+    [self.plusBtn sizeToFit];
     self.plusBtn.centerX = self.centerX;
-    //调整发布按钮的中线点Y值
-    self.plusBtn.centerY = 46 * 0.5 - 2*LBMagin ;
-
-    self.plusBtn.size = CGSizeMake(self.plusBtn.currentBackgroundImage.size.width, self.plusBtn.currentBackgroundImage.size.height);
-  
+      //调整发布按钮的中线点Y值
+      self.plusBtn.centerY = 46 * 0.5 - 2*LBMagin ;
         UILabel *label = [[UILabel alloc] init];
         label.text = @"发布";
         label.font = [UIFont fontWithName:@"ArialMT"size:11];
@@ -68,8 +65,7 @@
         label.textColor = [UIColor grayColor];
         [self addSubview:label];
         label.centerX = ScreenWidth/2;
-        label.centerY = 43*ScalePpth;
-
+        label.centerY = 41*ScalePpth;
     int btnIndex = 0;
     for (UIView *btn in self.subviews) {//遍历tabbar的子控件
         if ([btn isKindOfClass:class]) {//如果是系统的UITabBarButton，那么就调整子控件位置，空出中间位置

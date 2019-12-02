@@ -7,22 +7,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "15F596DF-91A9-45AF-8985-50F6A2C518C9"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "&#x9c81;&#x73ed;&#x96f6;&#x5de5;/&#x6211;&#x53d1;&#x5e03;&#x7684;&#x96f6;&#x5de5;/Controller/ChildViewController/EmployerCenterOrderDetailController.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "28"
-            endingLineNumber = "28"
-            landmarkName = "-viewDidLoad"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "795A2570-5EB8-4429-BBD8-ACAA8FE8EAB5"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -49,6 +33,49 @@
             startingLineNumber = "28"
             endingLineNumber = "28"
             landmarkName = "-viewDidLoad"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.ExceptionBreakpoint">
+         <BreakpointContent
+            uuid = "AEEBF30B-57FA-41DD-9A34-60F130DF8C14"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            scope = "1"
+            stopOnStyle = "0">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "AD7E353F-C68E-46EF-84E7-5AD2BBC02307"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "&#x9c81;&#x73ed;&#x96f6;&#x5de5;/&#x8054;&#x7cfb;&#x96c7;&#x4e3b;|&#x4e92;&#x52a8;&#x804a;&#x5929;/Controller/ChatController.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "102"
+            endingLineNumber = "102"
+            landmarkName = "-onSyncOfflineMessageConversation:offlineMessages:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4065367A-3F88-4088-8392-3503E6951FAD"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "&#x9c81;&#x73ed;&#x96f6;&#x5de5;/&#x8054;&#x7cfb;&#x96c7;&#x4e3b;|&#x4e92;&#x52a8;&#x804a;&#x5929;/Controller/ChatController.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "121"
+            endingLineNumber = "121"
+            landmarkName = "-onSyncRoamingMessageConversation:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

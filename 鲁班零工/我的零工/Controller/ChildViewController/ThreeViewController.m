@@ -4,15 +4,19 @@
 //
 //  Created by 水晶岛 on 2018/12/3.
 //  Copyright © 2018 水晶岛. All rights reserved.
-
+#import <MapKit/MapKit.h>
+#import <CoreLocation/CoreLocation.h>
 #import "OrderStatusCell.h"
 #import "ThreeViewController.h"
 #import "OrderDetailsController.h"
 
-@interface ThreeViewController () <UITableViewDelegate,UITableViewDataSource>
+@interface ThreeViewController () <UITableViewDelegate,UITableViewDataSource,CLLocationManagerDelegate>
 
 @property (nonatomic, strong) NSArray <MyOddJobModel *>*jobModelArray;
 @property (nonatomic, strong) UITableView *tableView;
+
+@property (nonatomic, strong) CLLocation *clannotation;
+@property (nonatomic, strong) CLLocationManager *locationManager;
 
 @end
 
@@ -21,6 +25,55 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self netWorking];
+    [self startLocation];
+}
+- (void)startLocation {
+    NSString *version = [UIDevice currentDevice].systemVersion;
+    if (version.doubleValue >= 8.0) {
+        // 由于iOS8中定位的授权机制改变, 需要进行手动授权
+        [self.locationManager requestAlwaysAuthorization];
+        [self.locationManager requestWhenInUseAuthorization];
+    }
+    [self.locationManager requestAlwaysAuthorization];
+    [self.locationManager requestWhenInUseAuthorization];
+    [self.locationManager startUpdatingLocation];
+}
+- (CLLocationManager *)locationManager {
+    if (!_locationManager) {
+        _locationManager = [[CLLocationManager alloc] init];
+        _locationManager.delegate = self;
+        _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        CLLocationDistance distance = 2000;
+        _locationManager.distanceFilter = distance;
+    }
+    return _locationManager;
+}
+- (void)setMapItemDatas:(MyOddJobModel * )typeModel {
+    CLLocationCoordinate2D coords1 = _clannotation.coordinate;
+    //目的地位置
+    CLLocationCoordinate2D coordinate2;
+    coordinate2.latitude = typeModel.orderLocationY.doubleValue;
+    coordinate2.longitude = typeModel.orderLocationX.doubleValue;
+    //起点
+    MKMapItem *currentLocation = [[MKMapItem alloc] initWithPlacemark:[[MKPlacemark alloc] initWithCoordinate:coords1 addressDictionary:nil]];
+    currentLocation.name = @"我的位置";
+    //目的地的位置
+    MKMapItem *toLocation = [[MKMapItem alloc] initWithPlacemark:[[MKPlacemark alloc] initWithCoordinate:coordinate2 addressDictionary:nil]];
+    toLocation.name = @"目的地";
+    if (NoneNull(typeModel.orderLocation)) {
+        toLocation.name = NoneNull(typeModel.orderLocation);
+    }
+    NSArray *items = @[currentLocation,toLocation];
+    NSDictionary *options = @{MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving,MKLaunchOptionsMapTypeKey:[NSNumber numberWithInteger:MKMapTypeStandard],MKLaunchOptionsShowsTrafficKey:@YES};
+    //打开苹果自身地图应用，并呈现特定的item
+    [MKMapItem openMapsWithItems:items launchOptions:options];
+}
+#pragma mark ---------- CLLocationManagerDelegate
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
+    CLLocation *currentLocation = locations.lastObject;
+    _clannotation = currentLocation;
+    
 }
 - (void)netWorking {
     WeakSelf;
@@ -130,6 +183,11 @@
                 } showHUD:YES];
             }
        };
+    cell.cellBlock = ^(MyOddJobModel * model) {
+    if ([weakCell.stateButton.currentTitle isEqual:@"导航"]) {
+            [weakSelf setMapItemDatas:model];
+        }
+    };
     return cell;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -138,5 +196,8 @@
           _orderDetailBlock(model.idName);
       }
 }
+
+
+
 @end
 

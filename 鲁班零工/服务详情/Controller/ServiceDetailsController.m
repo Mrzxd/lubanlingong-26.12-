@@ -11,6 +11,7 @@
 #import "MyAdvantageCell.h"
 #import "ServiceContentCell.h"
 #import "ServiceDetailModel.h"
+#import "EmployerRecordController.h"
 #import "EmployeeRecordsController.h"
 #import "ServiceDetailsController.h"
 #import "AcknowledgementOrderController.h"
@@ -124,7 +125,9 @@
     [self.navigationController popViewControllerAnimated:NO];
 }
 - (void)imageButtonAction:(UIButton *)button {
-    EmployeeRecordsController *ERVC = [EmployeeRecordsController new];
+//    EmployeeRecordsController *ERVC = [EmployeeRecordsController new];
+    EmployerRecordController *ERVC = [EmployerRecordController new];
+    ERVC.releaseId = _detailModel.releaseId NonNull;ERVC.isService = YES;
     [self.navigationController pushViewController:ERVC animated:NO];
 }
 - (void)immediatelyButtonAction {

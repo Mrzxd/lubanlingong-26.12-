@@ -26,6 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) MyOddJobModel *jobModel;
 
+@property (nonatomic, strong) ReleasedJobsModel *releasedJobsModel;
+
 @property (nonatomic, strong) OrderFirstButtonBlock firstButtonBlock;
 @property (nonatomic, strong) OrderStatusCellBlock cellBlock;
 @property (nonatomic, strong) OrderMiddleButtonBlock middlleButtonBlock;

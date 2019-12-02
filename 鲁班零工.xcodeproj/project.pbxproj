@@ -20,7 +20,6 @@
 		61153BE12351CA2300C8DCDF /* UIImage+Image.m in Sources */ = {isa = PBXBuildFile; fileRef = 61153BDD2351CA2300C8DCDF /* UIImage+Image.m */; };
 		61153BF92351CBBE00C8DCDF /* MineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61153BF82351CBBE00C8DCDF /* MineController.m */; };
 		61153BFC2351CBFC00C8DCDF /* LookingForServicesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61153BFB2351CBFC00C8DCDF /* LookingForServicesController.m */; };
-		61153BFF2351CC2600C8DCDF /* PublishController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61153BFE2351CC2600C8DCDF /* PublishController.m */; };
 		61153C022351CC5B00C8DCDF /* OddJobController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61153C012351CC5B00C8DCDF /* OddJobController.m */; };
 		61153C052351CC6D00C8DCDF /* HomeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61153C042351CC6D00C8DCDF /* HomeController.m */; };
 		61153C082351CD1900C8DCDF /* LBTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 61153C062351CD1900C8DCDF /* LBTabBar.m */; };
@@ -96,6 +95,7 @@
 		612551772366C12700BEDD9C /* MyAdvantageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 612551762366C12700BEDD9C /* MyAdvantageCell.m */; };
 		6125517A2366C25800BEDD9C /* ServiceContentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 612551792366C25800BEDD9C /* ServiceContentCell.m */; };
 		6125517D2366C54200BEDD9C /* AcknowledgementOrderController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6125517C2366C54200BEDD9C /* AcknowledgementOrderController.m */; };
+		61268A12238E2AB40067C661 /* ListRecordModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 61268A11238E2AB40067C661 /* ListRecordModel.m */; };
 		612B69D3234D8F8F00447686 /* UIImage+WHToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 612B69A7234D8F8F00447686 /* UIImage+WHToast.m */; };
 		612B69D4234D8F8F00447686 /* WHToastConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 612B69A8234D8F8F00447686 /* WHToastConfig.m */; };
 		612B69D5234D8F8F00447686 /* WHToastView.m in Sources */ = {isa = PBXBuildFile; fileRef = 612B69A9234D8F8F00447686 /* WHToastView.m */; };
@@ -138,6 +138,7 @@
 		612D4E3E2355D3BD002B7E9E /* homeButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 612D4E3D2355D3BD002B7E9E /* homeButton.png */; };
 		612D4E402355D41F002B7E9E /* star.png in Resources */ = {isa = PBXBuildFile; fileRef = 612D4E3F2355D41E002B7E9E /* star.png */; };
 		612FE0512388E2E000967094 /* MyOddJobModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 612FE0502388E2E000967094 /* MyOddJobModel.m */; };
+		61353ABE238D196900BDAA5F /* ReleasedJobsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 61353ABD238D196900BDAA5F /* ReleasedJobsModel.m */; };
 		61492E59235B1B620020DDA3 /* xButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61492E58235B1B620020DDA3 /* xButton.png */; };
 		61492E5C235B21C90020DDA3 /* LookForServicesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 61492E5B235B21C90020DDA3 /* LookForServicesCell.m */; };
 		61492E63235B2AF20020DDA3 /* RealNameAuthenticationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61492E62235B2AF20020DDA3 /* RealNameAuthenticationController.m */; };
@@ -230,8 +231,6 @@
 		61153BF82351CBBE00C8DCDF /* MineController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MineController.m; sourceTree = "<group>"; };
 		61153BFA2351CBFC00C8DCDF /* LookingForServicesController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LookingForServicesController.h; sourceTree = "<group>"; };
 		61153BFB2351CBFC00C8DCDF /* LookingForServicesController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LookingForServicesController.m; sourceTree = "<group>"; };
-		61153BFD2351CC2600C8DCDF /* PublishController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PublishController.h; sourceTree = "<group>"; };
-		61153BFE2351CC2600C8DCDF /* PublishController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PublishController.m; sourceTree = "<group>"; };
 		61153C002351CC5B00C8DCDF /* OddJobController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OddJobController.h; sourceTree = "<group>"; };
 		61153C012351CC5B00C8DCDF /* OddJobController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OddJobController.m; sourceTree = "<group>"; };
 		61153C032351CC6D00C8DCDF /* HomeController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HomeController.h; sourceTree = "<group>"; };
@@ -373,6 +372,8 @@
 		612551792366C25800BEDD9C /* ServiceContentCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ServiceContentCell.m; sourceTree = "<group>"; };
 		6125517B2366C54200BEDD9C /* AcknowledgementOrderController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AcknowledgementOrderController.h; sourceTree = "<group>"; };
 		6125517C2366C54200BEDD9C /* AcknowledgementOrderController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AcknowledgementOrderController.m; sourceTree = "<group>"; };
+		61268A10238E2AB40067C661 /* ListRecordModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ListRecordModel.h; sourceTree = "<group>"; };
+		61268A11238E2AB40067C661 /* ListRecordModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ListRecordModel.m; sourceTree = "<group>"; };
 		612B69A3234D8F8F00447686 /* UIImage+WHToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+WHToast.h"; sourceTree = "<group>"; };
 		612B69A4234D8F8F00447686 /* WHToastView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHToastView.h; sourceTree = "<group>"; };
 		612B69A5234D8F8F00447686 /* WHToastConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHToastConfig.h; sourceTree = "<group>"; };
@@ -446,6 +447,8 @@
 		612D4E3F2355D41E002B7E9E /* star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = star.png; sourceTree = "<group>"; };
 		612FE04F2388E2E000967094 /* MyOddJobModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyOddJobModel.h; sourceTree = "<group>"; };
 		612FE0502388E2E000967094 /* MyOddJobModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyOddJobModel.m; sourceTree = "<group>"; };
+		61353ABC238D196900BDAA5F /* ReleasedJobsModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReleasedJobsModel.h; sourceTree = "<group>"; };
+		61353ABD238D196900BDAA5F /* ReleasedJobsModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReleasedJobsModel.m; sourceTree = "<group>"; };
 		61492E58235B1B620020DDA3 /* xButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xButton.png; sourceTree = "<group>"; };
 		61492E5A235B21C90020DDA3 /* LookForServicesCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LookForServicesCell.h; sourceTree = "<group>"; };
 		61492E5B235B21C90020DDA3 /* LookForServicesCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LookForServicesCell.m; sourceTree = "<group>"; };
@@ -762,42 +765,6 @@
 			path = "鲁班零工/零工/Controller";
 			sourceTree = SOURCE_ROOT;
 		};
-		61153BEB2351CB2D00C8DCDF /* 发布 */ = {
-			isa = PBXGroup;
-			children = (
-				61153BEE2351CB3E00C8DCDF /* Controller */,
-				61153BED2351CB3E00C8DCDF /* Model */,
-				61153BEC2351CB3E00C8DCDF /* View */,
-			);
-			path = "发布";
-			sourceTree = "<group>";
-		};
-		61153BEC2351CB3E00C8DCDF /* View */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = View;
-			path = "鲁班零工/零工/View";
-			sourceTree = SOURCE_ROOT;
-		};
-		61153BED2351CB3E00C8DCDF /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Model;
-			path = "鲁班零工/零工/Model";
-			sourceTree = SOURCE_ROOT;
-		};
-		61153BEE2351CB3E00C8DCDF /* Controller */ = {
-			isa = PBXGroup;
-			children = (
-				61153BFD2351CC2600C8DCDF /* PublishController.h */,
-				61153BFE2351CC2600C8DCDF /* PublishController.m */,
-			);
-			name = Controller;
-			path = "鲁班零工/零工/Controller";
-			sourceTree = SOURCE_ROOT;
-		};
 		61153BEF2351CB4500C8DCDF /* 找服务 */ = {
 			isa = PBXGroup;
 			children = (
@@ -952,6 +919,8 @@
 		6118C26A2362A59A0062AE02 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				61353ABC238D196900BDAA5F /* ReleasedJobsModel.h */,
+				61353ABD238D196900BDAA5F /* ReleasedJobsModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1090,7 +1059,6 @@
 				615CE86A235307A000836431 /* 登录、注册、忘记密码、修改手机号 */,
 				61153BF32351CB6700C8DCDF /* 我的 */,
 				61153BEF2351CB4500C8DCDF /* 找服务 */,
-				61153BEB2351CB2D00C8DCDF /* 发布 */,
 				61153BE62351CAEA00C8DCDF /* 零工 */,
 				61153BE22351CAAD00C8DCDF /* 首页 */,
 				612B69A1234D8F8F00447686 /* Tools */,
@@ -1129,8 +1097,8 @@
 		611D8ACE2373DF3C005B0A09 /* ZXDNetWorkInAF */ = {
 			isa = PBXGroup;
 			children = (
-				611D8ACF2373DF3C005B0A09 /* ZXD_NetWorking.m */,
 				611D8AD02373DF3C005B0A09 /* ZXD_NetWorking.h */,
+				611D8ACF2373DF3C005B0A09 /* ZXD_NetWorking.m */,
 			);
 			path = ZXDNetWorkInAF;
 			sourceTree = "<group>";
@@ -1607,6 +1575,8 @@
 			children = (
 				61B3988F23863D3400C7BA1C /* GrabdDetailsModel.h */,
 				61B3989023863D3400C7BA1C /* GrabdDetailsModel.m */,
+				61268A10238E2AB40067C661 /* ListRecordModel.h */,
+				61268A11238E2AB40067C661 /* ListRecordModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2222,6 +2192,7 @@
 				6120E893235EC5D00072E4F5 /* AboutUsController.m in Sources */,
 				612CCEC82363E70500936F17 /* OrderManagementFourChildController.m in Sources */,
 				611B070F2359540000A2983F /* GrabdDetailsImagCell.m in Sources */,
+				61353ABE238D196900BDAA5F /* ReleasedJobsModel.m in Sources */,
 				61137C6E237E974800983C67 /* OrderDetailsOfMyEmployeesController.m in Sources */,
 				618E38CF235FEAE400CB8AFA /* SMSVerificationCodeController.m in Sources */,
 				612B69DA234D8F8F00447686 /* SegmentTapView.m in Sources */,
@@ -2248,7 +2219,6 @@
 				612D4E262355B709002B7E9E /* ZXDBaseViewController.m in Sources */,
 				61492E6D235B3AC10020DDA3 /* TransactionDetailsCell.m in Sources */,
 				611AAA52235707B100F178AB /* EmployerRecordCell.m in Sources */,
-				61153BFF2351CC2600C8DCDF /* PublishController.m in Sources */,
 				612D4E352355C667002B7E9E /* SendTableCell.m in Sources */,
 				611AAA642357278500F178AB /* PersonTableCell.m in Sources */,
 				611AAA202356E18B00F178AB /* JobRequirementsCell.m in Sources */,
@@ -2260,6 +2230,7 @@
 				618E392C23603C9800CB8AFA /* RightUserCell.m in Sources */,
 				61153C0F2351E02900C8DCDF /* CategoryLabel.m in Sources */,
 				61137C65237E752F00983C67 /* SharingAwardsController.swift in Sources */,
+				61268A12238E2AB40067C661 /* ListRecordModel.m in Sources */,
 				61137C68237E76E500983C67 /* Swift_M_H.swift in Sources */,
 				61137C75237EB01E00983C67 /* ToEvaluateEmployerController.m in Sources */,
 				612CCEBF2363E6AA00936F17 /* OrderManagementOneChildController.m in Sources */,
@@ -2471,6 +2442,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2WTMSF4J24;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2485,8 +2457,73 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"WeChatSDK\"",
+					"-l\"c++\"",
+					"-l\"jcore-ios-2.1.2\"",
+					"-l\"resolv\"",
+					"-l\"sqlite3\"",
+					"-l\"sqlite3.0\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AFNetworking\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"AudioToolbox\"",
+					"-framework",
+					"\"CFNetwork\"",
+					"-framework",
+					"\"CoreAudio\"",
+					"-framework",
+					"\"CoreFoundation\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreLocation\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"JMessage\"",
+					"-framework",
+					"\"MBProgressHUD\"",
+					"-framework",
+					"\"MJExtension\"",
+					"-framework",
+					"\"MJRefresh\"",
+					"-framework",
+					"\"Masonry\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"SDWebImage\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"WebKit\"",
+					"-framework",
+					"\"YYCache\"",
+					"-framework",
+					"\"YYModel\"",
+					"-weak_framework",
+					"\"UserNotifications\"",
+					"-ObjC",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "lubanlinggong-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "鲁班零工/我的/分享有奖/Controller/鲁班零工-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -2500,6 +2537,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2WTMSF4J24;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2514,8 +2552,73 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"WeChatSDK\"",
+					"-l\"c++\"",
+					"-l\"jcore-ios-2.1.2\"",
+					"-l\"resolv\"",
+					"-l\"sqlite3\"",
+					"-l\"sqlite3.0\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AFNetworking\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"AudioToolbox\"",
+					"-framework",
+					"\"CFNetwork\"",
+					"-framework",
+					"\"CoreAudio\"",
+					"-framework",
+					"\"CoreFoundation\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreLocation\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"JMessage\"",
+					"-framework",
+					"\"MBProgressHUD\"",
+					"-framework",
+					"\"MJExtension\"",
+					"-framework",
+					"\"MJRefresh\"",
+					"-framework",
+					"\"Masonry\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"SDWebImage\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"WebKit\"",
+					"-framework",
+					"\"YYCache\"",
+					"-framework",
+					"\"YYModel\"",
+					"-weak_framework",
+					"\"UserNotifications\"",
+					"-ObjC",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "lubanlinggong-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "鲁班零工/我的/分享有奖/Controller/鲁班零工-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

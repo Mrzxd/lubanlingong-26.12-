@@ -42,9 +42,9 @@
     [topCoverView addSubview:[self typeLabel:@"工作名称" :54.5]];
     [topCoverView addSubview:[self typeLabel:@"工资" :95]];
     NSString *name = _model.name?:_detailModel.name;
-    NSString *orderOrderName = _model.orderOrderName?:_detailModel.workName;
-    NSString *orderSalary = _model.orderSalary?:_detailModel.salary;
-    NSString *orderSalaryDay = _model.orderSalaryDay?:_detailModel.salaryDay;
+    NSString *orderOrderName = _model.orderOrderName?:_detailModel.orderOrderName;
+    NSString *orderSalary = _model.orderSalary?:_detailModel.orderSalary;
+    NSString *orderSalaryDay = _model.orderSalaryDay?:_detailModel.orderSalaryDay;
     [topCoverView addSubview:[self rightLabel:NoneNull(name) :14.5]];
     [topCoverView addSubview:[self rightLabel:orderOrderName :55.5]];
     [topCoverView addSubview:[self rightLabel:[NSString stringWithFormat:@"%@/%@",orderSalary,orderSalaryDay] :96]];

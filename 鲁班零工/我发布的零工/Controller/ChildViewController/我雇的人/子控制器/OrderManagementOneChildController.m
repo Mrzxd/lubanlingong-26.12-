@@ -8,6 +8,7 @@
 //  Copyright © 2019 张兴栋. All rights reserved.
 //
 #import "OrderStatusCell.h"
+#import "ToEvaluateEmployerController.h"
 #import "OrderManagementOneChildController.h"
 #import "OrderDetailsOfMyEmployeesController.h"
 
@@ -92,32 +93,102 @@
         cell.MiddleButton.hidden = YES;
         cell.waitLabel.text = @"进行中";
         [cell.stateButton setTitle:@"确认完工" forState:UIControlStateNormal];
-    } else if (indexPath.section == 5) {
+    } else if (cell.jobModel.orderStatusGz.intValue == 5) {
         cell.timeLabel.text = @"下架时间";
         cell.startWorkButton.hidden = YES;
         cell.MiddleButton.hidden = NO;
         cell.waitLabel.text = @"验收中";
         [cell.MiddleButton setTitle:@"驳回" forState:UIControlStateNormal];
         [cell.stateButton setTitle:@"确认完工" forState:UIControlStateNormal];
-    } else if (indexPath.section == 6) {
+    } else if (cell.jobModel.orderStatusGz.intValue == 6) {
         cell.timeLabel.text = @"驳回时间";
         cell.startWorkButton.hidden = YES;
         cell.MiddleButton.hidden = NO;
         cell.waitLabel.text = @"已完成";
         [cell.MiddleButton setTitle:@"删除订单" forState:UIControlStateNormal];
         [cell.stateButton setTitle:@"去评价" forState:UIControlStateNormal];
-    } else if (indexPath.section == 7) {
+    } else if (cell.jobModel.orderStatusGz.intValue == 7) {
         cell.startWorkButton.hidden = YES;
         cell.MiddleButton.hidden = YES;
         cell.waitLabel.text = @"已评价";
         [cell.stateButton setTitle:@"删除订单" forState:UIControlStateNormal];
     }
+    
+    WeakCell;
+    WeakSelf;
+    cell.cellBlock = ^(MyOddJobModel * model) {
+    if ([weakCell.stateButton.currentTitle isEqual:@"删除订单"]) {
+             [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/employerCore/deleteOrder"] params:@{@"id":NoneNull(model.idName)} success:^(id  _Nonnull response) {
+                 if (response[@"code"] && [response[@"code"] intValue] == 0) {
+                     [weakSelf netWorking];
+                 } else {
+                     if (response[@"msg"]) {
+                         [WHToast showErrorWithMessage:response[@"msg"]];
+                     } else {
+                         [WHToast showErrorWithMessage:@"删除失败"];
+                     }
+                 }
+             } fail:^(NSError * _Nonnull error) {
+                 
+             } showHUD:YES];
+         } else if ([weakCell.stateButton.currentTitle isEqual:@"确认完工"]) {
+             [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/employerCore/confirmWorkButton"] params:@{@"id":NoneNull(model.idName)} success:^(id  _Nonnull response) {
+                 if (response && [response[@"code"] intValue] == 0) {
+                                   [weakSelf netWorking];
+                               } else {
+                                   if (response[@"msg"]) {
+                                       [WHToast showErrorWithMessage:response[@"msg"]];
+                                   } else {
+                                       [WHToast showErrorWithMessage:@"确认完工失败"];
+                                   }
+                               }
+             } fail:^(NSError * _Nonnull error) {
+                 
+             } showHUD:YES];
+         } else if ([weakCell.stateButton.currentTitle isEqual:@"去评价"]) {
+             ToEvaluateEmployerController *teec = [ ToEvaluateEmployerController new];
+             teec.model = model;
+             [weakSelf.navigationController pushViewController:teec animated:YES];
+         }
+    };
+   cell.middlleButtonBlock = ^(MyOddJobModel * model) {
+       if ([weakCell.MiddleButton.currentTitle isEqual:@"驳回"]) {
+           [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/employerCore/TurnDown"] params:@{@"id":NoneNull(model.idName)} success:^(id  _Nonnull response) {
+                   if (response && [response[@"code"] intValue] == 0) {
+                                     [weakSelf netWorking];
+                                 } else {
+                                     if (response[@"msg"]) {
+                                         [WHToast showErrorWithMessage:response[@"msg"]];
+                                     } else {
+                                         [WHToast showErrorWithMessage:@"驳回失败"];
+                                     }
+                                 }
+               } fail:^(NSError * _Nonnull error) {
+                   
+               } showHUD:YES];
+       } else if ([weakCell.MiddleButton.currentTitle isEqual:@"删除订单"]) {
+            [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/employerCore/deleteOrder"] params:@{@"id":NoneNull(model.idName)} success:^(id  _Nonnull response) {
+                if (response[@"code"] && [response[@"code"] intValue] == 0) {
+                    [weakSelf netWorking];
+                } else {
+                    if (response[@"msg"]) {
+                        [WHToast showErrorWithMessage:response[@"msg"]];
+                    } else {
+                        [WHToast showErrorWithMessage:@"删除失败"];
+                    }
+                }
+            } fail:^(NSError * _Nonnull error) {
+                
+            } showHUD:YES];
+        }
+   };
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *idName = [_jobModelArray[indexPath.section] idName];
     OrderDetailsOfMyEmployeesController *odvc = [OrderDetailsOfMyEmployeesController new];
-    
+    odvc.idName = NoneNull(idName);
     [self.navigationController pushViewController:odvc animated:YES];
 }
 

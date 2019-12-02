@@ -789,6 +789,9 @@
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [_textView endEditing:YES];
+    [_textFieldCellArray enumerateObjectsUsingBlock:^(EmployerCertificationTexyfieldCell  * cell, NSUInteger idx, BOOL * _Nonnull stop) {
+          [cell.textField endEditing:YES];
+    }];
     _indexpath = indexPath;
     if (indexPath.section == 0 && indexPath.row == 2) {
         _JobArray = _mutableArray;

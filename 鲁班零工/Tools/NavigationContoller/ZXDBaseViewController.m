@@ -16,12 +16,27 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    GlobalSingleton.gS_ShareInstance.currentViewController = self;
+    //手势返回开启
+    self.navigationController.interactivePopGestureRecognizer.delegate = (id)self;
     self.navigationController.navigationBar.barTintColor = UIColor.whiteColor;
     self.navigationController.navigationBar.tintColor = UIColor.whiteColor;
 }
-
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if (self.navigationController && (self.navigationController.viewControllers.firstObject != self))
+    {
+        self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+    }
+    else
+    {
+        self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    }
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.navigationController.navigationBarHidden = NO;
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
     backButton.frame = CGRectMake(-30, 0, 35, 35);
@@ -43,6 +58,7 @@
 }
 
 - (void)setTitle:(NSString *)title {
+    [super setTitle:title];
     _titleLabel.text  = title;
     [_titleLabel sizeToFit];
 }

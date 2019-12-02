@@ -81,9 +81,11 @@ typedef NS_ENUM(NSUInteger, ZXD_NetWorking_ENUM) {
         } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
 //            DLog(@"请求结果=%@",responseObject);
             if (success) {
+                [self setCookieUsingSelfFunc:task];
                 if (responseObject) {
                                   if ([responseObject[@"code"] intValue] == 600) {
-                                      [UIApplication sharedApplication].keyWindow.rootViewController = [LoginViewController new];
+                                      LoginViewController *login = [[LoginViewController alloc] init];login.isRe_visit = YES;
+                                      [GlobalSingleton.gS_ShareInstance.currentViewController presentViewController:login animated:YES completion:nil];
                                   }
                               }
                 success(responseObject);
@@ -108,9 +110,11 @@ typedef NS_ENUM(NSUInteger, ZXD_NetWorking_ENUM) {
         } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
 //             DLog(@"请求成功=%@",responseObject);
             if (success) {
+                [self setCookieUsingSelfFunc:task];
                 if (responseObject) {
                     if ([responseObject[@"code"] intValue] == 600) {
-                        [UIApplication sharedApplication].keyWindow.rootViewController = [LoginViewController new];
+                         LoginViewController *login = [[LoginViewController alloc] init];login.isRe_visit = YES;
+                         [GlobalSingleton.gS_ShareInstance.currentViewController presentViewController:login animated:YES completion:nil];
                     }
                 }
                 success(responseObject);
@@ -132,9 +136,11 @@ typedef NS_ENUM(NSUInteger, ZXD_NetWorking_ENUM) {
     }  else if (type == ZXD_NetWorking_ENUM_PUT){
         sessionTask = [manager PUT:urlStr parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
             if (success) {
+           [self setCookieUsingSelfFunc:task];
                 if (responseObject) {
                                   if ([responseObject[@"code"] intValue] == 600) {
-                                      [UIApplication sharedApplication].keyWindow.rootViewController = [LoginViewController new];
+                                       LoginViewController *login = [[LoginViewController alloc] init];login.isRe_visit = YES;
+                                       [GlobalSingleton.gS_ShareInstance.currentViewController presentViewController:login animated:YES completion:nil];
                                   }
                               }
                 success(responseObject);
@@ -160,7 +166,17 @@ typedef NS_ENUM(NSUInteger, ZXD_NetWorking_ENUM) {
     }
     return sessionTask;
 }
-
++ (void)setCookieUsingSelfFunc:(NSURLSessionDataTask *)task {
+    //获取 Cookie
+    NSHTTPURLResponse* response = (NSHTTPURLResponse* )task.response;
+    NSDictionary *allHeaderFieldsDic = response.allHeaderFields;
+    NSString *setCookie = allHeaderFieldsDic[@"Set-Cookie"];
+    if (setCookie != nil) {
+       NSString *cookie = [[setCookie componentsSeparatedByString:@";"] objectAtIndex:0];
+       // 这里对cookie进行存储
+       [[NSUserDefaults standardUserDefaults] setObject:cookie forKey:@"Set-Cookiesss"];
+    }
+}
 + (ZXDURLSessionTask *)uploadWithImage:(UIImage *)image url:(NSString *)url filename:(NSString *)filename name:(NSString *)name params:(NSDictionary *)params progress:(ZXDUploadProgress)progress success:(ZXDResponseSuccess)success fail:(ZXDResponseFail)fail showHUD:(BOOL)showHUD {
 //    DLog(@"请求地址----%@\n    请求参数----%@",url,params);
     if (url==nil) {
@@ -269,7 +285,6 @@ typedef NS_ENUM(NSUInteger, ZXD_NetWorking_ENUM) {
 }
 
 
-
 +(AFHTTPSessionManager *)getAFManager {
     
     [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
@@ -278,6 +293,8 @@ typedef NS_ENUM(NSUInteger, ZXD_NetWorking_ENUM) {
     manager.responseSerializer = [AFJSONResponseSerializer serializer];//设置返回数据为json
     manager.requestSerializer.stringEncoding = NSUTF8StringEncoding;
     manager.requestSerializer.timeoutInterval = 10;
+    manager.requestSerializer.HTTPShouldHandleCookies = YES;
+  
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithArray:@[@"application/json",
                                                                               @"text/html",
                                                                               @"text/json",
@@ -285,6 +302,17 @@ typedef NS_ENUM(NSUInteger, ZXD_NetWorking_ENUM) {
                                                                               @"text/javascript",
                                                                               @"text/xml",
                                                                               @"image/*"]];
+    // 如果已有Cookie, 则把你的cookie符上
+       NSString *cookie = [[NSUserDefaults standardUserDefaults] objectForKey:@"Set-Cookiesss"];
+           if (cookie != nil) {
+               [manager.requestSerializer setValue:cookie forHTTPHeaderField:@"Set-Cookie"];
+           }
+//    清除 cookie
+//    NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+//      NSArray *_tmpArray = [NSArray arrayWithArray:[cookieStorage cookies]];
+//      for (id obj in _tmpArray) {
+//          [cookieStorage deleteCookie:obj];
+//      }
     return manager;
 }
 

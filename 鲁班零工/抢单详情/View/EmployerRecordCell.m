@@ -27,7 +27,7 @@
     _leftLabel.textColor = RGBHex(0x0C0D0D);
     [self.contentView addSubview:_leftLabel];
     
-    _rightLabel = [[UILabel alloc] initWithFrame:AutoFrame(175, 17, 189, 11)];
+    _rightLabel = [[UILabel alloc] initWithFrame:AutoFrame(90, 17, 274, 11)];
     _rightLabel.font  = [UIFont systemFontOfSize:11*ScalePpth];
     _rightLabel.textColor = RGBHex(0x999999);
     _rightLabel.textAlignment = NSTextAlignmentRight;

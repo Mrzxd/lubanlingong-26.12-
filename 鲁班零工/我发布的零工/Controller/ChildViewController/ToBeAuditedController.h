@@ -9,9 +9,10 @@
 #import "ZXDBaseViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
+typedef void (^OrderDetailBlock)(NSInteger type);
 @interface ToBeAuditedController : ZXDBaseViewController
-
+@property (nonatomic, strong) OrderDetailBlock orderDetailBlock;
+@property (nonatomic, assign) BOOL isService;
 @end
 
 NS_ASSUME_NONNULL_END

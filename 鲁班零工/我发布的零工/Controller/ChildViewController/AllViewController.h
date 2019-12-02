@@ -7,12 +7,16 @@
 //
 
 #import "ZXDBaseViewController.h"
-typedef void (^OrderDetailBlock)(NSInteger type);
+
 NS_ASSUME_NONNULL_BEGIN
+
+typedef void (^OrderDetailBlock)(NSInteger type);
 
 @interface AllViewController : ZXDBaseViewController
 
 @property (nonatomic, strong) OrderDetailBlock orderDetailBlock;
+@property (nonatomic, assign) BOOL isService;
+
 @end
 
 NS_ASSUME_NONNULL_END
