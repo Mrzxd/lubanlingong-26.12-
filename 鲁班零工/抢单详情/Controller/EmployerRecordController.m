@@ -39,6 +39,17 @@
     [_array addObject:[[NSMutableArray alloc] init]];
     [self.view addSubview:self.tableView];
     [self netWorking];
+    WeakSelf;
+    dispatch_after(2, dispatch_get_main_queue(), ^{
+       
+    });
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+         if ([weakSelf detectLoginStatusIsNoLogined]) {
+                      [WHToast showErrorWithMessage:@"因涉及到核心用户信息无法获取到数据，你需要登录才能将您的操作记录展示出来！" duration:3.9 finishHandler:nil];
+                         return;
+               }
+    });
+   
 }
 - (void)netWorking {
     WeakSelf;
@@ -188,6 +199,10 @@
               
           } showHUD:YES];
     }
+//    if ([self detectLoginStatusIsNoLogined]) {
+//              [self toLoginWithInfo:@"因涉及到核心用户信息无法获取到数据，你需要登录才能将您的操作记录展示出来！"];
+//              return;
+//          }
 }
 
 

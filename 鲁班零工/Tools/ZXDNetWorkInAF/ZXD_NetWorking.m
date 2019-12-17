@@ -84,8 +84,9 @@ typedef NS_ENUM(NSUInteger, ZXD_NetWorking_ENUM) {
                 [self setCookieUsingSelfFunc:task];
                 if (responseObject) {
                                   if ([responseObject[@"code"] intValue] == 600) {
-                                      LoginViewController *login = [[LoginViewController alloc] init];login.isRe_visit = YES;
-                                      [GlobalSingleton.gS_ShareInstance.currentViewController presentViewController:login animated:YES completion:nil];
+                                      [WHToast showErrorWithMessage:@"因为您尚未登录暂时无法显示您所有数据" duration:3 finishHandler:nil];
+//                                      LoginViewController *login = [[LoginViewController alloc] init];login.isRe_visit = YES;
+//                                      [GlobalSingleton.gS_ShareInstance.currentViewController presentViewController:login animated:YES completion:nil];
                                   }
                               }
                 success(responseObject);
@@ -113,8 +114,9 @@ typedef NS_ENUM(NSUInteger, ZXD_NetWorking_ENUM) {
                 [self setCookieUsingSelfFunc:task];
                 if (responseObject) {
                     if ([responseObject[@"code"] intValue] == 600) {
-                         LoginViewController *login = [[LoginViewController alloc] init];login.isRe_visit = YES;
-                         [GlobalSingleton.gS_ShareInstance.currentViewController presentViewController:login animated:YES completion:nil];
+                        [WHToast showErrorWithMessage:@"因为您尚未登录暂时无法显示您所有数据" duration:3 finishHandler:nil];
+//                         LoginViewController *login = [[LoginViewController alloc] init];login.isRe_visit = YES;
+//                         [GlobalSingleton.gS_ShareInstance.currentViewController presentViewController:login animated:YES completion:nil];
                     }
                 }
                 success(responseObject);
@@ -139,8 +141,9 @@ typedef NS_ENUM(NSUInteger, ZXD_NetWorking_ENUM) {
            [self setCookieUsingSelfFunc:task];
                 if (responseObject) {
                                   if ([responseObject[@"code"] intValue] == 600) {
-                                       LoginViewController *login = [[LoginViewController alloc] init];login.isRe_visit = YES;
-                                       [GlobalSingleton.gS_ShareInstance.currentViewController presentViewController:login animated:YES completion:nil];
+                                      [WHToast showErrorWithMessage:@"因为您尚未登录暂时无法显示您所有数据" duration:3 finishHandler:nil];
+//                                       LoginViewController *login = [[LoginViewController alloc] init];login.isRe_visit = YES;
+//                                       [GlobalSingleton.gS_ShareInstance.currentViewController presentViewController:login animated:YES completion:nil];
                                   }
                               }
                 success(responseObject);
@@ -232,7 +235,6 @@ typedef NS_ENUM(NSUInteger, ZXD_NetWorking_ENUM) {
 }
 
 + (ZXDURLSessionTask *)downloadWithUrl:(NSString *)url saveToPath:(NSString *)saveToPath progress:(ZXDDownloadProgress)progressBlock success:(ZXDResponseSuccess)success failure:(ZXDResponseFail)fail showHUD:(BOOL)showHUD {
-    
 //    DLog(@"请求地址----%@\n    ",url);
     if (url==nil) {
         return nil;

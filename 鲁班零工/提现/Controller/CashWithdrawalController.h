@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CashWithdrawalController : ZXDBaseViewController
 
+- (void)netWorking;
 @end
 
 NS_ASSUME_NONNULL_END

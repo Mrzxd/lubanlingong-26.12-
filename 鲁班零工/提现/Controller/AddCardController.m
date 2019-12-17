@@ -15,6 +15,7 @@
 @property (nonatomic, strong) NSMutableArray <UITextField *>*textFieldArray;
 @property (nonatomic, strong) UIView *mineheaderView;
 @property (nonatomic, strong) UIView *footerView;
+@property (nonatomic, strong) NSArray *infoArray;
 
 @end
 
@@ -97,8 +98,6 @@
 }
 
 - (void)cardButtonAction:(UIButton *)button {
-    _textFieldArray[1].text = @"6226221609479412";
-    _textFieldArray[2].text = @"371427199001201937";
     if ([_textFieldArray[0] text].length == 0) {
         [WHToast showErrorWithMessage:@"请输入持卡人姓名"];
         return;
@@ -111,21 +110,25 @@
         [WHToast showErrorWithMessage:@"请输入正确的身份证号吗"];
         return;
     }
-    WeakSelf;
-    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/apiBank/add"] params:@{
-        @"name":[_textFieldArray[0] text],
-        @"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userId"],
-        @"bankCard":[_textFieldArray[1] text],
-        @"cardId":[_textFieldArray[2] text]
-    } success:^(id  _Nonnull response) {
-        if (response && response[@"code"] && response[@"data"] && [response[@"code"] intValue] == 0) {
-            VerificationCardController *vcc = [VerificationCardController new];
-            vcc.cardDictionary = response[@"data"];
-            [weakSelf.navigationController pushViewController:vcc animated:YES];
-        }
-    } fail:^(NSError * _Nonnull error) {
-            [WHToast showErrorWithMessage:@"网络错误"];
-    } showHUD:YES];
+    _infoArray = @[_textFieldArray[0].text,_textFieldArray[1].text,_textFieldArray[2].text];
+    VerificationCardController *vcc = [VerificationCardController new];
+    vcc.infoArray = _infoArray;
+    [self.navigationController pushViewController:vcc animated:YES];
+//    WeakSelf;
+//    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/apiBank/add"] params:@{
+//        @"name":[_textFieldArray[0] text],
+//        @"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userId"],
+//        @"bankCard":[_textFieldArray[1] text],
+//        @"cardId":[_textFieldArray[2] text]
+//    } success:^(id  _Nonnull response) {
+//        if (response && response[@"code"] && response[@"data"] && [response[@"code"] intValue] == 0) {
+//            VerificationCardController *vcc = [VerificationCardController new];
+//            vcc.cardDictionary = response[@"data"];
+//            [weakSelf.navigationController pushViewController:vcc animated:YES];
+//        }
+//    } fail:^(NSError * _Nonnull error) {
+//            [WHToast showErrorWithMessage:@"网络错误"];
+//    } showHUD:YES];
 }
 
 - (UITextField *)setUpTextFieldWithHeight:(CGFloat)height String:(NSString *)string {

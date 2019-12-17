@@ -135,6 +135,7 @@
        [self presentViewController:navi animated:YES completion:nil];
 //     [self real_name_authentication_query:@"1"];
 }
+
 - (void)real_name_authentication_query:(NSString *)type {
     WeakSelf;
     [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingString:@"/ReleaseWork/CardId"] params:@{@"type":type NonNull} success:^(id  _Nonnull response) {
@@ -203,4 +204,5 @@
         LBNavigationController *navi = [[LBNavigationController alloc] initWithRootViewController:serviceAuthenticationvc];
         [self presentViewController:navi animated:YES completion:nil];
 }
+
 @end

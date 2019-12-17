@@ -75,7 +75,14 @@
         loginButton.layer.cornerRadius = 45.0/2*ScalePpth;
         loginButton.layer.masksToBounds = YES;
         loginButton.clipsToBounds = YES;
+        [loginButton addTarget:self action:@selector(loginButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:loginButton];
+    }
+}
+
+- (void)loginButtonAction:(UIButton *)button {
+    if (_cellBlock) {
+        _cellBlock(nil);
     }
 }
 

@@ -126,6 +126,7 @@
 }
 - (void)imageButtonAction:(UIButton *)button {
 //    EmployeeRecordsController *ERVC = [EmployeeRecordsController new];
+   
     EmployerRecordController *ERVC = [EmployerRecordController new];
     ERVC.releaseId = _detailModel.releaseId NonNull;ERVC.isService = YES;
     [self.navigationController pushViewController:ERVC animated:NO];

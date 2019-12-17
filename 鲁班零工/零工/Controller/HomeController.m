@@ -88,6 +88,7 @@
                    @"workTypeId":@(weakSelf.toIndex),
                } success:^(id  _Nonnull response) {
                 weakSelf.pageListModel = [PageListModel mj_objectWithKeyValues:response[@"data"]];
+                 GlobalSingleton.gS_ShareInstance.pageListModel = weakSelf.pageListModel;
                 [weakSelf.tableView reloadData];
                } fail:^(NSError * _Nonnull error) {
                    
@@ -114,6 +115,7 @@
                         [listArray addObject:obj];
                     }];
                     weakSelf.pageListModel.list = listArray;
+                     GlobalSingleton.gS_ShareInstance.pageListModel = weakSelf.pageListModel;
                     [weakSelf.tableView reloadData];
                 }
                } fail:^(NSError * _Nonnull error) {
@@ -231,35 +233,42 @@
 
 
 
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    WeakSelf;
+       [ZXD_NetWorking getWithUrl:[rootUrl stringByAppendingString:@"/ReleaseWork/WorkSort1"] params:@{} success:^(id  _Nonnull response) {
+           if (response && response[@"data"]) {
+               weakSelf.listModelArray = [HomeListModel mj_objectArrayWithKeyValuesArray:response[@"data"]];
+               [weakSelf addsegerbar];
+               [[NSUserDefaults standardUserDefaults] setObject:response[@"data"] forKey:@"HomeListModelArray"];
+           }
+       } fail:^(NSError * _Nonnull error) {
+
+       } showHUD:NO];
+       [ZXD_NetWorking postWithUrl:[rootUrl  stringByAppendingString:@"/ReleaseWork/select/workListHoem"] params:@{
+           @"page":@"1",
+           @"pageSize":@"10",
+           @"workTypeId":@"-1",
+       } success:^(id  _Nonnull response) {
+           weakSelf.pageListModel = [PageListModel mj_objectWithKeyValues:response[@"data"]];
+           GlobalSingleton.gS_ShareInstance.pageListModel = weakSelf.pageListModel;
+           [weakSelf.tableView reloadData];
+       } fail:^(NSError * _Nonnull error) {
+
+       } showHUD:YES];
+}
+
 #pragma mark ----- viewDidLoad
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    _toIndex = -1;
     self.navigationController.navigationBar.translucent = NO;
     self.view.backgroundColor = RGBHex(0xf0f0f0);
     GlobalSingleton.gS_ShareInstance.contentType = @"abc";
     [self.view addSubview:self.tableView];
-    WeakSelf;
-    [ZXD_NetWorking getWithUrl:[rootUrl stringByAppendingString:@"/ReleaseWork/WorkSort1"] params:@{} success:^(id  _Nonnull response) {
-        if (response && response[@"data"]) {
-            weakSelf.listModelArray = [HomeListModel mj_objectArrayWithKeyValuesArray:response[@"data"]];
-            [weakSelf addsegerbar];
-            [[NSUserDefaults standardUserDefaults] setObject:response[@"data"] forKey:@"HomeListModelArray"];
-        }
-    } fail:^(NSError * _Nonnull error) {
 
-    } showHUD:NO];
-    [ZXD_NetWorking postWithUrl:[rootUrl  stringByAppendingString:@"/ReleaseWork/select/workListHoem"] params:@{
-        @"page":@"1",
-        @"pageSize":@"10",
-        @"workTypeId":@"-1",
-    } success:^(id  _Nonnull response) {
-        weakSelf.pageListModel = [PageListModel mj_objectWithKeyValues:response[@"data"]];
-        [weakSelf.tableView reloadData];
-    } fail:^(NSError * _Nonnull error) {
-
-    } showHUD:YES];
 }
 - (void)addsegerbar {
     NSMutableArray *mutableArray = [[NSMutableArray alloc] initWithArray: @[@"今日推荐",@"抢单中心"]];
@@ -328,5 +337,10 @@
     };
     return cell;
 }
-
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    PageContentListModel * model = _pageListModel.list[indexPath.section];
+    GrabdDetailsController *gdc = [GrabdDetailsController new];
+    gdc.listModel = model;
+    [self.navigationController pushViewController:gdc animated:NO];
+}
 @end

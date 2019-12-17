@@ -70,5 +70,22 @@
      else
          [self.navigationController popViewControllerAnimated:NO];
 }
+- (BOOL)detectLoginStatusIsNoLogined {
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"userId"]) {
+        return YES;
+    }
+    return NO;
+}
+- (void)toLoginWithInfo:(NSString *)info {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提醒" message:info delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"登录", nil];
+    [alert show];
+    
+}
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        LoginViewController *login = [[LoginViewController alloc] init];login.isRe_visit = YES;
+        [GlobalSingleton.gS_ShareInstance.currentViewController presentViewController:login animated:YES completion:nil];
+    }
+}
 
 @end

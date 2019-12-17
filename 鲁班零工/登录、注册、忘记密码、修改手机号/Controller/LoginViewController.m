@@ -143,7 +143,11 @@
                                                                                LBTabBarController *tabbarVc = [LBTabBarController new];
                                                                                 [weakSelf presentViewController:tabbarVc animated:YES completion:nil];
                                                                            } else {
-                                                                               [WHToast showErrorWithMessage:@"登录失败"];
+                                                                               if ( response && response[@"msg"]) {
+                                                                                    [WHToast showErrorWithMessage:response[@"msg"]];
+                                                                               } else {
+                                                                                   [WHToast showErrorWithMessage:@"登录失败"];
+                                                                               }
                                                                            }
     } fail:^(NSError * _Nonnull error) {
         [WHToast showErrorWithMessage:@"网络错误"];

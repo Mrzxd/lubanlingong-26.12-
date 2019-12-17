@@ -16,7 +16,8 @@
 
 #import "MyOddJobModel.h"
 #import "ReleasedJobsModel.h"
-
+#import <AlipaySDK/AlipaySDK.h>
+#import "LoginViewController.h"
 #import "EmployerCenterOrderDetailController.h"
 #import "UIScrollView+MJRefreshEX.h"
 #import "ZXD_NetWorking.h"
@@ -68,7 +69,7 @@ typedef NS_ENUM(NSInteger,OrderDetail_Type){
 };
 
 
-#define  rootUrl @"http://192.168.1.106"
+#define  rootUrl @"http://117.50.44.219:8085"
 
 #define NonNull ?:@""
  #define NonNullNum ?:@0

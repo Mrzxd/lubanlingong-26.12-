@@ -102,7 +102,7 @@
     [backGroundView addSubview:mybalanceLabel];
     
     balanceLabel = [[UILabel alloc] initWithFrame:AutoFrame(18, 41, 300, 0)];
-    balanceLabel.text = @"88.66";
+    balanceLabel.text = @"0";
     balanceLabel.font = [UIFont boldSystemFontOfSize:38*ScalePpth];
     balanceLabel.textColor = [UIColor whiteColor];
     [balanceLabel sizeToFit];
@@ -233,16 +233,32 @@
     [super viewDidAppear:animated];
     self.navigationController.navigationBarHidden = YES;
 }
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self toNet];
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.navigationBar.translucent = NO;
     self.view.backgroundColor = RGBHex(0xffffff);
     [self.view addSubview:self.tableView];
-    [self netWorking];
+    
 }
 - (void)netWorking {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提醒" message:@"您需要登录才能显示具体个人信息" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"登录", nil];
+    [alert show];
+    
+}
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        LoginViewController *login = [[LoginViewController alloc] init];login.isRe_visit = YES;
+        [GlobalSingleton.gS_ShareInstance.currentViewController presentViewController:login animated:YES completion:nil];
+    }
+}
+- (void)toNet {
     WeakSelf;
-    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/CoreInfo/Core"] params:@{@"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userId"]} success:^(id  _Nonnull response) {
+    NSString *userid = [[NSUserDefaults standardUserDefaults] objectForKey:@"userId"];
+    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/CoreInfo/Core"] params:@{@"userId":NoneNull(userid)} success:^(id  _Nonnull response) {
         if (response[@"code"] && [response[@"code"] intValue] == 0) {
             weakSelf.data = response[@"data"];
             if (weakSelf.data.count) {
@@ -301,7 +317,6 @@
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
     return [[UIView alloc] initWithFrame:AutoFrame(0, 0, 0.0000001, 0.0000001)];
 }
-
 - (MineTableCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     MineTableCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MineTableCell" forIndexPath:indexPath];
     if (!cell) {
@@ -311,7 +326,6 @@
     cell.images = @[@"my_job",@"my_core",@"my_share",@"my_realname",@"my_customer",@"my_about",@"my_exit"][indexPath.row];
     return cell;
 }
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row == 3) {
         RealNameAuthenticationController *rnac = [RealNameAuthenticationController new];
@@ -322,6 +336,7 @@
         [self.navigationController pushViewController:[EmployeeCentreController new] animated:YES];
     } else if (indexPath.row == 6) {
           [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"login_state"];
+          [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"userId"];
         if (GlobalSingleton.gS_ShareInstance.state == 1) {
             LoginViewController *loginController = [LoginViewController new];
             GlobalSingleton.gS_ShareInstance.systemWindow.rootViewController = loginController;
@@ -333,6 +348,15 @@
         [self.navigationController pushViewController:[EmployerCenterController new] animated:YES];
     } else if (indexPath.row == 2) {
         [self presentViewController:[SharingAwardsController new] animated:YES completion:nil];
+    } else if (indexPath.row == 4) {
+        [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingString:@"/WorkerCore/contPhone"] params:@{} success:^(id  _Nonnull response) {
+            if (response && response[@"data"] && response[@"data"][@"phone"]) {
+                NSMutableString *phone=[[NSMutableString alloc] initWithFormat:@"telprompt://%@",response[@"data"][@"phone"] NonNull];
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:phone]];
+            }
+        } fail:^(NSError * _Nonnull error) {
+            
+        } showHUD:YES];
     }
 }
 

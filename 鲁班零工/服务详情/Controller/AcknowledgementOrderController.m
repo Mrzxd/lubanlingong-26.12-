@@ -189,6 +189,9 @@
             rsc.idName = response[@"data"][@"id"];
             rsc.phone = response[@"data"][@"phone"];
             [weakSelf.navigationController pushViewController:rsc animated:YES];
+        } else if (response && [response[@"code"] intValue] == 1) {
+            [WHToast showErrorWithMessage:@"尚未进行雇主实名认证，请去实名认证!"];
+            [weakSelf.navigationController popToRootViewControllerAnimated:YES];
         }
     } fail:^(NSError * _Nonnull error) {
         

@@ -11,9 +11,9 @@
 
 @interface ToEvaluateEmployerController () <HCRatingViewDelegate,UITextViewDelegate>
 
-@property  UITextView *textView;
-@property (nonatomic, strong)HCRatingView *ratingView1;
-@property (nonatomic, strong)HCRatingView *ratingView2;
+@property (nonatomic, strong) UITextView *textView;
+@property (nonatomic, strong) HCRatingView *ratingView1;
+@property (nonatomic, strong) HCRatingView *ratingView2;
 
 @end
 
@@ -50,8 +50,8 @@
     NSString *orderSalaryDay = _model.orderSalaryDay?:_detailModel.orderSalaryDay;
     NSString *ordernum = _model.orderNumbering?:_detailModel.orderNumbering;
     [topCoverView addSubview:[self rightLabel:NoneNull(name) :14.5]];
-     [topCoverView addSubview:[self rightLabel:orderOrderName :55.5]];
-       [topCoverView addSubview:[self rightLabel:[NSString stringWithFormat:@"%@/%@",orderSalary,orderSalaryDay] :96]];
+    [topCoverView addSubview:[self rightLabel:orderOrderName :55.5]];
+    [topCoverView addSubview:[self rightLabel:[NSString stringWithFormat:@"%@/%@",orderSalary,orderSalaryDay] :96]];
     [topCoverView addSubview:[self rightLabel:[self getTimeFromTimestamp:_model.creatOrderTime?:_detailModel.creatOrderTime NonNull] :136.5]];
     [topCoverView addSubview:[self rightLabel:NoneNull(ordernum) :178]];
     

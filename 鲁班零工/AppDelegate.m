@@ -27,14 +27,14 @@
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     GlobalSingleton.gS_ShareInstance.systemWindow = self.window;
     NSString *login_state = [[NSUserDefaults standardUserDefaults] objectForKey:@"login_state"];
-    if (login_state && [login_state isEqualToString:@"yes"]) {
+//    if (login_state && [login_state isEqualToString:@"yes"]) {
         GlobalSingleton.gS_ShareInstance.state = 1;
         self.window.rootViewController = [LBTabBarController new];
-    } else {
-        GlobalSingleton.gS_ShareInstance.state = 2;
-        LoginViewController *loginController = [LoginViewController new];
-        self.window.rootViewController = loginController;
-    }
+//    } else {
+//        GlobalSingleton.gS_ShareInstance.state = 2;
+//        LoginViewController *loginController = [LoginViewController new];
+//        self.window.rootViewController = loginController;
+//    }
     // Required - 启动 JMessage SDK
     [JMessage addDelegate:self withConversation:nil];
     [JMessage setupJMessage:launchOptions appKey:App_Key channel:nil apsForProduction:NO category:nil messageRoaming:NO];
@@ -172,6 +172,88 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    if ([url.host isEqualToString:@"safepay"]) {
+        // 支付跳转支付宝钱包进行支付，处理支付结果
+        [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
+            [self payResultWithDictionary:resultDic];
+        }];
+        
+        // 授权跳转支付宝钱包进行支付，处理支付结果
+        [[AlipaySDK defaultService] processAuth_V2Result:url standbyCallback:^(NSDictionary *resultDic) {
+            NSLog(@"result = %@",resultDic);
+            // 解析 auth code
+            NSString *result = resultDic[@"result"];
+            NSString *authCode = nil;
+            if (result.length>0) {
+                NSArray *resultArr = [result componentsSeparatedByString:@"&"];
+                for (NSString *subResult in resultArr) {
+                    if (subResult.length > 10 && [subResult hasPrefix:@"auth_code="]) {
+                        authCode = [subResult substringFromIndex:10];
+                        break;
+                    }
+                }
+            }
+            NSLog(@"授权结果 authCode = %@", authCode?:@"");
+            [self payResultWithDictionary:resultDic];
+        }];
+    }
+    return YES;
+}
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString*, id> *)options
+{
+    if ([url.host isEqualToString:@"safepay"]) {
+        // 支付跳转支付宝钱包进行支付，处理支付结果
+        [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
+            NSLog(@"result = %@",resultDic);
+            [self payResultWithDictionary:resultDic];
+        }];
+        
+        // 授权跳转支付宝钱包进行支付，处理支付结果
+        [[AlipaySDK defaultService] processAuth_V2Result:url standbyCallback:^(NSDictionary *resultDic) {
+            NSLog(@"result = %@",resultDic);
+            // 解析 auth code
+            NSString *result = resultDic[@"result"];
+            NSString *authCode = nil;
+            if (result.length>0) {
+                NSArray *resultArr = [result componentsSeparatedByString:@"&"];
+                for (NSString *subResult in resultArr) {
+                    if (subResult.length > 10 && [subResult hasPrefix:@"auth_code="]) {
+                        authCode = [subResult substringFromIndex:10];
+                        break;
+                    }
+                }
+            }
+            NSLog(@"授权结果 authCode = %@", authCode?:@"");
+            [self payResultWithDictionary:resultDic];
+        }];
+    }
+    return YES;
+}
 
+- (void)payResultWithDictionary:(NSDictionary *)resultDic {
+    if (resultDic && resultDic[@"resultStatus"]) {
+        if ([resultDic[@"resultStatus"] intValue] == 9000) {
+            [WHToast showSuccessWithMessage:@"订单支付成功"];
+        } else if ([resultDic[@"resultStatus"] intValue] == 8000) {
+            [WHToast showSuccessWithMessage:@"正在处理中，支付结果未知（有可能已经支付成功），请查询商户订单列表中订单的支付状态"];
+        } else if ([resultDic[@"resultStatus"] intValue] == 4000) {
+            [WHToast showErrorWithMessage:@"订单支付失败"];
+        } else if ([resultDic[@"resultStatus"] intValue] == 5000) {
+            [WHToast showErrorWithMessage:@"重复请求"];
+        } else if ([resultDic[@"resultStatus"] intValue] == 6001) {
+            [WHToast showErrorWithMessage:@"用户中途取消"];
+        } else if ([resultDic[@"resultStatus"] intValue] == 6002) {
+            [WHToast showErrorWithMessage:@"网络连接出错"];
+        } else if ([resultDic[@"resultStatus"] intValue] == 6004) {
+            [WHToast showErrorWithMessage:@"支付结果未知（有可能已经支付成功），请查询商户订单列表中订单的支付状态"];
+        } else {
+            [WHToast showErrorWithMessage:@"其它支付错误"];
+        }
+    } else {
+            [WHToast showErrorWithMessage:@"其它支付错误"];
+    }
+}
 
 @end

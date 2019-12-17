@@ -78,7 +78,7 @@
 - (void)closeButtonEnabledWithString:(NSString *)string {
     NSArray *dayArray = [string componentsSeparatedByString:@","];
     [_weekButtonArray enumerateObjectsUsingBlock:^(UIButton *button, NSUInteger idx, BOOL * _Nonnull stop) {
-        button.enabled = NO;
+        button.userInteractionEnabled = NO;
         button.selected = NO;
         NSInteger index = idx;
         [dayArray enumerateObjectsUsingBlock:^(NSString *day, NSUInteger idx, BOOL * _Nonnull stop) {

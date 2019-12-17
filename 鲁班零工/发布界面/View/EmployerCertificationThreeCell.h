@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) BOOL isServiceAuthenticationController;
 @property (nonatomic, strong) PhotoBlock photoBlock;
+@property (nonatomic, strong) OrderStatusCellBlock cellBlock;
 @property (nonatomic, strong) UIButton *fullfacePhoto;
 @property (nonatomic, strong) UIButton *negativePhoto;
 

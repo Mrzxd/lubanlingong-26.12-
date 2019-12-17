@@ -15,6 +15,7 @@
 
 @property (nonatomic, strong) UIButton *lastButton;
 @property (nonatomic, strong) UIView *grayView;
+@property (nonatomic, strong) UIImageView *nonDataView;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) MyOddJobModel * model;
 @property (nonatomic, strong) NSArray <MyOddJobModel *>*jobModelArray;
@@ -27,19 +28,37 @@
 @implementation OneViewController {
      UIView *bottomCoverView;
 }
-
+- (UIImageView *)nonDataView {
+    if (!_nonDataView) {
+        _nonDataView = [[UIImageView alloc] initWithFrame:AutoFrame(50, 94, 275, 200)];
+        _nonDataView.image = [UIImage imageNamed:@"indent_null"];
+        UILabel *nonLabel = [[UILabel alloc] initWithFrame:AutoFrame(15/2.0, 39+136, 260, 14)];
+        nonLabel.font = FontSize(14);
+        nonLabel.textAlignment = NSTextAlignmentCenter;
+        nonLabel.textColor = RGBHexAlpha(0x9999999, 1);
+        nonLabel.text = @"当前暂无订单";
+        [_nonDataView addSubview:nonLabel];
+    }
+    return _nonDataView;
+}
 - (void)netWorking {
     WeakSelf;
     [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingString:@"/WorkerCore/AllOrderFromList"] params:@{
-        @"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userId"],
+        @"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userId"] NonNull,
         @"type":@"0"
     } success:^(id  _Nonnull response) {
-        if (response && [response[@"code"] intValue] == 0 && response[@"data"]) {
+        if (response && [response[@"code"] intValue] == 0 && response[@"data"] && [response[@"data"] count]) {
             weakSelf.jobModelArray = [MyOddJobModel mj_objectArrayWithKeyValuesArray:response[@"data"]];
             [weakSelf.tableView reloadData];
+        } else {
+            weakSelf.tableView.hidden = YES;
+            [WHToast showErrorWithMessage:@"暂无数据"];
+            [weakSelf.view addSubview:weakSelf.nonDataView];
         }
     } fail:^(NSError * _Nonnull error) {
-        
+            [WHToast showErrorWithMessage:@"网络错误"];
+            weakSelf.tableView.hidden = YES;
+            [weakSelf.view addSubview:weakSelf.nonDataView];
     } showHUD:YES];
 }
 - (void)viewWillAppear:(BOOL)animated {

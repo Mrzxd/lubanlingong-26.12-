@@ -97,18 +97,19 @@
     [_button setTitleColor:RGBHex(0x333333) forState:UIControlStateNormal];
     [contentView addSubview:_button];
 }
-//- (void)setListModel:(PageContentListModel *)listModel {
-//    _listModel = listModel;
-//    if (listModel) {
-//        nameLabel.text = NoneNull(listModel.workName);
-//        NSString *price = [NSString stringWithFormat:@"%@/%@", listModel.salary, listModel.salaryDay];
-//        dayPriceLabel.text = NoneNull(price);
-//        locationLabel.text = NoneNull(listModel.workPositino);
-//        rateLabel.text = [[NSString stringWithFormat:@"好评率：%@",NoneNull(listModel.praise)] stringByAppendingString:@"%"];
-//        personLabel.text = NoneNull(listModel.contactPeople);
-//        timeLabel.text = [NSString stringWithFormat:@"按%@",NoneNull(listModel.salaryDay)];
-//    }
-//}
+- (void)setListModel:(PageContentListModel *)listModel {
+    _listModel = listModel;
+    if (listModel) {
+        nameLabel.text = NoneNull(listModel.workName);
+        NSString *price = [NSString stringWithFormat:@"%@/%@", listModel.salary, listModel.salaryDay];
+        dayPriceLabel.text = NoneNull(price);
+        locationLabel.text = NoneNull(listModel.workPositino);
+        rateLabel.text = [[NSString stringWithFormat:@"好评率：%@",NoneNull(listModel.praise)] stringByAppendingString:@"%"];
+        personLabel.text = NoneNull(listModel.contactPeople);
+        timeLabel.text = [NSString stringWithFormat:@"按%@",NoneNull(listModel.salaryDay)];
+    }
+}
+
 - (void)buttonAction:(UIButton *)button {
 //    if (_detailBlock &&_listModel) {
 //        _detailBlock(_listModel);

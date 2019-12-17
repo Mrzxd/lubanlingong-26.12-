@@ -233,7 +233,7 @@
             } else {
                 
             }
-                button.enabled = NO;
+                button.userInteractionEnabled = NO;
         }
     }];
 }

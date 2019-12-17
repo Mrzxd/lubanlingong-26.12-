@@ -18,6 +18,7 @@
 @interface GrabdDetailsController () <UITableViewDelegate,UITableViewDataSource,YTSegmentBarDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UIButton *starButton;
 @property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, assign) BOOL isJobRequirements;
 @property (nonatomic, strong) YTSegmentBar *segmentBar;
@@ -101,6 +102,13 @@
     WeakSelf;
     [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingString:@"/ReleaseWork/select/workinfo"] params:@{@"id":_listModel.idName NonNull} success:^(id  _Nonnull response) {
         if (response && response[@"data"]) {
+            if (response[@"data"][@"collection"]) {
+                if ([response[@"data"][@"collection"] intValue] == 1) {
+                    weakSelf.starButton.selected = YES;
+                } else {
+                    weakSelf.starButton.selected = NO;
+                }
+            }
             weakSelf.detailModel = [GrabdDetailsModel mj_objectWithKeyValues:response[@"data"]];
             if (weakSelf.detailModel.timeSelect) {
                 [weakSelf.detailModel.timeSelect containsString:@"1"]? weakSelf.detailModel.timeSelect = [weakSelf.detailModel.timeSelect stringByReplacingOccurrencesOfString:@"1" withString:@"周一"]:@"";
@@ -269,11 +277,11 @@
     [homeButton addTarget:self action:@selector(homeButtonAction) forControlEvents:UIControlEventTouchUpInside];
     [footerView addSubview:homeButton];
     
-    UIButton *starButton = [[UIButton alloc] initWithFrame:AutoFrame(101, 8, 20, 20)];
-    [starButton setImage:[UIImage imageNamed:@"not_to_collect"] forState:UIControlStateNormal];
-    [starButton setImage:[UIImage imageNamed:@"collect"] forState:UIControlStateSelected];
-    [starButton addTarget:self action:@selector(starButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [footerView addSubview:starButton];
+    _starButton = [[UIButton alloc] initWithFrame:AutoFrame(101, 8, 20, 20)];
+    [_starButton setImage:[UIImage imageNamed:@"not_to_collect"] forState:UIControlStateNormal];
+    [_starButton setImage:[UIImage imageNamed:@"collect"] forState:UIControlStateSelected];
+    [_starButton addTarget:self action:@selector(starButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [footerView addSubview:_starButton];
 //    [starButton addTarget:self action:@selector(homeButtonAction) forControlEvents:UIControlEventTouchUpInside];
     UILabel *homeLabel = [[UILabel alloc] initWithFrame:AutoFrame(31, 32, 40, 10)];
     homeLabel.textColor = RGBHex(0xB3B3B3);
@@ -283,7 +291,7 @@
     UILabel *starLabel = [[UILabel alloc] initWithFrame:AutoFrame(96, 32, 40, 10)];
     starLabel.textColor = RGBHex(0xB3B3B3);
     starLabel.font = FontSize(10);
-    starLabel.text = @"已收藏";
+    starLabel.text = @"收藏";
     
     UIButton *immediatelyButton = [[UIButton alloc] initWithFrame:AutoFrame(155, 0, 220, 47)];
     immediatelyButton.backgroundColor = RGBHex(0xFFD301);
@@ -357,7 +365,7 @@
     [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingString:@"/ReleaseWork/GrabTheOrder"] params:@{
         @"id":_detailModel.idName NonNull,
         @"amount":weakSelf.netWork_data[@"GrAmount"] NonNull,
-        @"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userId"]
+        @"userId":([[NSUserDefaults standardUserDefaults] objectForKey:@"userId"] NonNull)
     } success:^(id  _Nonnull response) {
         if (response && [response[@"code"] intValue] == 0) {
             if (response[@"data"]) {
@@ -370,13 +378,38 @@
                     [WHToast showErrorWithMessage:@"余额不足"];
                 }
             }
+        } else if (response && [response[@"code"] intValue] == 1) {
+            if (response && response[@"msg"]) {
+                [WHToast showErrorWithMessage:response[@"msg"] duration:2 finishHandler:^{
+                    [weakSelf.navigationController popToRootViewControllerAnimated:YES];
+                }];
+            }
         }
     } fail:^(NSError * _Nonnull error) {
         [WHToast showErrorWithMessage:@"网络错误"];
     } showHUD:YES];
 }
 - (void)starButtonAction:(UIButton *)button {
-    button.selected = !button.selected;
+    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingString:@"/ReleaseWork/collection"] params:@{@"id":NoneNull(_detailModel.idName)} success:^(id  _Nonnull response) {
+        if (response && response[@"code"] && [response[@"code"] intValue] == 0 && response[@"data"] && response[@"data"][@"collection"]) {
+            if ([response[@"data"][@"collection"] intValue] == 1) {
+                button.selected = YES;
+                 [WHToast showSuccessWithMessage:@"收藏成功"];
+            } else {
+                button.selected = NO;
+                 [WHToast showSuccessWithMessage:@"已取消收藏"];
+            }
+        } else {
+                button.selected = NO;
+            if (response && response[@"msg"]) {
+                [WHToast showErrorWithMessage:response[@"msg"]];
+            } else {
+                [WHToast showErrorWithMessage:@"收藏失败"];
+            }
+        }
+    } fail:^(NSError * _Nonnull error) {
+        [WHToast showErrorWithMessage:@"网络错误"];
+    } showHUD:YES];
 }
 
 

@@ -31,7 +31,7 @@
 - (void)netWorking {
     WeakSelf;
     [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:_isService?@"/CoreInfo/MyReleaseSkill":@"/CoreInfo/MyReleaseWork"] params:@{
-        @"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userId"],
+        @"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userId"] NonNull,
         @"type":@"4"
     } success:^(id  _Nonnull response) {
         if (response[@"code"] && [response[@"code"] intValue] == 0) {

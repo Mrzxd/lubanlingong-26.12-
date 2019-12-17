@@ -95,6 +95,7 @@
 		6125517A2366C25800BEDD9C /* ServiceContentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 612551792366C25800BEDD9C /* ServiceContentCell.m */; };
 		6125517D2366C54200BEDD9C /* AcknowledgementOrderController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6125517C2366C54200BEDD9C /* AcknowledgementOrderController.m */; };
 		61268A12238E2AB40067C661 /* ListRecordModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 61268A11238E2AB40067C661 /* ListRecordModel.m */; };
+		6129EE65239E77EB000D14F3 /* PrivacyProtocolController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6129EE64239E77EB000D14F3 /* PrivacyProtocolController.m */; };
 		612B69D3234D8F8F00447686 /* UIImage+WHToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 612B69A7234D8F8F00447686 /* UIImage+WHToast.m */; };
 		612B69D4234D8F8F00447686 /* WHToastConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 612B69A8234D8F8F00447686 /* WHToastConfig.m */; };
 		612B69D5234D8F8F00447686 /* WHToastView.m in Sources */ = {isa = PBXBuildFile; fileRef = 612B69A9234D8F8F00447686 /* WHToastView.m */; };
@@ -147,9 +148,12 @@
 		615CE8692352EF9400836431 /* MineTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 615CE8672352EF9400836431 /* MineTableCell.m */; };
 		615CE870235307F200836431 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 615CE86F235307F200836431 /* LoginViewController.m */; };
 		615CE87D2353187300836431 /* RegisterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 615CE87C2353187300836431 /* RegisterController.m */; };
+		617103242396145D00DE8C7B /* ManageBankCardsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 617103232396145D00DE8C7B /* ManageBankCardsCell.m */; };
+		6171032723961F1C00DE8C7B /* BankCardManagementController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6171032523961F1C00DE8C7B /* BankCardManagementController.m */; };
 		617B0E142357FA4100E46C1E /* PublishContentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 617B0E132357FA4100E46C1E /* PublishContentController.m */; };
 		617B0E1D23580A8400E46C1E /* EmployerCertificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 617B0E1C23580A8400E46C1E /* EmployerCertificationController.m */; };
 		617B0E202358105200E46C1E /* EmployerCertificationOneCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 617B0E1F2358105200E46C1E /* EmployerCertificationOneCell.m */; };
+		617B7BB0239E6C92001F6B85 /* UserAgreementController.m in Sources */ = {isa = PBXBuildFile; fileRef = 617B7BAF239E6C92001F6B85 /* UserAgreementController.m */; };
 		618E38CF235FEAE400CB8AFA /* SMSVerificationCodeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 618E38CE235FEAE400CB8AFA /* SMSVerificationCodeController.m */; };
 		618E38D6235FF59100CB8AFA /* OrderDetailsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 618E38D5235FF59100CB8AFA /* OrderDetailsController.m */; };
 		618E38E123601CD200CB8AFA /* CancleOrderController.m in Sources */ = {isa = PBXBuildFile; fileRef = 618E38E023601CD200CB8AFA /* CancleOrderController.m */; };
@@ -373,6 +377,8 @@
 		6125517C2366C54200BEDD9C /* AcknowledgementOrderController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AcknowledgementOrderController.m; sourceTree = "<group>"; };
 		61268A10238E2AB40067C661 /* ListRecordModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ListRecordModel.h; sourceTree = "<group>"; };
 		61268A11238E2AB40067C661 /* ListRecordModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ListRecordModel.m; sourceTree = "<group>"; };
+		6129EE63239E77EB000D14F3 /* PrivacyProtocolController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrivacyProtocolController.h; sourceTree = "<group>"; };
+		6129EE64239E77EB000D14F3 /* PrivacyProtocolController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PrivacyProtocolController.m; sourceTree = "<group>"; };
 		612B69A3234D8F8F00447686 /* UIImage+WHToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+WHToast.h"; sourceTree = "<group>"; };
 		612B69A4234D8F8F00447686 /* WHToastView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHToastView.h; sourceTree = "<group>"; };
 		612B69A5234D8F8F00447686 /* WHToastConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WHToastConfig.h; sourceTree = "<group>"; };
@@ -465,12 +471,18 @@
 		615CE86F235307F200836431 /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		615CE87B2353187300836431 /* RegisterController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RegisterController.h; sourceTree = "<group>"; };
 		615CE87C2353187300836431 /* RegisterController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RegisterController.m; sourceTree = "<group>"; };
+		617103222396145D00DE8C7B /* ManageBankCardsCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ManageBankCardsCell.h; sourceTree = "<group>"; };
+		617103232396145D00DE8C7B /* ManageBankCardsCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ManageBankCardsCell.m; sourceTree = "<group>"; };
+		6171032523961F1C00DE8C7B /* BankCardManagementController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BankCardManagementController.m; sourceTree = "<group>"; };
+		6171032623961F1C00DE8C7B /* BankCardManagementController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BankCardManagementController.h; sourceTree = "<group>"; };
 		617B0E122357FA4100E46C1E /* PublishContentController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PublishContentController.h; sourceTree = "<group>"; };
 		617B0E132357FA4100E46C1E /* PublishContentController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PublishContentController.m; sourceTree = "<group>"; };
 		617B0E1B23580A8400E46C1E /* EmployerCertificationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmployerCertificationController.h; sourceTree = "<group>"; };
 		617B0E1C23580A8400E46C1E /* EmployerCertificationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmployerCertificationController.m; sourceTree = "<group>"; };
 		617B0E1E2358105200E46C1E /* EmployerCertificationOneCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmployerCertificationOneCell.h; sourceTree = "<group>"; };
 		617B0E1F2358105200E46C1E /* EmployerCertificationOneCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmployerCertificationOneCell.m; sourceTree = "<group>"; };
+		617B7BAE239E6C92001F6B85 /* UserAgreementController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserAgreementController.h; sourceTree = "<group>"; };
+		617B7BAF239E6C92001F6B85 /* UserAgreementController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserAgreementController.m; sourceTree = "<group>"; };
 		618E38CD235FEAE400CB8AFA /* SMSVerificationCodeController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SMSVerificationCodeController.h; sourceTree = "<group>"; };
 		618E38CE235FEAE400CB8AFA /* SMSVerificationCodeController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SMSVerificationCodeController.m; sourceTree = "<group>"; };
 		618E38D4235FF59100CB8AFA /* OrderDetailsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OrderDetailsController.h; sourceTree = "<group>"; };
@@ -1187,6 +1199,10 @@
 			children = (
 				6120E891235EC5D00072E4F5 /* AboutUsController.h */,
 				6120E892235EC5D00072E4F5 /* AboutUsController.m */,
+				617B7BAE239E6C92001F6B85 /* UserAgreementController.h */,
+				617B7BAF239E6C92001F6B85 /* UserAgreementController.m */,
+				6129EE63239E77EB000D14F3 /* PrivacyProtocolController.h */,
+				6129EE64239E77EB000D14F3 /* PrivacyProtocolController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1492,6 +1508,8 @@
 		612CFEEB235D56D000BDECD2 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				6171032623961F1C00DE8C7B /* BankCardManagementController.h */,
+				6171032523961F1C00DE8C7B /* BankCardManagementController.m */,
 				612CFEEE235D575000BDECD2 /* CashWithdrawalController.h */,
 				612CFEEF235D575000BDECD2 /* CashWithdrawalController.m */,
 				612CFEF1235D5EAB00BDECD2 /* AddCardController.h */,
@@ -1507,6 +1525,8 @@
 		612CFEEC235D56D200BDECD2 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				617103222396145D00DE8C7B /* ManageBankCardsCell.h */,
+				617103232396145D00DE8C7B /* ManageBankCardsCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1903,6 +1923,7 @@
 				611D0EEA234D8BBE00391470 /* Frameworks */,
 				611D0EEB234D8BBE00391470 /* Resources */,
 				9AF1293603D09260658E3122 /* [CP] Embed Pods Frameworks */,
+				F3A4ED91D2B6277CB9F2EDB0 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2132,6 +2153,23 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-鲁班零工/Pods-鲁班零工-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		F3A4ED91D2B6277CB9F2EDB0 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-鲁班零工/Pods-鲁班零工-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-鲁班零工/Pods-鲁班零工-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-鲁班零工/Pods-鲁班零工-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -2153,6 +2191,8 @@
 				6120E897235EE53B0072E4F5 /* YTSegmentBarVC.m in Sources */,
 				6118C27D2362BCA40062AE02 /* TheOddJobsIReleasedController.m in Sources */,
 				612B69DC234D8F8F00447686 /* NSObject+JudgmentClass.m in Sources */,
+				6171032723961F1C00DE8C7B /* BankCardManagementController.m in Sources */,
+				617B7BB0239E6C92001F6B85 /* UserAgreementController.m in Sources */,
 				6124FB3423547F7600C18A81 /* OddJobCell.m in Sources */,
 				61137C7B237EB43300983C67 /* EmployerInformationController.swift in Sources */,
 				612551732366B4A800BEDD9C /* ServiceDetailsController.m in Sources */,
@@ -2170,6 +2210,7 @@
 				6118C2842362DBF60062AE02 /* EmployerCenterOrderDetailCell.m in Sources */,
 				6118C2742362BBA50062AE02 /* OnShelvesViewController.m in Sources */,
 				6118C27A2362BC410062AE02 /* RejectedController.m in Sources */,
+				617103242396145D00DE8C7B /* ManageBankCardsCell.m in Sources */,
 				619D35932387BAF7009EEE5A /* LookingForListModel.m in Sources */,
 				611B070C235953D100A2983F /* GrabdTableCell.m in Sources */,
 				611B07292359CC1400A2983F /* CallOutAnnotationView.m in Sources */,
@@ -2245,6 +2286,7 @@
 				6125517A2366C25800BEDD9C /* ServiceContentCell.m in Sources */,
 				612B69D6234D8F8F00447686 /* WHToast.m in Sources */,
 				6118C26E2362A6350062AE02 /* ToBeAuditedController.m in Sources */,
+				6129EE65239E77EB000D14F3 /* PrivacyProtocolController.m in Sources */,
 				6118C2772362BBFD0062AE02 /* OffShelfController.m in Sources */,
 				61D998212358644D00CDABFA /* PublishImageTableCell.m in Sources */,
 				611B07262359CA2D00A2983F /* CalloutMapAnnotation.m in Sources */,
@@ -2434,21 +2476,37 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2WTMSF4J24;
+				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/鲁班零工/GPAdaptationHeader.h";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/AFNetworking/AFNetworking.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/MBProgressHUD/MBProgressHUD.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/MJExtension/MJExtension.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/MJRefresh/MJRefresh.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Masonry/Masonry.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/SDWebImage/SDWebImage.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/YYCache/YYCache.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/YYModel/YYModel.framework/Headers\"",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"$(SRCROOT)/鲁班零工",
+					"\"${PODS_ROOT}/Headers/Public/WechatOpenSDK\"",
+				);
 				INFOPLIST_FILE = "鲁班零工/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.20;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2515,11 +2573,11 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "lubanlinggong-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = develop_1202_prof;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "鲁班零工/我的/分享有奖/Controller/鲁班零工-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -2530,21 +2588,37 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2WTMSF4J24;
+				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/鲁班零工/GPAdaptationHeader.h";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/AFNetworking/AFNetworking.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/MBProgressHUD/MBProgressHUD.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/MJExtension/MJExtension.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/MJRefresh/MJRefresh.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Masonry/Masonry.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/SDWebImage/SDWebImage.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/YYCache/YYCache.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/YYModel/YYModel.framework/Headers\"",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"$(SRCROOT)/鲁班零工",
+					"\"${PODS_ROOT}/Headers/Public/WechatOpenSDK\"",
+				);
 				INFOPLIST_FILE = "鲁班零工/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.20;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2611,10 +2685,10 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "lubanlinggong-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = develop_1202_prof;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "鲁班零工/我的/分享有奖/Controller/鲁班零工-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

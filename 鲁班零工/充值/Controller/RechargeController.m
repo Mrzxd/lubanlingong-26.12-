@@ -62,15 +62,16 @@
     if (!_footerView) {
         _footerView = [[UIView alloc] initWithFrame:AutoFrame(0, 0, 375, 100)];
         _footerView.backgroundColor = UIColor.whiteColor;
-        UIButton *loginButton = [[UIButton alloc] initWithFrame:CGRectMake(38*ScalePpth, 43*ScalePpth, 300*ScalePpth, 45*ScalePpth)];
-        [loginButton setTitle:@"立即充值" forState:UIControlStateNormal];
-        [loginButton setTitleColor:UIColor.blackColor forState:UIControlStateNormal];
-        loginButton.titleLabel.font = FontSize(17);
-        loginButton.backgroundColor = RGBHex(0xFFD301);
-        loginButton.layer.cornerRadius = 45.0/2*ScalePpth;
-        loginButton.layer.masksToBounds = YES;
-        loginButton.clipsToBounds = YES;
-        [_footerView addSubview:loginButton];
+        UIButton *immediatelyButton = [[UIButton alloc] initWithFrame:CGRectMake(38*ScalePpth, 43*ScalePpth, 300*ScalePpth, 45*ScalePpth)];
+        [immediatelyButton setTitle:@"立即充值" forState:UIControlStateNormal];
+        [immediatelyButton setTitleColor:UIColor.blackColor forState:UIControlStateNormal];
+        immediatelyButton.titleLabel.font = FontSize(17);
+        immediatelyButton.backgroundColor = RGBHex(0xFFD301);
+        immediatelyButton.layer.cornerRadius = 45.0/2*ScalePpth;
+        immediatelyButton.layer.masksToBounds = YES;
+        immediatelyButton.clipsToBounds = YES;
+        [immediatelyButton addTarget:self action:@selector(immediatelyButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        [_footerView addSubview:immediatelyButton];
     }
     return _footerView;
 }
@@ -138,7 +139,47 @@
     button.backgroundColor = RGBHex(0xffd301);
     _lastButton = button;
 }
-
+- (void)immediatelyButtonAction:(UIButton *)button {
+    NSString *amount = _lastButton.currentTitle NonNull;
+    amount = [amount stringByReplacingOccurrencesOfString:@"充" withString:@""];
+    amount = [amount stringByReplacingOccurrencesOfString:@"元" withString:@""];
+    if (_lastModeButton.tag == 100) {
+            [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingString:@"/pay/insertAlipayTradePage"] params:@{
+                                                                                                                    @"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userId"] NonNull,
+                                                                                                                    @"RechargeAmount":NoneNull(amount)
+                                                                                                                    } success:^(id  _Nonnull response) {
+                                                                                                                        if (response && response[@"orderInfo"]) {
+                                                                                                                            [[AlipaySDK defaultService] payOrder:response[@"orderInfo"] fromScheme:@"alisdkdemo." callback:^(NSDictionary *resultDic) {
+                                                                                                                                if (resultDic && resultDic[@"resultStatus"]) {
+                                                                                                                                    if ([resultDic[@"resultStatus"] intValue] == 9000) {
+                                                                                                                                        [WHToast showSuccessWithMessage:@"订单支付成功"];
+                                                                                                                                    } else if ([resultDic[@"resultStatus"] intValue] == 8000) {
+                                                                                                                                        [WHToast showSuccessWithMessage:@"正在处理中，支付结果未知（有可能已经支付成功），请查询商户订单列表中订单的支付状态"];
+                                                                                                                                    } else if ([resultDic[@"resultStatus"] intValue] == 4000) {
+                                                                                                                                        [WHToast showErrorWithMessage:@"订单支付失败"];
+                                                                                                                                    } else if ([resultDic[@"resultStatus"] intValue] == 5000) {
+                                                                                                                                        [WHToast showErrorWithMessage:@"重复请求"];
+                                                                                                                                    } else if ([resultDic[@"resultStatus"] intValue] == 6001) {
+                                                                                                                                        [WHToast showErrorWithMessage:@"用户中途取消"];
+                                                                                                                                    } else if ([resultDic[@"resultStatus"] intValue] == 6002) {
+                                                                                                                                        [WHToast showErrorWithMessage:@"网络连接出错"];
+                                                                                                                                    } else if ([resultDic[@"resultStatus"] intValue] == 6004) {
+                                                                                                                                        [WHToast showErrorWithMessage:@"支付结果未知（有可能已经支付成功），请查询商户订单列表中订单的支付状态"];
+                                                                                                                                    } else {
+                                                                                                                                        [WHToast showErrorWithMessage:@"其它支付错误"];
+                                                                                                                                    }
+                                                                                                                                } else {
+                                                                                                                                    [WHToast showErrorWithMessage:@"其它支付错误"];
+                                                                                                                                }
+                                                                                                                            }];
+                                                                                                                        }
+            } fail:^(NSError * _Nonnull error) {
+                [WHToast showErrorWithMessage:@"网络错误"];
+            } showHUD:YES];
+    } else {
+        
+    }
+}
 #pragma mark ------ UITableViewDelegate
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -169,17 +210,26 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    PayModeTableCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PayModeTableCell" forIndexPath:indexPath];
-    cell.modeImageView.image = [UIImage imageNamed:@[@"alipay",@"wechat"][indexPath.row]];
-    cell.modeLabel.text = @[@"支付宝支付",@"微信支付"][indexPath.row];
-    if (indexPath.row == 0) {
-        _lastModeButton = cell.modeButton;
+    PayModeTableCell *cell = [tableView dequeueReusableCellWithIdentifier:[NSString stringWithFormat:@"PayModeTableCell_%ld",indexPath.row]];
+    if (!cell) {
+        cell = [[PayModeTableCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[NSString stringWithFormat:@"PayModeTableCell_%ld",indexPath.row]];
+        cell.modeImageView.image = [UIImage imageNamed:@[@"alipay",@"wechat"][indexPath.row]];
+        cell.modeLabel.text = @[@"支付宝支付",@"微信支付"][indexPath.row];
+        if (indexPath.row == 0) {
+            _lastModeButton = cell.modeButton;
+        }
+        [cell.modeButton setImage:[UIImage imageNamed:@[@"check",@"no_checked"][indexPath.row]] forState:UIControlStateNormal];
+        cell.modeButton.tag = indexPath.row +100;
+        [cell.modeButton addTarget:self action:@selector(modeButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     }
-    [cell.modeButton setImage:[UIImage imageNamed:@[@"check",@"no_checked"][indexPath.row]] forState:UIControlStateNormal];
-    [cell.modeButton addTarget:self action:@selector(modeButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     return cell;
 }
-
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [_lastModeButton setImage:[UIImage imageNamed:@"no_checked"] forState:UIControlStateNormal];
+    UIButton *button = (UIButton *)[tableView viewWithTag:indexPath.row + 100];
+    [button setImage:[UIImage imageNamed:@"check"] forState:UIControlStateNormal];
+    _lastModeButton = button;
+}
 - (void)modeButtonAction:(UIButton *)button {
     [_lastModeButton setImage:[UIImage imageNamed:@"no_checked"] forState:UIControlStateNormal];
     [button setImage:[UIImage imageNamed:@"check"] forState:UIControlStateNormal];

@@ -142,6 +142,10 @@
     _cell.rightLabel.textColor = RGBHex(0x333333);
 }
 - (void)publishButtonAction:(UIButton *)button {
+    if ([self detectLoginStatusIsNoLogined]) {
+           [self toLoginWithInfo:@"因为涉及到您的核心用户信息，您需要登录才能发布零工或发布服务"];
+           return;
+       }
     if ([_textFieldCellArray[0] textField].text.length == 0) {
         [WHToast showErrorWithMessage:@"请输入需求名称"];
         return;
@@ -529,7 +533,7 @@
                          } else {
                               weakSelf.encodedBase64ImageArray[2] = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
                          }
-                             button.enabled = NO;
+                             button.userInteractionEnabled = NO;
                      }
                   }];
               };

@@ -5,17 +5,29 @@
 //  Created by 张昊 on 2019/10/22.
 //  Copyright © 2019 张兴栋. All rights reserved.
 //
+#import "GrabdDetailsController.h"
 #import "SignInReceiveCell.h"
 #import "SignInReceiveRedEnvelopesController.h"
 
 @interface SignInReceiveRedEnvelopesController ()  <UITableViewDelegate,UITableViewDataSource>
+
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIView *mineheaderView;
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UIView *sectionHeader;
+@property (nonatomic, strong) UIView *backGroundView;
+@property (nonatomic, strong) UIView *redView;
+@property (nonatomic, strong) UILabel *signInLabel;
+@property (nonatomic, strong) UILabel *intergrialLabel;
+@property (nonatomic, strong) NSDictionary *dictionary;
+
+@property (nonatomic, strong) PageListModel*pageListModel;
+
 @end
 
-@implementation SignInReceiveRedEnvelopesController
+@implementation SignInReceiveRedEnvelopesController {
+    UIView *whiteView;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -31,6 +43,54 @@
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     self.view.backgroundColor = RGBHex(0xFFAA1A);
     [self.view addSubview:self.tableView];
+    _pageListModel = GlobalSingleton.gS_ShareInstance.pageListModel;
+    [self netWorking];
+}
+
+- (void)netWorking {
+    WeakSelf;
+    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/api/ApiBonus/select"] params:@{
+        @"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userId"] NonNull,
+    } success:^(id  _Nonnull response) {
+        if (response && response[@"code"] && [response[@"code"] intValue] == 0 && response[@"data"] && [response[@"data"] count]) {
+            weakSelf.dictionary = response;
+            [weakSelf reloadData];
+        }
+    } fail:^(NSError * _Nonnull error) {
+        [WHToast showErrorWithMessage:@"网络错误"];
+    } showHUD:YES];
+}
+
+- (void)reloadData {
+    NSMutableAttributedString *attibutestr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"已连续签到%@天",_dictionary[@"data"][@"schedule"] NonNull]];
+    [attibutestr addAttribute:NSForegroundColorAttributeName value:RGBHex(0x323232) range:NSMakeRange(0, 5)];
+    [attibutestr addAttribute:NSForegroundColorAttributeName value:RGBHex(0x323232) range:NSMakeRange(6, 1)];
+    [attibutestr addAttribute:NSForegroundColorAttributeName value:RGBHex(0xED4C4A) range:NSMakeRange(5, 1)];
+    _signInLabel.attributedText = attibutestr;
+    _intergrialLabel.text = [NSString stringWithFormat:@"已经获得%@元",_dictionary[@"daya"][@"bonus"] NonNull];
+    NSString *days = _dictionary[@"data"][@"schedule"] NonNull;
+    _redView.frame = AutoFrame(21.5, 98,(days.intValue/7.0 * 312), 9);
+    [whiteView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj.tag > 400 ? [obj removeFromSuperview] : 0;
+    }];
+    NSMutableArray *titleArray = [_dictionary[@"data"][@"bonusList"] mutableCopy];
+    for (NSInteger i = 0; i < 7; i ++) {
+        titleArray.count < 7?[titleArray addObject:@"0"]:@0;
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:AutoFrame((26+i *45.4), 79, 46, 19)];
+        imageView.image = [UIImage imageNamed:@"圆角矩形3"];
+        imageView.tag = 500+i;
+        [whiteView addSubview:imageView];
+        
+        NSString *title = titleArray[i] NonNull;
+        UILabel *label = [[UILabel alloc] initWithFrame:AutoFrame(0, 0, 46, 14.8)];
+        label.text = [NoneNull(title) stringByAppendingString:@"元"];
+        label.textColor = RGBHex(0xC09F7A);
+        label.font = FontSize(10.44);
+        label.tag = 600+i;
+        label.textAlignment = NSTextAlignmentCenter;
+        [imageView addSubview:label];
+        [titleArray[i] floatValue] == 0.0?imageView.hidden = YES:1;
+    }
 }
 
 - (UITableView *)tableView {
@@ -73,24 +133,24 @@
     _imageView.image = [UIImage imageNamed:@"sign_banner"];
     [_mineheaderView addSubview:_imageView];
     
-    UIView *whiteView = [[UIView alloc] initWithFrame:AutoFrame(10, (267*ScalePpth- KNavigationHeight)/ScalePpth, 355, 200)];
+    whiteView = [[UIView alloc] initWithFrame:AutoFrame(10, (267*ScalePpth- KNavigationHeight)/ScalePpth, 355, 200)];
     whiteView.backgroundColor = UIColor.whiteColor;
     whiteView.clipsToBounds = YES;
     whiteView.layer.masksToBounds = YES;
     whiteView.layer.cornerRadius = 18.5;
     [_mineheaderView addSubview:whiteView];
     
-    UILabel *signInLabel = [[UILabel alloc] initWithFrame:AutoFrame(0, 19, 355, 18)];
-    signInLabel.textColor = RGBHex(0x323232);
-    signInLabel.font = FontSize(18);
-    signInLabel.textAlignment = NSTextAlignmentCenter;
-    [whiteView addSubview:signInLabel];
+    _signInLabel = [[UILabel alloc] initWithFrame:AutoFrame(0, 19, 355, 18)];
+    _signInLabel.textColor = RGBHex(0x323232);
+    _signInLabel.font = FontSize(18);
+    _signInLabel.textAlignment = NSTextAlignmentCenter;
+    [whiteView addSubview:_signInLabel];
     
     NSMutableAttributedString *attibutestr = [[NSMutableAttributedString alloc] initWithString:@"已连续签到3天"];
     [attibutestr addAttribute:NSForegroundColorAttributeName value:RGBHex(0x323232) range:NSMakeRange(0, 5)];
     [attibutestr addAttribute:NSForegroundColorAttributeName value:RGBHex(0x323232) range:NSMakeRange(6, 1)];
     [attibutestr addAttribute:NSForegroundColorAttributeName value:RGBHex(0xED4C4A) range:NSMakeRange(5, 1)];
-    signInLabel.attributedText = attibutestr;
+    _signInLabel.attributedText = attibutestr;
     
     UILabel *rewardLabel = [[UILabel alloc] initWithFrame:AutoFrame(0, 48, 355, 18)];
     rewardLabel.textColor = RGBHex(0x9C9C9C);
@@ -99,19 +159,19 @@
     rewardLabel.textAlignment = NSTextAlignmentCenter;
     [whiteView addSubview:rewardLabel];
     
-    UIView *backGroundView = [[UIView alloc] initWithFrame:AutoFrame(21.5, 98, 312, 9)];
-    backGroundView.backgroundColor = RGBHex(0xFFEFC2);
-    backGroundView.clipsToBounds = YES;
-    backGroundView.layer.cornerRadius = 4.5*ScalePpth;
-    backGroundView.layer.masksToBounds = YES;
-    [whiteView addSubview:backGroundView];
+    _backGroundView = [[UIView alloc] initWithFrame:AutoFrame(21.5, 98, 312, 9)];
+    _backGroundView.backgroundColor = RGBHex(0xFFEFC2);
+    _backGroundView.clipsToBounds = YES;
+    _backGroundView.layer.cornerRadius = 4.5*ScalePpth;
+    _backGroundView.layer.masksToBounds = YES;
+    [whiteView addSubview:_backGroundView];
     
-    UIView *redView = [[UIView alloc] initWithFrame:AutoFrame(21.5, 98, 133, 9)];
-    redView.backgroundColor = RGBHex(0xF96F34);
-    redView.clipsToBounds = YES;
-    redView.layer.cornerRadius = 4.5*ScalePpth;
-    redView.layer.masksToBounds = YES;
-    [whiteView addSubview:redView];
+    _redView = [[UIView alloc] initWithFrame:AutoFrame(21.5, 98, 133, 9)];
+    _redView.backgroundColor = RGBHex(0xF96F34);
+    _redView.clipsToBounds = YES;
+    _redView.layer.cornerRadius = 4.5*ScalePpth;
+    _redView.layer.masksToBounds = YES;
+    [whiteView addSubview:_redView];
     
     NSArray *dateArray = @[@"1天",@"2天",@"3天",@"4天",@"5天",@"6天",@"7天"];
     for (NSInteger i = 0; i < 7; i ++) {
@@ -122,20 +182,6 @@
         [whiteView addSubview:rewardLabel];
     }
   
-    NSArray *titleArray = @[@"0.5元",@"1.0元",@"2.0元"];
-    for (NSInteger i = 0; i < 3; i ++) {
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:AutoFrame((122+i *86), 79, 46, 19)];
-        imageView.image = [UIImage imageNamed:@"圆角矩形3"];
-        [whiteView addSubview:imageView];
-        
-        UILabel *label = [[UILabel alloc] initWithFrame:AutoFrame(0, 0, 46, 14.8)];
-        label.text = titleArray[i];
-        label.textColor = RGBHex(0xC09F7A);
-        label.font = FontSize(10.44);
-        label.textAlignment = NSTextAlignmentCenter;
-        [imageView addSubview:label];
-    }
-    
     UIButton *immediatelyButton = [[UIButton alloc] initWithFrame:CGRectMake(126.5*ScalePpth, 150*ScalePpth, 101.5*ScalePpth, 31.5*ScalePpth)];
     [immediatelyButton setTitle:@"签 到" forState:UIControlStateNormal];
     [immediatelyButton setTitleColor:UIColor.blackColor forState:UIControlStateNormal];
@@ -144,19 +190,41 @@
     immediatelyButton.layer.cornerRadius = 31.5/2*ScalePpth;
     immediatelyButton.layer.masksToBounds = YES;
     immediatelyButton.clipsToBounds = YES;
+    [immediatelyButton addTarget:self action:@selector(immediatelyButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [whiteView addSubview:immediatelyButton];
     
-    UILabel *intergrialLabel = [[UILabel alloc] initWithFrame:AutoFrame(247, 167, 110, 12)];
-    intergrialLabel.textColor = RGBHex(0xBABABA);
-    intergrialLabel.font = [UIFont boldSystemFontOfSize:12 *ScalePpth];
-    intergrialLabel.text = @"已经获得4.26元";
-    [whiteView addSubview:intergrialLabel];
+    _intergrialLabel = [[UILabel alloc] initWithFrame:AutoFrame(247, 167, 110, 12)];
+    _intergrialLabel.textColor = RGBHex(0xBABABA);
+    _intergrialLabel.font = [UIFont boldSystemFontOfSize:12 *ScalePpth];
+    _intergrialLabel.text = @"已经获得4.26元";
+    [whiteView addSubview:_intergrialLabel];
 }
+
+- (void)immediatelyButtonAction:(UIButton *)button {
+    WeakSelf;
+    [ZXD_NetWorking postWithUrl:[rootUrl stringByAppendingFormat:@"/api/ApiBonus/updata"] params:@{
+        @"userId":[[NSUserDefaults standardUserDefaults] objectForKey:@"userId"] NonNull
+    } success:^(id  _Nonnull response) {
+        if (response && response[@"code"] && [response[@"code"] intValue] == 0 && response[@"msg"]) {
+            [weakSelf netWorking];
+            [WHToast showSuccessWithMessage:response[@"msg"]];
+        } else {
+            if (response && response[@"msg"]) {
+                [WHToast showErrorWithMessage:response[@"msg"]];
+            } else {
+                [WHToast showErrorWithMessage:@"签到失败"];
+            }
+        }
+    } fail:^(NSError * _Nonnull error) {
+                [WHToast showErrorWithMessage:@"网络错误"];
+    } showHUD:YES];
+}
+
 #pragma mark ------ UITableViewDelegate
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 3;
+    return _pageListModel.list.count;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 1;
@@ -187,11 +255,14 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SignInReceiveCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SignInReceiveCell" forIndexPath:indexPath];
     cell.button.hidden = YES;
+    cell.listModel = _pageListModel.list[indexPath.section];
     return cell;
 }
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
- 
-    
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    PageContentListModel * model = _pageListModel.list[indexPath.section];
+    GrabdDetailsController *gdc = [GrabdDetailsController new];
+    gdc.listModel = model;
+    [self.navigationController pushViewController:gdc animated:NO];
 }
 
 

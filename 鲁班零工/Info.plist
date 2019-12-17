@@ -15,25 +15,38 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.5</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>alisdkdemo.</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string></string>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>1.5</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>addImage</string>
+	<string>APP会在您使用发布零工、发布服务功能时，访问您的相机使用权限。</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>始终或者在使用时开启定位</string>
+	<string>APP会在您使用上班地点、找服务、零工以及定位功能时，通过申请来访问您的位置权限。</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>总是开启描述</string>
+	<string>APP会在您使用上班地点、找服务、零工以及定位功能时，通过申请来访问您的位置权限。</string>
 	<key>NSLocationUsageDescription</key>
-	<string>yes</string>
+	<string>APP会在您使用上班地点、找服务、零工以及定位功能时，通过申请来访问您的位置权限。</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>仅在使用时获取定位权限</string>
+	<string>APP会在您使用上班地点、找服务、零工以及定位功能时，通过申请来访问您的位置权限。</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>take photo to acive image</string>
+	<string>APP会在您使用发布零工、发布服务功能时，访问您的相册权限。</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>

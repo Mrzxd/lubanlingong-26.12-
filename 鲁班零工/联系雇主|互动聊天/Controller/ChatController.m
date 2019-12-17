@@ -24,9 +24,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    WeakSelf;
     self.title = @"雇主郑婷婷";
-    weakSelf.jmsgMessageArray = [NSMutableArray new];
+    _jmsgMessageArray = [NSMutableArray new];
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.footerView];
     [JMessage removeDelegate:(id<JMessageDelegate>)[UIApplication sharedApplication].delegate withConversation:nil];
@@ -134,6 +133,7 @@
         _tableView.backgroundColor = RGBHex(0xF7F7F7);
         _tableView.tableFooterView = [[UIView alloc] initWithFrame:AutoFrame(0, 0, 0.0000001, 0.0000001)];
         _tableView.showsVerticalScrollIndicator = NO;
+        _tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     }
     return _tableView;
@@ -149,8 +149,8 @@
 }
 
 - (void)addSubViews {
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:AutoFrame(12, 15.5, 25, 20)];
-    imageView.image = [UIImage imageNamed:@"uploading"];
+    UIButton *imageView = [[UIButton alloc] initWithFrame:AutoFrame(12, 15.5, 25, 20)];
+    [imageView setImage:[UIImage imageNamed:@"uploading"] forState:UIControlStateNormal];
     [_footerView addSubview:imageView];
     _textField = [[UITextField alloc] initWithFrame:CGRectMake(49*ScalePpth, 10.5*ScalePpth, 295*ScalePpth, 30*ScalePpth)];
     _textField.clearButtonMode = UITextFieldViewModeWhileEditing;
@@ -223,8 +223,8 @@
         return cell;
     }
 }
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    [_textField endEditing:YES];
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [_textField resignFirstResponder];
 }
 
 @end

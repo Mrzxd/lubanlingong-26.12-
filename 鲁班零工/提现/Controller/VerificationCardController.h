@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface VerificationCardController : ZXDBaseViewController
 
-@property (nonatomic, strong) NSDictionary *cardDictionary;
+@property (nonatomic, strong) NSArray *infoArray;
 
 @end
 

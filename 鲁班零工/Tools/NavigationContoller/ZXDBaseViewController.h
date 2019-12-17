@@ -15,8 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property BOOL isPresent;
 @property (nonatomic, strong) UILabel *titleLabel;
-
-
+- (BOOL)detectLoginStatusIsNoLogined;
+- (void)toLoginWithInfo:(NSString *)info;
 
 @end
 

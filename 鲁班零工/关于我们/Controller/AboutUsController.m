@@ -5,7 +5,8 @@
 //  Created by 张昊 on 2019/10/22.
 //  Copyright © 2019 张兴栋. All rights reserved.
 //
-
+#import "PrivacyProtocolController.h"
+#import "UserAgreementController.h"
 #import "AboutUsController.h"
 
 @interface AboutUsController ()
@@ -64,7 +65,12 @@
         [button setImage:[UIImage imageNamed:@"issue_arrows"] forState:UIControlStateNormal];
         [button setImageEdgeInsets:UIEdgeInsetsMake(0, 75 *ScalePpth, 0, 0)];
         button.imageView.contentMode = UIViewContentModeScaleAspectFit;
+        
         [self.view addSubview:button];
+        UIButton *buttons = [[UIButton alloc] initWithFrame:AutoFrame(0, (299*ScalePpth +statusHeight + i *50)/ScalePpth, 375, 41)];
+        [buttons addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
+        buttons.tag = 100 + i;
+        [self.view addSubview:buttons];
     }
     
     UILabel *companyLabel = [[UILabel alloc] initWithFrame:AutoFrame(0, (ScreenHeight - 22*ScalePpth-KNavigationHeight)/ScalePpth, 375, 10)];
@@ -73,7 +79,16 @@
     companyLabel.textColor = RGBHex(0xCCCCCC);
     companyLabel.font = FontSize(10);
     [self.view addSubview:companyLabel];
-    
+}
+
+- (void)buttonAction:(UIButton *)button {
+    if (button.tag == 100) {
+        UserAgreementController *uac = [UserAgreementController new];
+        [self.navigationController pushViewController:uac animated:YES];
+    } else {
+        PrivacyProtocolController*uac = [PrivacyProtocolController new];
+        [self.navigationController pushViewController:uac animated:YES];
+    }
 }
 
 @end

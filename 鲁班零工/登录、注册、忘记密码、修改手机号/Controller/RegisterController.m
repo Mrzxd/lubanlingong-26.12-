@@ -26,9 +26,29 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = UIColor.whiteColor;
+    // 添加通知监听见键盘弹出/退出
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardAction:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardAction:) name:UIKeyboardWillHideNotification object:nil];
     [self addSubViews];
 }
-
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+}
+ // 键盘监听事件
+ - (void)keyboardAction:(NSNotification*)sender {
+     // 通过通知对象获取键盘frame: [value CGRectValue]
+//     NSDictionary *useInfo = [sender userInfo];
+//     NSValue *value = [useInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+     // <注意>具有约束的控件通过改变约束值进行frame的改变处理
+     if([sender.name isEqualToString:UIKeyboardWillShowNotification]){
+         CGRect frame = self.view.frame;
+         if (frame.origin.y == 0) {(frame.origin.y -= 160);frame.size.height += 160;};
+         self.view.frame = frame;
+     }else{
+         self.view.frame = CGRectMake(0, 0, self.view.bounds.size.width, ScreenHeight);
+     }
+ }
 //获取验证码
 - (void)connectToInternet {
     if (![self isMobileNumberOnly:NoneNull(phoneTextField.text)]) {
@@ -40,6 +60,12 @@
         if ([response[@"code"] intValue] == 0 && [response[@"data"] isKindOfClass:[NSDictionary class]] && [response[@"data"] count]) {
             StrongSelf;
             strongSelf->verificationCodeField.text = response[@"data"][@"verificationCode"];
+        } else {
+            if (response && response[@"msg"]) {
+                [WHToast showErrorWithMessage:response[@"msg"]];
+            } else {
+                [WHToast showErrorWithMessage:@"获取邀请码失败"];
+            }
         }
     } fail:^(NSError * _Nonnull error) {
         
@@ -167,7 +193,7 @@
     _invitationTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
     _invitationTextField.font = FontSize(15);
     _invitationTextField.delegate = self;
-    _invitationTextField.placeholder = @"请输入邀请码(若无则不填)";
+    _invitationTextField.placeholder = @"（选填）请输入邀请码(可选)";
     [self.view addSubview:_invitationTextField];
     
     UIButton *loginButton = [[UIButton alloc] initWithFrame:CGRectMake(38*ScalePpth, 524*ScalePpth +statusHeight, 300*ScalePpth, 45*ScalePpth)];
@@ -263,12 +289,10 @@
    
 }
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
-//    CGRect frame = self.view.frame;
-//    if (frame.origin.y == 0) {(frame.origin.y -= 150);frame.size.height += 150;};
-//    self.view.frame = frame;
     return YES;
 }
 - (void)textFieldDidEndEditing:(UITextField *)textField {
+  
 }
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
 //    self.view.frame = CGRectMake(0, 0,  ScreenWidth,ScreenHeight);
@@ -282,6 +306,7 @@
     [verificationCodeField endEditing:YES];
     [_passWordTextField endEditing:YES];
     [_scPassWordTextField endEditing:YES];
+    [_invitationTextField endEditing:YES];
 }
 
 @end

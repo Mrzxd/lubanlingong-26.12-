@@ -12,6 +12,8 @@ target '鲁班零工' do
   
   # 图片请求
   pod 'SDWebImage', '~> 5.0.0'
+  # 支付宝支付sdk
+  pod 'AlipaySDK-iOS'
   
   # 下拉刷新
   pod 'MJRefresh'
