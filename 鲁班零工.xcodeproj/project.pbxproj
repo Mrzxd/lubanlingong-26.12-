@@ -1054,6 +1054,7 @@
 		611D0EEF234D8BBE00391470 /* 鲁班零工 */ = {
 			isa = PBXGroup;
 			children = (
+				61CD448623B48D1100E8D663 /* New Group */,
 				61564FCF23B09CF90093B4E8 /* 鲁班零工.entitlements */,
 				61137C6F237EAFCE00983C67 /* 去评价（评价工人） */,
 				611E748723682CEE00481E19 /* 雇员中心 */,
@@ -1898,6 +1899,13 @@
 			children = (
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		61CD448623B48D1100E8D663 /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "New Group";
 			sourceTree = "<group>";
 		};
 		AD5F85E9B85B3760B7719DC5 /* Pods */ = {
