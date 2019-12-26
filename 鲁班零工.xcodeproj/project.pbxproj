@@ -465,6 +465,7 @@
 		61492E69235B35210020DDA3 /* TransactionDetailsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TransactionDetailsController.m; sourceTree = "<group>"; };
 		61492E6B235B3AC10020DDA3 /* TransactionDetailsCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TransactionDetailsCell.h; sourceTree = "<group>"; };
 		61492E6C235B3AC10020DDA3 /* TransactionDetailsCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TransactionDetailsCell.m; sourceTree = "<group>"; };
+		61564FCF23B09CF90093B4E8 /* 鲁班零工.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "鲁班零工.entitlements"; sourceTree = "<group>"; };
 		615CE8672352EF9400836431 /* MineTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MineTableCell.m; sourceTree = "<group>"; };
 		615CE8682352EF9400836431 /* MineTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MineTableCell.h; sourceTree = "<group>"; };
 		615CE86E235307F200836431 /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
@@ -1053,6 +1054,7 @@
 		611D0EEF234D8BBE00391470 /* 鲁班零工 */ = {
 			isa = PBXGroup;
 			children = (
+				61564FCF23B09CF90093B4E8 /* 鲁班零工.entitlements */,
 				61137C6F237EAFCE00983C67 /* 去评价（评价工人） */,
 				611E748723682CEE00481E19 /* 雇员中心 */,
 				6125516D2366B41900BEDD9C /* 服务详情 */,
@@ -1984,6 +1986,11 @@
 					611D0EEC234D8BBE00391470 = {
 						CreatedOnToolsVersion = 10.3;
 						LastSwiftMigration = 1030;
+						SystemCapabilities = {
+							com.apple.SafariKeychain = {
+								enabled = 1;
+							};
+						};
 					};
 					611D0F04234D8BBF00391470 = {
 						CreatedOnToolsVersion = 10.3;
@@ -2476,6 +2483,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "鲁班零工/鲁班零工.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2WTMSF4J24;
@@ -2572,7 +2580,7 @@
 					"-ObjC",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "lubanlinggong-ios";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "鲁班零工";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "鲁班零工/我的/分享有奖/Controller/鲁班零工-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -2588,6 +2596,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "鲁班零工/鲁班零工.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2WTMSF4J24;
@@ -2684,7 +2693,7 @@
 					"-ObjC",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "lubanlinggong-ios";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "鲁班零工";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "鲁班零工/我的/分享有奖/Controller/鲁班零工-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

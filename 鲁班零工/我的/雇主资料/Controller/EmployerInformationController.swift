@@ -8,6 +8,31 @@
 
 import UIKit
 
+class EmployerInformationModel: NSObject {
+    var phone: String?
+    var name: String?
+    var id: String?
+    var empType: String?
+    var card :String?
+    var naem: String?
+    var cardImageb: String?
+    var cardImagez: String?
+    var businessLicense: String?
+    
+    init(dict:[String: Any]) {
+        super.init()
+        phone = dict["phone"] as? String
+        name = dict["name"] as? String
+        id = dict["id"] as? String
+        empType = dict["empType"] as? String
+        card = dict["card"] as? String
+        naem = dict["naem"] as? String
+        cardImageb = dict["cardImageb"] as? String
+        cardImagez = dict["cardImagez"] as? String
+        businessLicense = dict["businessLicense"] as? String
+    }
+}
+
 class EmployerInformationController: ZXDBaseViewController,UITextFieldDelegate {
     
     lazy var middleView:UIView = {
@@ -20,12 +45,48 @@ class EmployerInformationController: ZXDBaseViewController,UITextFieldDelegate {
     var imageView2:UIImageView!
     var imageView3:UIImageView!
     
+    var textField1:UITextField!
+    var textField2:UITextField!
+    var textField3:UITextField!
+    var textField:UITextField!
+    
+    var infoModel:EmployerInformationModel!
+    
     var textFiledArray:NSMutableArray!
+     func reloadUI() {
+        textField1.text = infoModel.empType
+        textField2.text = infoModel.naem
+        textField3.text = infoModel.card
+        textField.text = infoModel.phone
+        let str:String = infoModel.cardImagez ?? ""
+        let str2:String = infoModel.cardImageb ?? ""
+        let str3:String = infoModel.businessLicense ?? ""
+        imageView1.sd_setImage(with: URL.init(string:rootUrl.appending(str))) { (image, error, types, urls) in
+            
+        }
+        imageView2.sd_setImage(with: URL.init(string:rootUrl.appending(str2))) { (image, error, types, urls) in
+            
+        }
+        imageView3.sd_setImage(with: URL.init(string:rootUrl.appending(str3))) { (image, error, types, urls) in
+                   
+        }
+    }
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
          title = "雇主资料"
+        weak var weakSelf = self
+        ZXD_NetWorking.post(withUrl: rootUrl.appending("/updateMemberNews/login/Emp"), params: ["userId":UserDefaults.standard.object(forKey: "userId") ?? ""], success: { (response ) in
+            let dictResps:[String:Any] = response as! [String : Any]
+            let code:String = dictResps["code"] as! String
+            if (code == "0") {
+                weakSelf?.infoModel = EmployerInformationModel(dict: dictResps["data"] as! [String : Any])
+                weakSelf?.reloadUI()
+            }
+        }, fail: { (eorr) in
+            
+        }, showHUD: true)
         view.addSubview(middleView)
         textFiledArray = NSMutableArray.init()
         
@@ -41,14 +102,15 @@ class EmployerInformationController: ZXDBaseViewController,UITextFieldDelegate {
             }
         }
         
-        rightTextFieldInSuperView(superView: view, space: 17.5, title: "请输入雇主类型")
-        rightTextFieldInSuperView(superView: view, space: 68.5, title: "请输入真实姓名")
-        rightTextFieldInSuperView(superView: view, space: (68.5+50.5), title: "请输入身份证号").text = "370923199865972369"
-        let textField:UITextField = rightTextFieldInSuperView(superView: view, space: (68.5+50.5*2), title: "请输入手机号码")
+        textField1 = rightTextFieldInSuperView(superView: view, space: 17.5, title: "请输入雇主类型")
+        textField2 = rightTextFieldInSuperView(superView: view, space: 68.5, title: "请输入真实姓名")
+        textField3 = rightTextFieldInSuperView(superView: view, space: (68.5+50.5), title: "请输入身份证号")
+        
+        textField = rightTextFieldInSuperView(superView: view, space: (68.5+50.5*2), title: "请输入手机号码")
         var frame:CGRect = textField.frame
         frame.origin.x = frame.origin.x - 15
         textField.frame = frame;
-        textField.text = "13040569867"
+        textField.text = "13040****67"
        
         let button:UIButton = UIButton(frame: AutoFrame(x: 200, y: 151, width: 175, height: 50))
         button.setImage(UIImage(named: "issue_arrows"), for: .normal)
@@ -77,6 +139,7 @@ class EmployerInformationController: ZXDBaseViewController,UITextFieldDelegate {
         rightTextField.placeholder = title
         rightTextField.textAlignment = .right
         rightTextField.borderStyle = .none
+        rightTextField.isEnabled = false
         superView.addSubview(rightTextField)
         textFiledArray.add(rightTextField)
         return rightTextField
@@ -120,14 +183,14 @@ class EmployerInformationController: ZXDBaseViewController,UITextFieldDelegate {
         imageView3.backgroundColor = .init(rgb: 0xcccccc)
         bottomView.addSubview(imageView3)
         
-        let submitButton = UIButton(frame: AutoFrame(x: 37.5, y: 331.5, width: 300, height: 45))
-        submitButton.backgroundColor = .init(rgb: 0xFFD301)
-        submitButton.layer.masksToBounds = true
-        submitButton.layer.cornerRadius = 22.5*ScalePpth
-        submitButton.titleLabel?.font = FontSize(height: 17)
-        submitButton.setTitle("提交", for: .normal)
-        submitButton.setTitleColor(.init(rgb: 0x333333), for: .normal)
-        bottomView.addSubview(submitButton)
+//        let submitButton = UIButton(frame: AutoFrame(x: 37.5, y: 331.5, width: 300, height: 45))
+//        submitButton.backgroundColor = .init(rgb: 0xFFD301)
+//        submitButton.layer.masksToBounds = true
+//        submitButton.layer.cornerRadius = 22.5*ScalePpth
+//        submitButton.titleLabel?.font = FontSize(height: 17)
+//        submitButton.setTitle("提交", for: .normal)
+//        submitButton.setTitleColor(.init(rgb: 0x333333), for: .normal)
+//        bottomView.addSubview(submitButton)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
